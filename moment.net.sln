@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moment.net", "moment.net\moment.net.csproj", "{13472E42-68FB-47C4-AB32-01A96F3BA884}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moment.net", "src\moment.net.csproj", "{13472E42-68FB-47C4-AB32-01A96F3BA884}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moment.net.Tests", "tests\moment.net.Tests.csproj", "{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{13472E42-68FB-47C4-AB32-01A96F3BA884}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13472E42-68FB-47C4-AB32-01A96F3BA884}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13472E42-68FB-47C4-AB32-01A96F3BA884}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
