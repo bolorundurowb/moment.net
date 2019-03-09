@@ -5,4 +5,7 @@ dist: bionic
 install:
  - dotnet restore
 script:
- - dotnet test tests/moment.net.Tests.csproj
+ - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover tests/moment.net.Tests.csproj
+after_success:
+ - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
+ - ./tools/csmacnz.Coveralls --opencover -i ./tests/coverage.opencover.xml --useRelativePaths
