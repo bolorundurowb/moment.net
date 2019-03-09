@@ -5,4 +5,4 @@ dist: bionic
 install:
  - dotnet restore
 script:
- - dotnet test moment.net.Tests
+ - dotnet test tests/moment.net.Tests.csproj
