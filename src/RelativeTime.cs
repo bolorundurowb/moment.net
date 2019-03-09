@@ -59,6 +59,18 @@ namespace moment.net
             {
                 return "a day ago";
             }
+
+            var totalTimeInDays = timeSpan.TotalDays;
+
+            if (totalTimeInHours > 35 && totalTimeInDays <= 25)
+            {
+                return $"{Math.Ceiling(totalTimeInDays)} days ago";
+            }
+
+            if (totalTimeInDays > 25 && totalTimeInDays <= 45)
+            {
+                return "a month ago";
+            }
         }
     }
 }
