@@ -86,6 +86,8 @@ namespace moment.net
             {
                 return $"{Math.Floor(totalTimeInDays / _daysInAYear)} years ago";
             }
+            
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan, "The time span sent could not be parsed.");
         }
     }
 }
