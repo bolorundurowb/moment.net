@@ -18,7 +18,7 @@ namespace moment.net
             {
                 return TimeFromTimeSpan(DateTime.UtcNow - This);
             }
-            
+
             return TimeFromTimeSpan(DateTime.Now - This);
         }
 
@@ -31,7 +31,7 @@ namespace moment.net
                 return "a few seconds ago";
             }
 
-            if (totalTimeInSeconds > 44.0 && totalTimeInSeconds<= 89.0)
+            if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
             {
                 return $"{Math.Ceiling(totalTimeInSeconds)} seconds ago";
             }
@@ -70,6 +70,21 @@ namespace moment.net
             if (totalTimeInDays > 25 && totalTimeInDays <= 45)
             {
                 return "a month ago";
+            }
+
+            if (totalTimeInDays > 45 && totalTimeInDays <= 319)
+            {
+                return $"{Math.Floor(totalTimeInDays / _daysInAMonth)} months ago";
+            }
+
+            if (totalTimeInDays > 319 && totalTimeInDays <= 547)
+            {
+                return "a year ago";
+            }
+
+            if (totalTimeInDays > 547)
+            {
+                return $"{Math.Floor(totalTimeInDays / _daysInAYear)} years ago";
             }
         }
     }
