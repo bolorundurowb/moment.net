@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace Tests
+namespace moment.net.Tests
 {
     public class Tests
     {
