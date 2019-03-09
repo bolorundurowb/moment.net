@@ -29,14 +29,14 @@ namespace moment.net
 
             if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
             {
-                return $"{Math.Ceiling(totalTimeInSeconds)} seconds ago";
+                return "a minute ago";
             }
 
             var totalTimeInMinutes = timeSpan.TotalMinutes;
 
             if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
             {
-                return $"{Math.Ceiling(totalTimeInMinutes)} minutes ago";
+                return $"{Math.Floor(totalTimeInMinutes)} minutes ago";
             }
 
             if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
@@ -48,7 +48,7 @@ namespace moment.net
 
             if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
             {
-                return $"{Math.Ceiling(totalTimeInHours)} hours ago";
+                return $"{Math.Floor(totalTimeInHours)} hours ago";
             }
 
             if (totalTimeInHours > 21 && totalTimeInHours <= 35)
@@ -60,7 +60,7 @@ namespace moment.net
 
             if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             {
-                return $"{Math.Ceiling(totalTimeInDays)} days ago";
+                return $"{Math.Floor(totalTimeInDays)} days ago";
             }
 
             if (totalTimeInDays > 25 && totalTimeInDays <= 45)
@@ -70,7 +70,7 @@ namespace moment.net
 
             if (totalTimeInDays > 45 && totalTimeInDays <= 319)
             {
-                return $"{Math.Floor(totalTimeInDays / _daysInAMonth)} months ago";
+                return $"{Math.Ceiling(totalTimeInDays / _daysInAMonth)} months ago";
             }
 
             if (totalTimeInDays > 319 && totalTimeInDays <= 547)
@@ -80,7 +80,7 @@ namespace moment.net
 
             if (totalTimeInDays > 547)
             {
-                return $"{Math.Floor(totalTimeInDays / _daysInAYear)} years ago";
+                return $"{Math.Ceiling(totalTimeInDays / _daysInAYear)} years ago";
             }
             
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan, "The time span sent could not be parsed.");
