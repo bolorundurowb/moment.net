@@ -43,9 +43,21 @@ namespace moment.net
                 return $"{Math.Ceiling(totalTimeInMinutes)} minutes ago";
             }
 
-            if (totalTimeInSeconds > 44 && totalTimeInMinutes <= 89)
+            if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
             {
                 return "an hour ago";
+            }
+
+            var totalTimeInHours = timeSpan.TotalHours;
+
+            if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
+            {
+                return $"{Math.Ceiling(totalTimeInHours)} hours ago";
+            }
+
+            if (totalTimeInHours > 21 && totalTimeInHours <= 35)
+            {
+                return "a day ago";
             }
         }
     }
