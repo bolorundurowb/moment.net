@@ -11,97 +11,153 @@ namespace moment.net
         public static string FromNow(this DateTime This)
         {
             return This.Kind == DateTimeKind.Utc
-                ? TimeFromTimeSpan(DateTime.UtcNow - This, RelativityDirection.From)
-                : TimeFromTimeSpan(DateTime.Now - This, RelativityDirection.From);
+                ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
+                : ParseFromPastTimeSpan(DateTime.Now - This);
         }
 
         public static string ToNow(this DateTime This)
         {
             return This.Kind == DateTimeKind.Utc
-                ? TimeFromTimeSpan(This - DateTime.UtcNow, RelativityDirection.To)
-                : TimeFromTimeSpan(This - DateTime.Now, RelativityDirection.To);
+                ? ParseFromFutureTimeSpan(This - DateTime.UtcNow)
+                : ParseFromFutureTimeSpan(This - DateTime.Now);
         }
 
-        private static string TimeFromTimeSpan(TimeSpan timeSpan, RelativityDirection direction)
+        private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
         {
-            var toPreScript = "in";
-            var fromPostScript = "ago";
-            var response = string.Empty;
             var totalTimeInSeconds = timeSpan.TotalSeconds;
 
             if (totalTimeInSeconds <= 44.0)
             {
-                response = "a few seconds";
+                return "a few seconds ago";
             }
 
             if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
             {
-                response = "a minute";
+                return "a minute ago";
             }
 
             var totalTimeInMinutes = timeSpan.TotalMinutes;
 
             if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
             {
-                response = $"{Math.Floor(totalTimeInMinutes)} minutes";
+                return $"{Math.Floor(totalTimeInMinutes)} minutes ago";
             }
 
             if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
             {
-                response = "an hour";
+                return "an hour ago";
             }
 
             var totalTimeInHours = timeSpan.TotalHours;
 
             if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
             {
-                response = $"{Math.Floor(totalTimeInHours)} hours";
+                return $"{Math.Floor(totalTimeInHours)} hours ago";
             }
 
             if (totalTimeInHours > 21 && totalTimeInHours <= 35)
             {
-                response = "a day";
+                return "a day ago";
             }
 
             var totalTimeInDays = timeSpan.TotalDays;
 
             if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             {
-                response = $"{Math.Floor(totalTimeInDays)} days";
+                return $"{Math.Floor(totalTimeInDays)} days ago";
             }
 
             if (totalTimeInDays > 25 && totalTimeInDays <= 45)
             {
-                response = "a month";
+                return "a month ago";
             }
 
             if (totalTimeInDays > 45 && totalTimeInDays <= 319)
             {
-                response = $"{Math.Ceiling(totalTimeInDays / DaysInAMonth)} months";
+                return $"{Math.Ceiling(totalTimeInDays / DaysInAMonth)} months ago";
             }
 
             if (totalTimeInDays > 319 && totalTimeInDays <= 547)
             {
-                response = "a year";
+                return "a year ago";
             }
 
             if (totalTimeInDays > 547)
             {
-                response = $"{Math.Ceiling(totalTimeInDays / DaysInAYear)} years";
-            }
-
-            if (direction == RelativityDirection.From)
-            {
-                return $"{response} {fromPostScript}";
-            }
-
-            if (direction == RelativityDirection.To)
-            {
-                return $"{toPreScript} {response}";
+                return $"{Math.Ceiling(totalTimeInDays / DaysInAYear)} years ago";
             }
 
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
                 "The time span sent could not be parsed.");
+        }
+
+        private static string ParseFromFutureTimeSpan(TimeSpan timeSpan)
+        {
+            var totalTimeInSeconds = timeSpan.TotalSeconds;
+
+            if (totalTimeInSeconds <= 44.0)
+            {
+                return "in a few seconds";
+            }
+
+            if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
+            {
+                return "in a minute";
+            }
+
+            var totalTimeInMinutes = timeSpan.TotalMinutes;
+
+            if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
+            {
+                return $"in {Math.Ceiling(totalTimeInMinutes)} minutes";
+            }
+
+            if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
+            {
+                return "in an hour";
+            }
+
+            var totalTimeInHours = timeSpan.TotalHours;
+
+            if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
+            {
+                return $"in {Math.Ceiling(totalTimeInHours)} hours";
+            }
+
+            if (totalTimeInHours > 21 && totalTimeInHours <= 35)
+            {
+                return "in a day";
+            }
+
+            var totalTimeInDays = timeSpan.TotalDays;
+
+            if (totalTimeInHours > 35 && totalTimeInDays <= 25)
+            {
+                return $"in {Math.Ceiling(totalTimeInDays)} days";
+            }
+
+            if (totalTimeInDays > 25 && totalTimeInDays <= 45)
+            {
+                return "in a month";
+            }
+
+            if (totalTimeInDays > 45 && totalTimeInDays <= 319)
+            {
+                return $"in {Math.Ceiling(totalTimeInDays / DaysInAMonth)} months";
+            }
+
+            if (totalTimeInDays > 319 && totalTimeInDays <= 547)
+            {
+                return "in a year";
+            }
+
+            if (totalTimeInDays > 547)
+            {
+                return $"in {Math.Ceiling(totalTimeInDays / DaysInAYear)} years";
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
+                "in The time span sent could not be parsed.");
         }
     }
 }
