@@ -1,89 +1,101 @@
 ﻿using System;
+using moment.net.Enums;
 
 namespace moment.net
 {
     public static class RelativeTime
     {
         private const int _daysInAWeek = 7;
-        private const double _daysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
-        private const double _daysInAMonth = _daysInAYear / 12;
+        private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
+        private const double DaysInAMonth = DaysInAYear / 12;
 
         public static string FromNow(this DateTime This)
         {
-            if (This.Kind == DateTimeKind.Utc)
-            {
-                return TimeFromTimeSpan(DateTime.UtcNow - This);
-            }
-
-            return TimeFromTimeSpan(DateTime.Now - This);
+            return This.Kind == DateTimeKind.Utc
+                ? TimeFromTimeSpan(DateTime.UtcNow - This, RelativityDirection.From)
+                : TimeFromTimeSpan(DateTime.Now - This, RelativityDirection.From);
         }
 
-        private static string TimeFromTimeSpan(TimeSpan timeSpan)
+        private static string TimeFromTimeSpan(TimeSpan timeSpan, RelativityDirection direction)
         {
+            var toPreScript = "in";
+            var fromPostScript = "ago";
+            var response = string.Empty;
             var totalTimeInSeconds = timeSpan.TotalSeconds;
 
             if (totalTimeInSeconds <= 44.0)
             {
-                return "a few seconds ago";
+                response = "a few seconds";
             }
 
             if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
             {
-                return "a minute ago";
+                response = "a minute";
             }
 
             var totalTimeInMinutes = timeSpan.TotalMinutes;
 
             if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
             {
-                return $"{Math.Floor(totalTimeInMinutes)} minutes ago";
+                response = $"{Math.Floor(totalTimeInMinutes)} minutes";
             }
 
             if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
             {
-                return "an hour ago";
+                response = "an hour";
             }
 
             var totalTimeInHours = timeSpan.TotalHours;
 
             if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
             {
-                return $"{Math.Floor(totalTimeInHours)} hours ago";
+                response = $"{Math.Floor(totalTimeInHours)} hours";
             }
 
             if (totalTimeInHours > 21 && totalTimeInHours <= 35)
             {
-                return "a day ago";
+                response = "a day";
             }
 
             var totalTimeInDays = timeSpan.TotalDays;
 
             if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             {
-                return $"{Math.Floor(totalTimeInDays)} days ago";
+                response = $"{Math.Floor(totalTimeInDays)} days";
             }
 
             if (totalTimeInDays > 25 && totalTimeInDays <= 45)
             {
-                return "a month ago";
+                response = "a month";
             }
 
             if (totalTimeInDays > 45 && totalTimeInDays <= 319)
             {
-                return $"{Math.Ceiling(totalTimeInDays / _daysInAMonth)} months ago";
+                response = $"{Math.Ceiling(totalTimeInDays / DaysInAMonth)} months";
             }
 
             if (totalTimeInDays > 319 && totalTimeInDays <= 547)
             {
-                return "a year ago";
+                response = "a year";
             }
 
             if (totalTimeInDays > 547)
             {
-                return $"{Math.Ceiling(totalTimeInDays / _daysInAYear)} years ago";
+                response = $"{Math.Ceiling(totalTimeInDays / DaysInAYear)} years";
             }
-            
-            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan, "The time span sent could not be parsed.");
+
+            if (direction == RelativityDirection.From)
+            {
+                return $"{response} {fromPostScript}";
+            }
+
+            if (direction == RelativityDirection.To)
+            {
+                return $"{toPreScript} {response}";
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
+                "The time span sent could not be parsed.");
         }
     }
 }
