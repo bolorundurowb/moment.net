@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests
 {
+    [ExcludeFromCodeCoverage]
     public class RelativeTimeTests
     {
         [Test]
@@ -95,6 +97,97 @@ namespace moment.net.Tests
         {
             var dateTime = DateTime.UtcNow.AddDays(-3650);
             dateTime.FromNow().ShouldBe("10 years ago");
+        }
+        
+        [Test]
+        public void AFewSecondsInTheFutureTest()
+        {
+            var aFewSecondsAgo = DateTime.UtcNow.AddSeconds(20);
+            aFewSecondsAgo.ToNow().ShouldBe("in a few seconds");
+        }
+        
+        [Test]
+        public void MoreSecondsInTheFutureTest()
+        {
+            var largeSecondsAgo = DateTime.UtcNow.AddSeconds(50);
+            largeSecondsAgo.ToNow().ShouldBe("in a minute");
+        }
+        
+        [Test]
+        public void AFewMinutesInTheFutureTest()
+        {
+            var afewMinutesAgo = DateTime.Now.AddMinutes(1);
+            afewMinutesAgo.ToNow().ShouldBe("in a minute");
+        }
+        
+        [Test]
+        public void MoreMinutesInTheFutureTest()
+        {
+            var minutesAgo = DateTime.Now.AddMinutes(15);
+            minutesAgo.ToNow().ShouldBe("in 15 minutes");
+        }
+        
+        [Test]
+        public void ToHourTest()
+        {
+            var dateTime = DateTime.UtcNow.AddMinutes(65);
+            dateTime.ToNow().ShouldBe("in an hour");
+        }
+        
+        [Test]
+        public void ToMultipleHoursTest()
+        {
+            var dateTime = DateTime.UtcNow.AddHours(20);
+            dateTime.ToNow().ShouldBe("in 20 hours");
+        }
+        
+        [Test]
+        public void ToDayTest()
+        {
+            var dateTime = DateTime.UtcNow.AddHours(25);
+            dateTime.ToNow().ShouldBe("in a day");
+        }
+        
+        [Test]
+        public void ToMultipleDaysTest()
+        {
+            var dateTime = DateTime.UtcNow.AddDays(4);
+            dateTime.ToNow().ShouldBe("in 4 days");
+        }
+        
+        [Test]
+        public void ToMonthTest()
+        {
+            var dateTime = DateTime.UtcNow.AddDays(27);
+            dateTime.ToNow().ShouldBe("in a month");
+        }
+        
+        [Test]
+        public void ToMultipleMonthsTest()
+        {
+            var dateTime = DateTime.UtcNow.AddDays(60);
+            dateTime.ToNow().ShouldBe("in 2 months");
+        }
+        
+        [Test]
+        public void ToYearTest()
+        {
+            var dateTime = DateTime.UtcNow.AddDays(360);
+            dateTime.ToNow().ShouldBe("in a year");
+        }
+        
+        [Test]
+        public void ToTwoYearsTest()
+        {
+            var dateTime = DateTime.UtcNow.AddDays(570);
+            dateTime.ToNow().ShouldBe("in 2 years");
+        }
+        
+        [Test]
+        public void ToMultipleYearsTest()
+        {
+            var dateTime = DateTime.UtcNow.AddDays(3650);
+            dateTime.ToNow().ShouldBe("in 10 years");
         }
     }
 }
