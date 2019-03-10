@@ -1,6 +1,6 @@
 namespace moment.net.Enums
 {
-    public enum RelativityDirection
+    internal enum RelativityDirection
     {
         From,
         To

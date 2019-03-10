@@ -5,7 +5,6 @@ namespace moment.net
 {
     public static class RelativeTime
     {
-        private const int _daysInAWeek = 7;
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
@@ -14,6 +13,13 @@ namespace moment.net
             return This.Kind == DateTimeKind.Utc
                 ? TimeFromTimeSpan(DateTime.UtcNow - This, RelativityDirection.From)
                 : TimeFromTimeSpan(DateTime.Now - This, RelativityDirection.From);
+        }
+
+        public static string ToNow(this DateTime This)
+        {
+            return This.Kind == DateTimeKind.Utc
+                ? TimeFromTimeSpan(This - DateTime.UtcNow, RelativityDirection.To)
+                : TimeFromTimeSpan(This - DateTime.Now, RelativityDirection.To);
         }
 
         private static string TimeFromTimeSpan(TimeSpan timeSpan, RelativityDirection direction)
