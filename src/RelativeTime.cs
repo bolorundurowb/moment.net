@@ -30,8 +30,8 @@ namespace moment.net
 
         public static string To(this DateTime This, DateTime dateTime)
         {
-            var endDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
-            var startDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+            var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
             return ParseFromFutureTimeSpan(endDate - startDate);
         }
 
