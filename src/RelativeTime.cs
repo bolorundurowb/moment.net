@@ -53,7 +53,7 @@ namespace moment.net
 
             if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
             {
-                return $"{Math.Floor(totalTimeInMinutes)} minutes ago";
+                return $"{Math.Round(totalTimeInMinutes)} minutes ago";
             }
 
             if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
@@ -65,7 +65,7 @@ namespace moment.net
 
             if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
             {
-                return $"{Math.Floor(totalTimeInHours)} hours ago";
+                return $"{Math.Round(totalTimeInHours)} hours ago";
             }
 
             if (totalTimeInHours > 21 && totalTimeInHours <= 35)
@@ -77,7 +77,7 @@ namespace moment.net
 
             if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             {
-                return $"{Math.Floor(totalTimeInDays)} days ago";
+                return $"{Math.Round(totalTimeInDays)} days ago";
             }
 
             if (totalTimeInDays > 25 && totalTimeInDays <= 45)
@@ -87,7 +87,7 @@ namespace moment.net
 
             if (totalTimeInDays > 45 && totalTimeInDays <= 319)
             {
-                return $"{Math.Ceiling(totalTimeInDays / DaysInAMonth)} months ago";
+                return $"{Math.Round(totalTimeInDays / DaysInAMonth)} months ago";
             }
 
             if (totalTimeInDays > 319 && totalTimeInDays <= 547)
@@ -97,7 +97,7 @@ namespace moment.net
 
             if (totalTimeInDays > 547)
             {
-                return $"{Math.Ceiling(totalTimeInDays / DaysInAYear)} years ago";
+                return $"{Math.Round(totalTimeInDays / DaysInAYear)} years ago";
             }
 
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
@@ -122,7 +122,7 @@ namespace moment.net
 
             if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
             {
-                return $"in {Math.Ceiling(totalTimeInMinutes)} minutes";
+                return $"in {Math.Round(totalTimeInMinutes)} minutes";
             }
 
             if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
@@ -134,7 +134,7 @@ namespace moment.net
 
             if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
             {
-                return $"in {Math.Ceiling(totalTimeInHours)} hours";
+                return $"in {Math.Round(totalTimeInHours)} hours";
             }
 
             if (totalTimeInHours > 21 && totalTimeInHours <= 35)
@@ -146,7 +146,7 @@ namespace moment.net
 
             if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             {
-                return $"in {Math.Ceiling(totalTimeInDays)} days";
+                return $"in {Math.Round(totalTimeInDays)} days";
             }
 
             if (totalTimeInDays > 25 && totalTimeInDays <= 45)
@@ -156,7 +156,7 @@ namespace moment.net
 
             if (totalTimeInDays > 45 && totalTimeInDays <= 319)
             {
-                return $"in {Math.Ceiling(totalTimeInDays / DaysInAMonth)} months";
+                return $"in {Math.Round(totalTimeInDays / DaysInAMonth)} months";
             }
 
             if (totalTimeInDays > 319 && totalTimeInDays <= 547)
@@ -166,7 +166,7 @@ namespace moment.net
 
             if (totalTimeInDays > 547)
             {
-                return $"in {Math.Ceiling(totalTimeInDays / DaysInAYear)} years";
+                return $"in {Math.Round(totalTimeInDays / DaysInAYear)} years";
             }
 
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,

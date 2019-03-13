@@ -189,5 +189,14 @@ namespace moment.net.Tests
             var dateTime = DateTime.UtcNow.AddDays(3650);
             dateTime.ToNow().ShouldBe("in 10 years");
         }
+        
+        [Test]
+        public void FromSpecifiedDateTest()
+        {
+            var twoThousandAndTwelve = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var twoThousandAndEighteen = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            
+            twoThousandAndTwelve.From(twoThousandAndEighteen).ShouldBe("6 years ago");
+        }
     }
 }
