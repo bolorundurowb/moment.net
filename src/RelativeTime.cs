@@ -1,5 +1,4 @@
 ﻿using System;
-using moment.net.Enums;
 
 namespace moment.net
 {
@@ -13,6 +12,13 @@ namespace moment.net
             return This.Kind == DateTimeKind.Utc
                 ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
                 : ParseFromPastTimeSpan(DateTime.Now - This);
+        }
+
+        public static string From(this DateTime This, DateTime dateTime)
+        {
+            var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+            return ParseFromPastTimeSpan(endDate - startDate);
         }
 
         public static string ToNow(this DateTime This)
