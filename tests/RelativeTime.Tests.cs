@@ -1,11 +1,9 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests
 {
-    [ExcludeFromCodeCoverage]
     public class RelativeTimeTests
     {
         [Test]
