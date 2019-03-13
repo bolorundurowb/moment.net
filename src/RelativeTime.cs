@@ -172,5 +172,74 @@ namespace moment.net
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
                 "in The time span sent could not be parsed.");
         }
+
+        private static string ParseTimeDifference(TimeSpan timeSpan)
+        {
+            var totalTimeInSeconds = timeSpan.TotalSeconds;
+
+            if (totalTimeInSeconds <= 44.0)
+            {
+                return "few seconds";
+            }
+
+            if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
+            {
+                return "one minute";
+            }
+
+            var totalTimeInMinutes = timeSpan.TotalMinutes;
+
+            if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
+            {
+                return $"{Math.Round(totalTimeInMinutes)} minutes";
+            }
+
+            if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
+            {
+                return "one hour";
+            }
+
+            var totalTimeInHours = timeSpan.TotalHours;
+
+            if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
+            {
+                return $"{Math.Round(totalTimeInHours)} hours";
+            }
+
+            if (totalTimeInHours > 21 && totalTimeInHours <= 35)
+            {
+                return "one day";
+            }
+
+            var totalTimeInDays = timeSpan.TotalDays;
+
+            if (totalTimeInHours > 35 && totalTimeInDays <= 25)
+            {
+                return $"{Math.Round(totalTimeInDays)} days";
+            }
+
+            if (totalTimeInDays > 25 && totalTimeInDays <= 45)
+            {
+                return "one month";
+            }
+
+            if (totalTimeInDays > 45 && totalTimeInDays <= 319)
+            {
+                return $"{Math.Round(totalTimeInDays / DaysInAMonth)} months";
+            }
+
+            if (totalTimeInDays > 319 && totalTimeInDays <= 547)
+            {
+                return "one year";
+            }
+
+            if (totalTimeInDays > 547)
+            {
+                return $"{Math.Round(totalTimeInDays / DaysInAYear)} years";
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
+                "in The time span sent could not be parsed.");
+        }
     }
 }
