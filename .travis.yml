@@ -7,5 +7,14 @@ install:
 script:
  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover tests/moment.net.Tests.csproj
 after_success:
+ - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
+ - REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
+ - REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
+ - echo $TRAVIS_COMMIT
+ - echo $TRAVIS_BRANCH
+ - echo $REPO_COMMIT_AUTHOR
+ - echo $REPO_COMMIT_AUTHOR_EMAIL
+ - echo $REPO_COMMIT_MESSAGE
+ - echo $TRAVIS_JOB_ID
  - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
- - ./tools/csmacnz.Coveralls --opencover -i ./tests/coverage.opencover.xml --useRelativePaths
+ - ./tools/csmacnz.Coveralls --opencover -i ./tests/coverage.opencover.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci" --useRelativePaths
