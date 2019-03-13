@@ -16,5 +16,5 @@ after_success:
  - echo $REPO_COMMIT_AUTHOR_EMAIL
  - echo $REPO_COMMIT_MESSAGE
  - echo $TRAVIS_JOB_ID
- - dotnet tool install -g coveralls.net --version 1.0.0
- - csmacnz.Coveralls --opencover -i ./tests/coverage.opencover.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci" --useRelativePaths
+ - dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
+ - ./tools/csmacnz.Coveralls --opencover -i ./tests/coverage.opencover.xml --repoToken $COVERALLS_REPO_TOKEN --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR" --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE" --jobId $TRAVIS_JOB_ID  --serviceName "travis-ci" --useRelativePaths
