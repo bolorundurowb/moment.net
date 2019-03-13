@@ -28,6 +28,13 @@ namespace moment.net
                 : ParseFromFutureTimeSpan(This - DateTime.Now);
         }
 
+        public static string To(this DateTime This, DateTime dateTime)
+        {
+            var endDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var startDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+            return ParseFromFutureTimeSpan(endDate - startDate);
+        }
+
         private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
         {
             var totalTimeInSeconds = timeSpan.TotalSeconds;
