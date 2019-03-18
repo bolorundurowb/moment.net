@@ -32,6 +32,11 @@ namespace moment.net
             return ParseFromPastTimeSpan(endDate - startDate);
         }
 
+        /// <summary>
+        /// Get the relative time from the current date time instance to a time frame in the future
+        /// </summary>
+        /// <param name="This">A time frame in the future</param>
+        /// <returns>A string representing the time span in human readable format</returns>
         public static string ToNow(this DateTime This)
         {
             return This.Kind == DateTimeKind.Utc
@@ -39,6 +44,12 @@ namespace moment.net
                 : ParseFromFutureTimeSpan(This - DateTime.Now);
         }
 
+        /// <summary>
+        /// Get the relative time from the a date time instance to a time frame in the future
+        /// </summary>
+        /// <param name="This">A time frame to be compared to</param>
+        /// <param name="dateTime">A time frame in the future</param>
+        /// <returns>A string representing the time span in human readable format</returns>
         public static string To(this DateTime This, DateTime dateTime)
         {
             var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
