@@ -2,6 +2,18 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.1;netstandard1.3;netstandard1.6;netstandard2.0</TargetFrameworks>
+        <PackageVersion>1.0.0-alpha</PackageVersion>
+        <Title>moment.net</Title>
+        <Authors>bolorundurowb</Authors>
+        <Description>A library aimed at adding in some relevanyt fundtionality as seen in moment.js</Description>
+        <Copyright>(c) 2019</Copyright>
+        <PackageProjectUrl>https://github.com/bolorundurowb/moment.net</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/bolorundurowb/moment.net/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>moment datetime relative time</PackageTags>
+        <PackageReleaseNotes>First pre release</PackageReleaseNotes>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
 </Project>
