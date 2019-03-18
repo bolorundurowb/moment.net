@@ -7,13 +7,24 @@ namespace moment.net
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
+        /// <summary>
+        /// Get the relative time from a given date time to the current time
+        /// </summary>
+        /// <param name="This">A time frame in the past</param>
+        /// <returns>A string representing the time span in human readable format</returns>
         public static string FromNow(this DateTime This)
         {
             return This.Kind == DateTimeKind.Utc
                 ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
                 : ParseFromPastTimeSpan(DateTime.Now - This);
         }
-
+        
+        /// <summary>
+        /// Get the relative time from a given date time to another date time instance
+        /// </summary>
+        /// <param name="This">A time frame in the past</param>
+        /// <param name="dateTime">A time frame sometime after the one being compared to</param>
+        /// <returns>A string representing the time span in human readable format</returns>
         public static string From(this DateTime This, DateTime dateTime)
         {
             var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
