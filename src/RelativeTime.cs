@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace moment.net
 {
@@ -6,6 +7,47 @@ namespace moment.net
     {
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
+
+        /// <summary>
+        /// Returns the start of the year, month, week, day or hour for specified date time
+        /// This implementation uses the current culture
+        /// </summary>
+        /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException">Thrown when an invalid  value is casted to timeAnchor</exception>
+        public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor)
+        {
+            return This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Returns the start of the year, month, week, day or hour for specified date time
+        /// This implementation requires culture information to be provided
+        /// </summary>
+        /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException">Thrown when an invalid  value is casted to timeAnchor</exception>
+        public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+        {
+            switch (timeAnchor)
+            {
+                case DateTimeAnchor.Minute:
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0);
+                case DateTimeAnchor.Hour:
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour,0,0);
+                case DateTimeAnchor.Day:
+                    return new DateTime(This.Year, This.Month, This.Day);
+                case DateTimeAnchor.Week:
+                    var tmp = GetFirstDateInWeek(This, cultureInfo);
+                    return new DateTime(tmp.Year, tmp.Month, tmp.Day);
+                case DateTimeAnchor.Month:
+                    return new DateTime(This.Year, This.Month, 1);
+                case DateTimeAnchor.Year:
+                    return new DateTime(This.Year, 1, 1);
+                default:
+                    throw new InvalidCastException();
+            }
+        }
 
         /// <summary>
         /// Get the relative time from a given date time to the current time
@@ -134,6 +176,23 @@ namespace moment.net
 
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
                 "in The time span sent could not be parsed.");
+        }
+
+
+        /// <summary>
+        /// Returns the first day of the week for the given date for the given
+        /// The returned first day of the week will vary based on the supplied culture info
+        /// </summary>
+        /// <param name="dayInWeek">A day in the week of interest</param>
+        /// <param name="cultureInfo">The culture infoormation to be formatted with</param>
+        /// <returns></returns>
+        private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        {
+            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+            DateTime firstDateInWeek = dayInWeek.Date;
+            int diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
+            var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
+            return value;
         }
     }
 }
