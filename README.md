@@ -34,7 +34,7 @@ var future = new DateTime(2021, 1, 1);
 var relativeTime = past.From(future); // in 2 years
 ```
 
-- StartOf
+- StartOfX
 ```csharp
 var time = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
 var startOfMinute = date.StartOf(DateTimeAnchor.Minute);	//01/05/2008 08:30:00"
