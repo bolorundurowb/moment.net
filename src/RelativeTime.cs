@@ -180,7 +180,7 @@ namespace moment.net
 
 
         /// <summary>
-        /// Returns the first day of the week for the given date for the given
+        /// Returns the first day of the week for the given date and culture info
         /// The returned first day of the week will vary based on the supplied culture info
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
