@@ -57,6 +57,19 @@ namespace moment.net
             return ParseFromFutureTimeSpan(endDate - startDate);
         }
 
+        public static string CalendarTime(this DateTime This, string outputFormat = "MM/dd/yyyy")
+        {
+            return CalendarTime(This, DateTime.UtcNow, outputFormat);
+        }
+
+        public static string CalendarTime(this DateTime This, DateTime dateTime,
+            string outputFormat = "MM/dd/yyyy")
+        {
+            var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+            var baseSuffix = endDate.ToString(" 'at' hh:mm tt");
+        }
+
         private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
         {
             return $"{ParseTimeDifference(timeSpan)} ago";
