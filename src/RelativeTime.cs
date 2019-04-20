@@ -1,4 +1,5 @@
 ﻿using System;
+using moment.net.Models;
 
 namespace moment.net
 {
@@ -18,7 +19,7 @@ namespace moment.net
                 ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
                 : ParseFromPastTimeSpan(DateTime.Now - This);
         }
-        
+
         /// <summary>
         /// Get the relative time from a given date time to another date time instance
         /// </summary>
@@ -57,17 +58,41 @@ namespace moment.net
             return ParseFromFutureTimeSpan(endDate - startDate);
         }
 
-        public static string CalendarTime(this DateTime This, string outputFormat = "MM/dd/yyyy")
+        public static string CalendarTime(this DateTime This, CalendarTimeFormats formats = null)
         {
-            return CalendarTime(This, DateTime.UtcNow, outputFormat);
+            return CalendarTime(This, DateTime.UtcNow, formats);
         }
 
         public static string CalendarTime(this DateTime This, DateTime dateTime,
-            string outputFormat = "MM/dd/yyyy")
+            CalendarTimeFormats formats = null)
         {
+            formats = formats ?? new CalendarTimeFormats();
             var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
             var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
-            var baseSuffix = endDate.ToString(" 'at' hh:mm tt");
+            var timeDiff = endDate - startDate;
+
+            if (startDate.Date == endDate.Date)
+            {
+                return endDate.ToString(formats.SameDay);
+            }
+
+            if (startDate.AddDays(1).Date == endDate.Date)
+            {
+                return endDate.ToString(formats.NextDay);
+            }
+            if (startDate.AddDays(-1).Date == endDate.Date)
+            {
+                return endDate.ToString(formats.LastDay);
+            }
+            if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
+            {
+                return endDate.ToString(formats.NextWeek);
+            }
+            if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
+            {
+                return endDate.ToString(formats.LastWeek);
+            }
+            return endDate.ToString(formats.EverythingElse);
         }
 
         private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
