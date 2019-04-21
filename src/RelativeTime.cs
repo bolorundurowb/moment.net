@@ -1,6 +1,7 @@
 ﻿using System;
 using moment.net.Models;
 using System.Globalization;
+using moment.net.Enums;
 
 namespace moment.net
 {
@@ -98,22 +99,6 @@ namespace moment.net
             var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
             var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
             return ParseFromFutureTimeSpan(endDate - startDate);
-        }
-
-        /// <summary>
-        /// Returns the first day of the week for the given date and culture info
-        /// The returned first day of the week will vary based on the supplied culture info
-        /// </summary>
-        /// <param name="dayInWeek">A day in the week of interest</param>
-        /// <param name="cultureInfo">The culture infoormation to be formatted with</param>
-        /// <returns></returns>
-        private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
-        {
-            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-            DateTime firstDateInWeek = dayInWeek.Date;
-            int diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
-            var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
-            return value;
         }
 
         public static string CalendarTime(this DateTime This, CalendarTimeFormats formats = null)
@@ -230,6 +215,22 @@ namespace moment.net
 
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
                 "in The time span sent could not be parsed.");
+        }
+
+        /// <summary>
+        /// Returns the first day of the week for the given date and culture info
+        /// The returned first day of the week will vary based on the supplied culture info
+        /// </summary>
+        /// <param name="dayInWeek">A day in the week of interest</param>
+        /// <param name="cultureInfo">The culture infoormation to be formatted with</param>
+        /// <returns></returns>
+        private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        {
+            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+            DateTime firstDateInWeek = dayInWeek.Date;
+            int diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
+            var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
+            return value;
         }
     }
 }

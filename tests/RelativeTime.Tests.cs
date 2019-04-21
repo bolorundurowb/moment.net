@@ -1,4 +1,5 @@
 using System;
+using moment.net.Enums;
 using moment.net.Models;
 using NUnit.Framework;
 using Shouldly;
