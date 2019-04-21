@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moment.net", "src\moment.net.csproj", "{13472E42-68FB-47C4-AB32-01A96F3BA884}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moment.net", "src\moment.net.csproj", "{13472E42-68FB-47C4-AB32-01A96F3BA884}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moment.net.Tests", "tests\moment.net.Tests.csproj", "{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moment.net.Tests", "tests\moment.net.Tests.csproj", "{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +21,11 @@ Global
 		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {581ACFA5-EF72-41DF-AA69-A3C199847275}
 	EndGlobalSection
 EndGlobal
