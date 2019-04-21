@@ -67,8 +67,8 @@ namespace moment.net
             CalendarTimeFormats formats = null)
         {
             formats = formats ?? new CalendarTimeFormats();
-            var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
-            var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+            var startDate = This.Kind == DateTimeKind.Local ? This : This.ToLocalTime();
+            var endDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
             var timeDiff = endDate - startDate;
 
             if (startDate.Date == endDate.Date)

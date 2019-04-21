@@ -20,11 +20,11 @@ namespace moment.net.Models
         public CalendarTimeFormats()
         {
             const string baseSuffix = " 'at' hh:mm tt";
-            SameDay = "Today" + baseSuffix;
-            NextDay = "Tomorrow" + baseSuffix;
+            SameDay = "'Today'" + baseSuffix;
+            NextDay = "'Tomorrow'" + baseSuffix;
             NextWeek = "dddd" + baseSuffix;
-            LastDay = "Yesterday" + baseSuffix;
-            LastWeek = "Last dddd" + baseSuffix;
+            LastDay = "'Yesterday'" + baseSuffix;
+            LastWeek = "'Last' dddd" + baseSuffix;
             EverythingElse = "MM/dd/yyyy";
         }
 
