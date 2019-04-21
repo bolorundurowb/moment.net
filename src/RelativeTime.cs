@@ -1,5 +1,7 @@
 ﻿using System;
+using moment.net.Models;
 using System.Globalization;
+using moment.net.Enums;
 
 namespace moment.net
 {
@@ -60,7 +62,7 @@ namespace moment.net
                 ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
                 : ParseFromPastTimeSpan(DateTime.Now - This);
         }
-        
+
         /// <summary>
         /// Get the relative time from a given date time to another date time instance
         /// </summary>
@@ -97,6 +99,56 @@ namespace moment.net
             var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
             var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
             return ParseFromFutureTimeSpan(endDate - startDate);
+        }
+
+        /// <summary>
+        /// Get the calendar time description from this DateTime instance to the current time
+        /// </summary>
+        /// <param name="This">The date instance which to compare with the current date</param>
+        /// <param name="formats">An object describing how the output string should be displayed</param>
+        /// <returns></returns>
+        public static string CalendarTime(this DateTime This, CalendarTimeFormats formats = null)
+        {
+            return CalendarTime(This, DateTime.Now, formats);
+        }
+
+        /// <summary>
+        /// Get the calendar time description from this DateTime instance to a specified DateTime instance
+        /// </summary>
+        /// <param name="This">The date instance which to start comparison from</param>
+        /// <param name="dateTime">The date instance to compare to</param>
+        /// <param name="formats">An object describing how the output string should be displayed</param>
+        /// <returns></returns>
+        public static string CalendarTime(this DateTime This, DateTime dateTime,
+            CalendarTimeFormats formats = null)
+        {
+            formats = formats ?? new CalendarTimeFormats();
+            var startDate = This.Kind == DateTimeKind.Local ? This : This.ToLocalTime();
+            var endDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
+            var timeDiff = endDate - startDate;
+
+            if (startDate.Date == endDate.Date)
+            {
+                return endDate.ToString(formats.SameDay);
+            }
+
+            if (startDate.AddDays(1).Date == endDate.Date)
+            {
+                return endDate.ToString(formats.NextDay);
+            }
+            if (startDate.AddDays(-1).Date == endDate.Date)
+            {
+                return endDate.ToString(formats.LastDay);
+            }
+            if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
+            {
+                return endDate.ToString(formats.NextWeek);
+            }
+            if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
+            {
+                return endDate.ToString(formats.LastWeek);
+            }
+            return endDate.ToString(formats.EverythingElse);
         }
 
         private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
@@ -177,7 +229,6 @@ namespace moment.net
             throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
                 "in The time span sent could not be parsed.");
         }
-
 
         /// <summary>
         /// Returns the first day of the week for the given date and culture info
