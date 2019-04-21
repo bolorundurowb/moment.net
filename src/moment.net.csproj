@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard1.1;netstandard1.3;netstandard1.6;netstandard2.0</TargetFrameworks>
-        <PackageVersion>1.0.0-alpha</PackageVersion>
+        <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
+        <PackageVersion>1.0.0</PackageVersion>
         <Title>moment.net</Title>
-        <Authors>bolorundurowb</Authors>
+        <Authors>bolorundurowb YemiKudaisi</Authors>
         <Description>A library aimed at adding in some relevanyt fundtionality as seen in moment.js</Description>
         <Copyright>(c) 2019</Copyright>
         <PackageProjectUrl>https://github.com/bolorundurowb/moment.net</PackageProjectUrl>
@@ -12,7 +12,7 @@
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment datetime relative time</PackageTags>
-        <PackageReleaseNotes>First pre release</PackageReleaseNotes>
+        <PackageReleaseNotes>First full release.</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
