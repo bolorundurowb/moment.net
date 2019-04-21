@@ -101,11 +101,24 @@ namespace moment.net
             return ParseFromFutureTimeSpan(endDate - startDate);
         }
 
+        /// <summary>
+        /// Get the calendar time description from this DateTime instance to the current time
+        /// </summary>
+        /// <param name="This">The date instance which to compare with the current date</param>
+        /// <param name="formats">An object describing how the output string should be displayed</param>
+        /// <returns></returns>
         public static string CalendarTime(this DateTime This, CalendarTimeFormats formats = null)
         {
-            return CalendarTime(This, DateTime.UtcNow, formats);
+            return CalendarTime(This, DateTime.Now, formats);
         }
 
+        /// <summary>
+        /// Get the calendar time description from this DateTime instance to a specified DateTime instance
+        /// </summary>
+        /// <param name="This">The date instance which to start comparison from</param>
+        /// <param name="dateTime">The date instance to compare to</param>
+        /// <param name="formats">An object describing how the output string should be displayed</param>
+        /// <returns></returns>
         public static string CalendarTime(this DateTime This, DateTime dateTime,
             CalendarTimeFormats formats = null)
         {
