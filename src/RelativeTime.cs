@@ -79,9 +79,10 @@ namespace moment.net
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59);
                 case DateTimeAnchor.Week:
-                    var tmp = GetFirstDateInWeek(This, cultureInfo);
+                    var tmp = GetLastDateInWeek(This, cultureInfo);
                     return new DateTime(tmp.Year, tmp.Month, tmp.Day);
                 case DateTimeAnchor.Month:
+                DateTime.DaysInMonth(date.Year, date.Month);
                     return new DateTime(This.Year, This.Month, 1);
                 case DateTimeAnchor.Year:
                     return new DateTime(This.Year, 1, 1);
@@ -225,7 +226,7 @@ namespace moment.net
         /// The returned first day of the week will vary based on the supplied culture info
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
-        /// <param name="cultureInfo">The culture infoormation to be formatted with</param>
+        /// <param name="cultureInfo">The culture information to be formatted with</param>
         /// <returns>The date of the first day in a week</returns>
         private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
@@ -241,15 +242,12 @@ namespace moment.net
         /// The returned last day of the week will vary based on the supplied culture info
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
-        /// <param name="cultureInfo">The culture infoormation to be formatted with</param>
+        /// <param name="cultureInfo">The culture information to be formatted with</param>
         /// <returns>The date of the last day in a week</returns>
         private static DateTime GetLastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            DayOfWeek lateDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-            DateTime firstDateInWeek = dayInWeek.Date;
-            int diff = (int)firstDateInWeek.DayOfWeek - (int)lateDayOfWeek;
-            var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
-            return value;
+            DateTime firstDayInWeek = GetFirstDayOfWeek(dayInWeek, cultureInfo);
+            return firstDayInWeek.AddDays(7);
         }
     }
 }
