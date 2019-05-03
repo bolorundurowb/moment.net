@@ -36,7 +36,7 @@ var relativeTime = past.From(future); // in 2 years
 
 - StartOfX
 ```csharp
-var time = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
+var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
 var startOfMinute = date.StartOf(DateTimeAnchor.Minute);	//01/05/2008 08:30:00"
 var startOfHour = date.StartOf(DateTimeAnchor.Hour);		//01/05/2008 08:00:00" 
 var startOfDay = date.StartOf(DateTimeAnchor.Day);			//01/05/2008 00:00:00"
