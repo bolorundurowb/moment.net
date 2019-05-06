@@ -80,12 +80,12 @@ namespace moment.net
                     return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59);
                 case DateTimeAnchor.Week:
                     var tmp = GetLastDateInWeek(This, cultureInfo);
-                    return new DateTime(tmp.Year, tmp.Month, tmp.Day);
+                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59);
                 case DateTimeAnchor.Month:
-                DateTime.DaysInMonth(date.Year, date.Month);
-                    return new DateTime(This.Year, This.Month, 1);
+                    var days = DateTime.DaysInMonth(This.Year, This.Month);
+                    return new DateTime(This.Year,This.Month, days, 23, 59, 59);
                 case DateTimeAnchor.Year:
-                    return new DateTime(This.Year, 1, 1);
+                    return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59);
                 default:
                     throw new InvalidCastException();
             }
@@ -246,8 +246,8 @@ namespace moment.net
         /// <returns>The date of the last day in a week</returns>
         private static DateTime GetLastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            DateTime firstDayInWeek = GetFirstDayOfWeek(dayInWeek, cultureInfo);
-            return firstDayInWeek.AddDays(7);
+            DateTime firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
+            return firstDayInWeek.AddDays(6);
         }
     }
 }
