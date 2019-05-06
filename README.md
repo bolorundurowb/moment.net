@@ -53,5 +53,5 @@ var endOfHour = date.EndOf(DateTimeAnchor.Hour);		//01/05/2008 08:59:59
 var endOfDay = date.EndOf(DateTimeAnchor.Day);			//01/05/2008 23:59:59
 var endOfWeek = date.EndOf(DateTimeAnchor.Week);		//03/05/2008 59:59:59
 var endOfMonth = date.EndOf(DateTimeAnchor.Month);		//31/05/2008 23:59:59
-var endOfYear = date.EndOf(DateTimeAnchor.Year);		//01/01/2008 00:00:00
+var endOfYear = date.EndOf(DateTimeAnchor.Year);		//31/12/2008 23:59:59
 ```
