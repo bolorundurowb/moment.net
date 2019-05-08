@@ -34,12 +34,12 @@ var future = new DateTime(2021, 1, 1);
 var relativeTime = past.From(future); // in 2 years
 ```
 
-- StartOfX
+- StartOf
 ```csharp
 var time = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
 var startOfMinute = date.StartOf(DateTimeAnchor.Minute);	//01/05/2008 08:30:00"
 var startOfHour = date.StartOf(DateTimeAnchor.Hour);		//01/05/2008 08:00:00" 
-var startOfDay = date.StartOf(DateTimeAnchor.Day);			//01/05/2008 00:00:00"
+var startOfDay = date.StartOf(DateTimeAnchor.Day);		//01/05/2008 00:00:00"
 var startOfWeek = date.StartOf(DateTimeAnchor.Week);		//27/04/2008 00:00:00" (previous month)
 var startOfMonth = date.StartOf(DateTimeAnchor.Month);		//01/05/2008 00:00:00"
 var startOfYear = date.StartOf(DateTimeAnchor.Year);		//01/01/2008 00:00:00"
