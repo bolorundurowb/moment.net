@@ -48,7 +48,7 @@ var startOfYear = date.StartOf(DateTimeAnchor.Year);		//01/01/2008 00:00:00"
 #### EndOf
 ```csharp
 var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
-var endOfMinute = date.EndOf(DateTimeAnchor.Minute);	        //01/05/2008 08:30:59
+var endOfMinute = date.EndOf(DateTimeAnchor.Minute);	        // 01/05/2008 08:30:59
 var endOfHour = date.EndOf(DateTimeAnchor.Hour);		// 01/05/2008 08:59:59
 var endOfDay = date.EndOf(DateTimeAnchor.Day);		        // 01/05/2008 23:59:59
 var endOfWeek = date.EndOf(DateTimeAnchor.Week);		// 03/05/2008 23:59:59
