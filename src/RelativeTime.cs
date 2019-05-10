@@ -52,6 +52,48 @@ namespace moment.net
         }
 
         /// <summary>
+        /// Returns the end of a year, month, week, day or hour for specified date time
+        /// This implementation uses the current culture
+        /// </summary>
+        /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException">Thrown when an invalid value is casted to timeAnchor</exception>
+        public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor)
+        {
+            return This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Returns the end of a year, month, week, day or hour for specified date time
+        /// This implementation requires culture information to be provided
+        /// </summary>
+        /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException">Thrown when an invalid value is casted to timeAnchor</exception>
+        public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+        {
+            switch (timeAnchor)
+            {
+                case DateTimeAnchor.Minute:
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59);
+                case DateTimeAnchor.Hour:
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 59, 59);
+                case DateTimeAnchor.Day:
+                    return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59);
+                case DateTimeAnchor.Week:
+                    var tmp = GetLastDateInWeek(This, cultureInfo);
+                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59);
+                case DateTimeAnchor.Month:
+                    var days = DateTime.DaysInMonth(This.Year, This.Month);
+                    return new DateTime(This.Year, This.Month, days, 23, 59, 59);
+                case DateTimeAnchor.Year:
+                    return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59);
+                default:
+                    throw new InvalidCastException();
+            }
+        }
+
+        /// <summary>
         /// Get the relative time from a given date time to the current time
         /// </summary>
         /// <param name="This">A time frame in the past</param>
@@ -245,5 +287,19 @@ namespace moment.net
             var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
             return value;
         }
+
+        /// <summary>
+        /// Returns the last day of the week for the given date and culture info
+        /// The returned last day of the week will vary based on the supplied culture info
+        /// </summary>
+        /// <param name="dayInWeek">A day in the week of interest</param>
+        /// <param name="cultureInfo">The culture information to be formatted with</param>
+        /// <returns>The date of the last day in a week</returns>
+        private static DateTime GetLastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        {
+            DateTime firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
+            return firstDayInWeek.AddDays(6);
+        }
+
     }
 }
