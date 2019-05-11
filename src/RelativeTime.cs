@@ -194,6 +194,18 @@ namespace moment.net
             return endDate.ToString(formats.EverythingElse);
         }
 
+        public static double UnixTimestampInSeconds(this DateTime This)
+        {
+            var timeSpan = This - UnixEpoch;
+            return timeSpan.TotalSeconds;
+        }
+
+        public static double UnixTimestampInMilliseconds(this DateTime This)
+        {
+            var timeSpan = This - UnixEpoch;
+            return timeSpan.TotalMilliseconds;
+        }
+
         private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
         {
             return $"{ParseTimeDifference(timeSpan)} ago";
