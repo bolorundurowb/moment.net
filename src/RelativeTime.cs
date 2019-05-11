@@ -194,12 +194,22 @@ namespace moment.net
             return endDate.ToString(formats.EverythingElse);
         }
 
+        /// <summary>
+        /// Get the total number of seconds since the unix epoch
+        /// </summary>
+        /// <param name="This">DateTime instance to compare the unix epoch to</param>
+        /// <returns>A double value indicating the number of seconds</returns>
         public static double UnixTimestampInSeconds(this DateTime This)
         {
             var timeSpan = This - UnixEpoch;
             return timeSpan.TotalSeconds;
         }
 
+        /// <summary>
+        /// Get the total number of milliseconds since the unix epoch
+        /// </summary>
+        /// <param name="This">DateTime instance to compare the unix epoch to</param>
+        /// <returns>A double value indicating the number of milliseconds</returns>
         public static double UnixTimestampInMilliseconds(this DateTime This)
         {
             var timeSpan = This - UnixEpoch;
