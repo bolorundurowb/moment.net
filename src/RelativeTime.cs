@@ -7,6 +7,7 @@ namespace moment.net
 {
     public static class RelativeTime
     {
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1);
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
