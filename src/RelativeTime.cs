@@ -282,9 +282,9 @@ namespace moment.net
         /// <returns></returns>
         private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-            DateTime firstDateInWeek = dayInWeek.Date;
-            int diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
+            var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+            var firstDateInWeek = dayInWeek.Date;
+            var diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
             var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
             return value;
         }
@@ -298,9 +298,8 @@ namespace moment.net
         /// <returns>The date of the last day in a week</returns>
         private static DateTime GetLastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            DateTime firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
+            var firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
             return firstDayInWeek.AddDays(6);
         }
-
     }
 }
