@@ -205,7 +205,8 @@ namespace moment.net
         /// <returns>A double value indicating the number of seconds</returns>
         public static double UnixTimestampInSeconds(this DateTime This)
         {
-            var timeSpan = This - UnixEpoch;
+            var dateInstance = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var timeSpan = dateInstance - UnixEpoch;
             return timeSpan.TotalSeconds;
         }
 
@@ -216,7 +217,8 @@ namespace moment.net
         /// <returns>A double value indicating the number of milliseconds</returns>
         public static double UnixTimestampInMilliseconds(this DateTime This)
         {
-            var timeSpan = This - UnixEpoch;
+            var dateInstance = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var timeSpan = dateInstance - UnixEpoch;
             return timeSpan.TotalMilliseconds;
         }
 
