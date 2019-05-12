@@ -29,7 +29,7 @@ namespace moment.net.Tests
             var tz = TZConvert.GetTimeZoneInfo("Pacific Standard Time");
             var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 8, 0, 0, DateTimeKind.Local), tz);
             var secondsElapsed = dateTime.UnixTimestampInSeconds();
-            secondsElapsed.ShouldBe(31586400);
+            secondsElapsed.ShouldBe(365.0 * 24 * 60 * 60);
         }
     }
 }
