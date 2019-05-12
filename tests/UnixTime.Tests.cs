@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Shouldly;
+using TimeZoneConverter;
 
 namespace moment.net.Tests
 {
@@ -25,7 +26,7 @@ namespace moment.net.Tests
         [Test]
         public void UnixTimeInSecondsOneLocalYearFromEpoch()
         {
-            var tz = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var tz = TZConvert.GetTimeZoneInfo("Pacific Standard Time");
             var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 8, 0, 0, DateTimeKind.Local), tz);
             var secondsElapsed = dateTime.UnixTimestampInSeconds();
             secondsElapsed.ShouldBe(31586400);

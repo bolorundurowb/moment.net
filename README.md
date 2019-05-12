@@ -67,3 +67,12 @@ var calendarTime = startDateTime.CalendarTime(endDateTime); // Tomorrow at 00:00
 calendarTime = endDateTime.CalendarTime(startDateTime); // Yesterday at 00:00 AM
 calendarTime = startDateTime.CalendarTime(sameDay); // Today at 12:00 PM
 ```
+
+#### UnixTime
+UnixTime supports retrieving the number of seconds or milliseconds that have elapsed since the [unix epoch](https://en.wikipedia.org/wiki/Unix_time)
+
+```csharp
+var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds(); // 31536000000
+var secondsElapsed = dateTime.UnixTimestampInSeconds(); // 31536000
+```
