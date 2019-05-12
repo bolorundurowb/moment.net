@@ -7,7 +7,7 @@ namespace moment.net
 {
     public static class RelativeTime
     {
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1);
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
@@ -37,7 +37,7 @@ namespace moment.net
                 case DateTimeAnchor.Minute:
                     return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0);
                 case DateTimeAnchor.Hour:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour,0,0);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 0, 0);
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day);
                 case DateTimeAnchor.Week:
@@ -179,18 +179,22 @@ namespace moment.net
             {
                 return endDate.ToString(formats.NextDay);
             }
+
             if (startDate.AddDays(-1).Date == endDate.Date)
             {
                 return endDate.ToString(formats.LastDay);
             }
+
             if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
             {
                 return endDate.ToString(formats.NextWeek);
             }
+
             if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
             {
                 return endDate.ToString(formats.LastWeek);
             }
+
             return endDate.ToString(formats.EverythingElse);
         }
 
@@ -306,7 +310,7 @@ namespace moment.net
         {
             var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
             var firstDateInWeek = dayInWeek.Date;
-            var diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
+            var diff = (int) firstDateInWeek.DayOfWeek - (int) firstDayOfWeek;
             var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
             return value;
         }
