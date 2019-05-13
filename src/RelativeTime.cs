@@ -77,7 +77,7 @@ namespace moment.net
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day,0,0,0,0);
                 case DateTimeAnchor.Week:
-                    var tmp = FirstDateInWeek(This, cultureInfo);
+                    var tmp = This.FirstDateInWeek(cultureInfo);
                     return new DateTime(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0);
                 case DateTimeAnchor.Month:
                     return new DateTime(This.Year, This.Month, 1, 0, 0, 0, 0);
@@ -118,7 +118,7 @@ namespace moment.net
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59, 999);
                 case DateTimeAnchor.Week:
-                    var tmp = LastDateInWeek(This, cultureInfo);
+                    var tmp = This.LastDateInWeek(cultureInfo);
                     return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999);
                 case DateTimeAnchor.Month:
                     var days = DateTime.DaysInMonth(This.Year, This.Month);
@@ -342,9 +342,9 @@ namespace moment.net
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
         /// <returns></returns>
-        public static DateTime FirstDateInWeek(DateTime dayInWeek)
+        public static DateTime FirstDateInWeek(this DateTime dayInWeek)
         {
-            return FirstDateInWeek(dayInWeek, CultureInfo.CurrentCulture);
+            return dayInWeek.FirstDateInWeek(CultureInfo.CurrentCulture);
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace moment.net
         /// <param name="dayInWeek">A day in the week of interest</param>
         /// <param name="cultureInfo">The culture information</param>
         /// <returns></returns>
-        public static DateTime FirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        public static DateTime FirstDateInWeek(this DateTime dayInWeek, CultureInfo cultureInfo)
         {
             var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
             var firstDateInWeek = dayInWeek.Date;
@@ -367,9 +367,9 @@ namespace moment.net
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
         /// <returns>The date of the last day in a week</returns>
-        private static DateTime LastDateInWeek(DateTime dayInWeek)
+        public static DateTime LastDateInWeek(this DateTime dayInWeek)
         {
-            return LastDateInWeek(dayInWeek, CultureInfo.CurrentCulture);
+            return dayInWeek.LastDateInWeek(CultureInfo.CurrentCulture);
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace moment.net
         /// <param name="dayInWeek">A day in the week of interest</param>
         /// <param name="cultureInfo">The culture information to be formatted with</param>
         /// <returns>The date of the last day in a week</returns>
-        private static DateTime LastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        public static DateTime LastDateInWeek(this DateTime dayInWeek, CultureInfo cultureInfo)
         {
             var firstDayInWeek = FirstDateInWeek(dayInWeek, cultureInfo);
             return firstDayInWeek.AddDays(6);
