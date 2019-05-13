@@ -22,12 +22,7 @@ namespace moment.net
             }
             return This;
         }
-
-        public static DateTime Next(this DateTime This, Months month)
-        {
-            return DateTime.Now;
-        }
-
+        
         public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek)
         {
             if (This.DayOfWeek == dayOfWeek)
@@ -39,13 +34,6 @@ namespace moment.net
             }
             return This;
         }
-
-        public static DateTime Last(this DateTime This, Months month)
-        {
-            return DateTime.Now;
-        }
-
-
 
         /// <summary>
         /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>

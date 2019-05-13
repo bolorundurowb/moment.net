@@ -77,7 +77,7 @@ var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds(); // 31536000000
 var secondsElapsed = dateTime.UnixTimestampInSeconds(); // 31536000
 ```
 
-#### First and Last Date a week
+#### First and Last Date in a week
 Moment.net supports retrieving the first or last day in a week given a specific ``DateTime``
 ```csharp
 date.FirstDateInWeek()  // 27/04/2008 00:00:00 (previous month)
@@ -85,3 +85,13 @@ date.LastDateInWeek()   // 03/05/2008 00:00:00
 ```
 The example above uses the current ``CultureInfo`` for the system in use, to specify a ``CultureInfo``, moment.net has an overloaded method that takes takes ``CultureInfo`` as an argument ``date.FirstDateInWeek(someCultureInfo)``.
 
+#### Next
+Returns the date of the next Thursday.
+```csharp
+date.Next(DayOfWeek.Thursday) // 08/05/2008 08:30:52
+```
+#### Last
+Returns the date of the previous Friday.
+```csharp
+date.Last(DayOfWeek.Friday) // 25/04/2008 08:30:52
+```
