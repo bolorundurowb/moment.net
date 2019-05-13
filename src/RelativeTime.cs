@@ -30,6 +30,9 @@ namespace moment.net
 
         public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek)
         {
+            if (This.DayOfWeek == dayOfWeek)
+                This = This.AddDays(-1);
+
             while (This.DayOfWeek != dayOfWeek)
             {
                 This = This.AddDays(-1);
