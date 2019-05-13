@@ -11,86 +11,108 @@ namespace moment.net
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
+        public static DateTime Next(SeekPosition.Day day)
+        {
+            return DateTime.Now;
+        }
+
+        public static DateTime Next(SeekPosition.Month month)
+        {
+            return DateTime.Now;
+        }
+
+        public static DateTime Last(SeekPosition.Day day)
+        {
+            return DateTime.Now;
+        }
+
+        public static DateTime Last(SeekPosition.Month month)
+        {
+            return DateTime.Now;
+        }
+
+
+
         /// <summary>
-        /// Returns the start of the year, month, week, day or hour for specified date time
+        /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>
         /// This implementation uses the current culture
         /// </summary>
         /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
         /// <returns></returns>
-        /// <exception cref="InvalidCastException">Thrown when an invalid  value is casted to timeAnchor</exception>
+        /// <exception cref="ArgumentException">Thrown when an invalid  value is casted to timeAnchor</exception>
         public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor)
         {
             return This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
         }
 
         /// <summary>
-        /// Returns the start of the year, month, week, day or hour for specified date time
-        /// This implementation requires culture information to be provided
+        /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>
+        /// This implementation requires <see cref="CultureInfo"/> to be provided
         /// </summary>
         /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
         /// <returns></returns>
-        /// <exception cref="InvalidCastException">Thrown when an invalid  value is casted to timeAnchor</exception>
+        /// <exception cref="ArgumentException">Thrown when an invalid  value is casted to <see cref="DateTimeAnchor"/>r</exception>
         public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
         {
             switch (timeAnchor)
             {
                 case DateTimeAnchor.Minute:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0, 0);
                 case DateTimeAnchor.Hour:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 0, 0);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 0, 0, 0);
                 case DateTimeAnchor.Day:
-                    return new DateTime(This.Year, This.Month, This.Day);
+                    return new DateTime(This.Year, This.Month, This.Day,0,0,0,0);
                 case DateTimeAnchor.Week:
                     var tmp = GetFirstDateInWeek(This, cultureInfo);
-                    return new DateTime(tmp.Year, tmp.Month, tmp.Day);
+                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0);
                 case DateTimeAnchor.Month:
-                    return new DateTime(This.Year, This.Month, 1);
+                    return new DateTime(This.Year, This.Month, 1, 0, 0, 0, 0);
                 case DateTimeAnchor.Year:
-                    return new DateTime(This.Year, 1, 1);
+                    return new DateTime(This.Year, 1, 1, 0, 0, 0, 0);
                 default:
-                    throw new InvalidCastException();
+                    throw new ArgumentException();
             }
         }
 
         /// <summary>
-        /// Returns the end of a year, month, week, day or hour for specified date time
+        /// Returns the end of a year, month, week, day or hour for the given  <see cref="DateTime"/>
         /// This implementation uses the current culture
         /// </summary>
         /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
         /// <returns></returns>
-        /// <exception cref="InvalidCastException">Thrown when an invalid value is casted to timeAnchor</exception>
+        /// <exception cref="InvalidCastException">Thrown when an invalid value is casted to <see cref="DateTimeAnchor"/></exception>
         public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor)
         {
             return This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
         }
 
         /// <summary>
-        /// Returns the end of a year, month, week, day or hour for specified date time
-        /// This implementation requires culture information to be provided
+        /// Returns the end of a year, month, week, day or hour for the given  <see cref="DateTime"/>
+        /// This implementation requires a <see cref="CultureInfo"/> to be provided
         /// </summary>
         /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
         /// <returns></returns>
-        /// <exception cref="InvalidCastException">Thrown when an invalid value is casted to timeAnchor</exception>
+        /// <exception cref="ArgumentException">Thrown when an invalid value is casted to timeAnchor</exception>
         public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
         {
             switch (timeAnchor)
             {
                 case DateTimeAnchor.Minute:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59, 999);
                 case DateTimeAnchor.Hour:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 59, 59);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 59, 59, 999);
                 case DateTimeAnchor.Day:
-                    return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59);
+                    return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59, 999);
                 case DateTimeAnchor.Week:
                     var tmp = GetLastDateInWeek(This, cultureInfo);
-                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59);
+                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999);
                 case DateTimeAnchor.Month:
                     var days = DateTime.DaysInMonth(This.Year, This.Month);
-                    return new DateTime(This.Year, This.Month, days, 23, 59, 59);
+                    return new DateTime(This.Year, This.Month, days, 23, 59, 59, 999);
                 case DateTimeAnchor.Year:
-                    return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59);
+                    return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999);
                 default:
-                    throw new InvalidCastException();
+                    throw new ArgumentException();
             }
         }
 
