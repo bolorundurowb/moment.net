@@ -77,7 +77,7 @@ namespace moment.net
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day,0,0,0,0);
                 case DateTimeAnchor.Week:
-                    var tmp = GetFirstDateInWeek(This, cultureInfo);
+                    var tmp = FirstDateInWeek(This, cultureInfo);
                     return new DateTime(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0);
                 case DateTimeAnchor.Month:
                     return new DateTime(This.Year, This.Month, 1, 0, 0, 0, 0);
@@ -118,7 +118,7 @@ namespace moment.net
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59, 999);
                 case DateTimeAnchor.Week:
-                    var tmp = GetLastDateInWeek(This, cultureInfo);
+                    var tmp = LastDateInWeek(This, cultureInfo);
                     return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999);
                 case DateTimeAnchor.Month:
                     var days = DateTime.DaysInMonth(This.Year, This.Month);
@@ -338,13 +338,22 @@ namespace moment.net
         }
 
         /// <summary>
-        /// Returns the first day of the week for the given date and culture info
-        /// The returned first day of the week will vary based on the supplied culture info
+        /// Returns the first day of the week for the given date and the current <see cref="CultureInfo"/>
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
-        /// <param name="cultureInfo">The culture infoormation to be formatted with</param>
         /// <returns></returns>
-        private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        public static DateTime FirstDateInWeek(DateTime dayInWeek)
+        {
+            return FirstDateInWeek(dayInWeek, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Returns the first day of the week for the given date and <see cref="CultureInfo"/>
+        /// </summary>
+        /// <param name="dayInWeek">A day in the week of interest</param>
+        /// <param name="cultureInfo">The culture information</param>
+        /// <returns></returns>
+        public static DateTime FirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
             var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
             var firstDateInWeek = dayInWeek.Date;
@@ -354,15 +363,25 @@ namespace moment.net
         }
 
         /// <summary>
+        /// Returns the last day of the week for the given date and current <see cref="CultureInfo"/>
+        /// </summary>
+        /// <param name="dayInWeek">A day in the week of interest</param>
+        /// <returns>The date of the last day in a week</returns>
+        private static DateTime LastDateInWeek(DateTime dayInWeek)
+        {
+            return LastDateInWeek(dayInWeek, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
         /// Returns the last day of the week for the given date and culture info
         /// The returned last day of the week will vary based on the supplied culture info
         /// </summary>
         /// <param name="dayInWeek">A day in the week of interest</param>
         /// <param name="cultureInfo">The culture information to be formatted with</param>
         /// <returns>The date of the last day in a week</returns>
-        private static DateTime GetLastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
+        private static DateTime LastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            var firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
+            var firstDayInWeek = FirstDateInWeek(dayInWeek, cultureInfo);
             return firstDayInWeek.AddDays(6);
         }
     }
