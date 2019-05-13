@@ -11,22 +11,33 @@ namespace moment.net
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
-        public static DateTime Next(SeekPosition.Day day)
+        public static DateTime Next(this DateTime This, DayOfWeek dayOfWeek)
+        {
+            if (This.DayOfWeek == dayOfWeek)
+                This = This.AddDays(1);
+
+            while (This.DayOfWeek != dayOfWeek)
+            {
+                This = This.AddDays(1);
+            }
+            return This;
+        }
+
+        public static DateTime Next(this DateTime This, Months month)
         {
             return DateTime.Now;
         }
 
-        public static DateTime Next(SeekPosition.Month month)
+        public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek)
         {
-            return DateTime.Now;
+            while (This.DayOfWeek != dayOfWeek)
+            {
+                This = This.AddDays(-1);
+            }
+            return This;
         }
 
-        public static DateTime Last(SeekPosition.Day day)
-        {
-            return DateTime.Now;
-        }
-
-        public static DateTime Last(SeekPosition.Month month)
+        public static DateTime Last(this DateTime This, Months month)
         {
             return DateTime.Now;
         }
