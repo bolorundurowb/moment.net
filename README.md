@@ -1,9 +1,9 @@
 # moment.net
 
-[![Build Status](https://travis-ci.org/bolorundurowb/moment.net.svg?branch=master)](https://travis-ci.org/bolorundurowb/moment.net)  [![Coverage Status](https://coveralls.io/repos/github/bolorundurowb/moment.net/badge.svg)](https://coveralls.io/github/bolorundurowb/moment.net)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Build Status](https://travis-ci.org/bolorundurowb/moment.net.svg?branch=master)](https://travis-ci.org/bolorundurowb/moment.net)  [![Coverage Status](https://coveralls.io/repos/github/bolorundurowb/moment.net/badge.svg)](https://coveralls.io/github/bolorundurowb/moment.net)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NuGet Badge](https://buildstats.info/nuget/moment.net)](https://www.nuget.org/packages/moment.net)
 
 
-This library aims to port as many bits of functionality from moment.js as is necessary. A few have been ported thus far `FromNow`, `From`, `ToNow`, `To`, `StartOf`, `EndOf` and `CalendarTime``.
+This library aims to port as many bits of functionality from moment.js as is necessary. A few have been ported thus far `FromNow`, `From`, `ToNow`, `To`, `StartOf`, `EndOf` and `CalendarTime`.
 
 ## Usages
 
@@ -66,4 +66,13 @@ var endDateTime = new DateTime(2012, 12, 13);
 var calendarTime = startDateTime.CalendarTime(endDateTime); // Tomorrow at 00:00 AM
 calendarTime = endDateTime.CalendarTime(startDateTime); // Yesterday at 00:00 AM
 calendarTime = startDateTime.CalendarTime(sameDay); // Today at 12:00 PM
+```
+
+#### UnixTime
+UnixTime supports retrieving the number of seconds or milliseconds that have elapsed since the [unix epoch](https://en.wikipedia.org/wiki/Unix_time)
+
+```csharp
+var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds(); // 31536000000
+var secondsElapsed = dateTime.UnixTimestampInSeconds(); // 31536000
 ```

@@ -2,17 +2,17 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>1.1.0</PackageVersion>
         <Title>moment.net</Title>
         <Authors>bolorundurowb YemiKudaisi</Authors>
-        <Description>A library aimed at adding in some relevanyt fundtionality as seen in moment.js</Description>
+        <Description>A library aimed at adding in some relevant functionality as seen in moment.js that is missing in the System.DateTime construct</Description>
         <Copyright>(c) 2019</Copyright>
         <PackageProjectUrl>https://github.com/bolorundurowb/moment.net</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/bolorundurowb/moment.net/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment datetime relative time</PackageTags>
-        <PackageReleaseNotes>First full release.</PackageReleaseNotes>
+        <PackageReleaseNotes>Add end time and unix timestamp support</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 

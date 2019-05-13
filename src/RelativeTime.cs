@@ -7,6 +7,7 @@ namespace moment.net
 {
     public static class RelativeTime
     {
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
@@ -36,7 +37,7 @@ namespace moment.net
                 case DateTimeAnchor.Minute:
                     return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0);
                 case DateTimeAnchor.Hour:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour,0,0);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 0, 0);
                 case DateTimeAnchor.Day:
                     return new DateTime(This.Year, This.Month, This.Day);
                 case DateTimeAnchor.Week:
@@ -178,19 +179,47 @@ namespace moment.net
             {
                 return endDate.ToString(formats.NextDay);
             }
+
             if (startDate.AddDays(-1).Date == endDate.Date)
             {
                 return endDate.ToString(formats.LastDay);
             }
+
             if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
             {
                 return endDate.ToString(formats.NextWeek);
             }
+
             if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
             {
                 return endDate.ToString(formats.LastWeek);
             }
+
             return endDate.ToString(formats.EverythingElse);
+        }
+
+        /// <summary>
+        /// Get the total number of seconds since the unix epoch
+        /// </summary>
+        /// <param name="This">DateTime instance to compare the unix epoch to</param>
+        /// <returns>A double value indicating the number of seconds</returns>
+        public static double UnixTimestampInSeconds(this DateTime This)
+        {
+            var dateInstance = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var timeSpan = dateInstance - UnixEpoch;
+            return timeSpan.TotalSeconds;
+        }
+
+        /// <summary>
+        /// Get the total number of milliseconds since the unix epoch
+        /// </summary>
+        /// <param name="This">DateTime instance to compare the unix epoch to</param>
+        /// <returns>A double value indicating the number of milliseconds</returns>
+        public static double UnixTimestampInMilliseconds(this DateTime This)
+        {
+            var dateInstance = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+            var timeSpan = dateInstance - UnixEpoch;
+            return timeSpan.TotalMilliseconds;
         }
 
         private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
@@ -281,9 +310,9 @@ namespace moment.net
         /// <returns></returns>
         private static DateTime GetFirstDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-            DateTime firstDateInWeek = dayInWeek.Date;
-            int diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
+            var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+            var firstDateInWeek = dayInWeek.Date;
+            var diff = (int) firstDateInWeek.DayOfWeek - (int) firstDayOfWeek;
             var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
             return value;
         }
@@ -297,9 +326,8 @@ namespace moment.net
         /// <returns>The date of the last day in a week</returns>
         private static DateTime GetLastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo)
         {
-            DateTime firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
+            var firstDayInWeek = GetFirstDateInWeek(dayInWeek, cultureInfo);
             return firstDayInWeek.AddDays(6);
         }
-
     }
 }
