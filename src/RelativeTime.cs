@@ -75,6 +75,12 @@ namespace moment.net
             return This;
         }
 
+
+        public static FinalDays Final(this DateTime This)
+        {
+            return new FinalDays(This);
+        }
+
         /// <summary>
         /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>
         /// This implementation uses the current culture
