@@ -11,6 +11,11 @@ namespace moment.net
         private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
         private const double DaysInAMonth = DaysInAYear / 12;
 
+        /// <summary>
+        /// Return the <see cref="DateTime"/> for the next <see cref="DayOfWeek"/> supplied
+        /// </summary>
+        /// <param name="dayOfWeek">The day of the week whose date is to be returned</param>
+        /// <returns>The <see cref="DateTime"/> for the next <see cref="DayOfWeek"/> supplied</returns>
         public static DateTime Next(this DateTime This, DayOfWeek dayOfWeek)
         {
             if (This.DayOfWeek == dayOfWeek)
@@ -22,7 +27,27 @@ namespace moment.net
             }
             return This;
         }
-        
+
+        /// <summary>
+        /// Return the <see cref="DateTime"/> for the nth next <see cref="DayOfWeek"/> supplied
+        /// </summary>
+        /// <param name="dayOfWeek">The day of the week whose date is to be returned</param>
+        /// <param name="count">A number indicating the nth next</param>
+        /// <returns>The <see cref
+        public static DateTime Next(this DateTime This, DayOfWeek dayOfWeek, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                This = This.Next(dayOfWeek);
+            }
+            return This;
+        }
+
+        /// <summary>
+        /// Return the <see cref="DateTime"/> for the previous <see cref="DayOfWeek"/> supplied
+        /// </summary>
+        /// <param name="dayOfWeek">The <see cref="DayOfWeek"/> whose date is to be returned</param>
+        /// <returns>The <see cref="DateTime"/> for the previous <see cref="DayOfWeek"/> supplied</returns>
         public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek)
         {
             if (This.DayOfWeek == dayOfWeek)
@@ -31,6 +56,21 @@ namespace moment.net
             while (This.DayOfWeek != dayOfWeek)
             {
                 This = This.AddDays(-1);
+            }
+            return This;
+        }
+
+        /// <summary>
+        /// Return the <see cref="DateTime"/> for the previous <see cref="DayOfWeek"/> supplied
+        /// </summary>
+        /// <param name="dayOfWeek">The <see cref="DayOfWeek"/> whose date is to be returned</param>
+        /// <param name="count">A number indicating the nth previous day of the week</param>
+        /// <returns>The <see cref="DateTime"/> for the previous <see cref="DayOfWeek"/> supplied</returns>
+        public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek, int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                This = This.Last(dayOfWeek);
             }
             return This;
         }
