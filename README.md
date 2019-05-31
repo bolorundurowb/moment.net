@@ -1,11 +1,32 @@
-# moment.net
+# Moment.net
 
 [![Build Status](https://travis-ci.org/bolorundurowb/moment.net.svg?branch=master)](https://travis-ci.org/bolorundurowb/moment.net)  [![Coverage Status](https://coveralls.io/repos/github/bolorundurowb/moment.net/badge.svg)](https://coveralls.io/github/bolorundurowb/moment.net)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NuGet Badge](https://buildstats.info/nuget/moment.net)](https://www.nuget.org/packages/moment.net)
 
+## Overview
+This library aims to port as many bits of functionality from moment.js as is necessary. A few have been ported thus far `FromNow`, `From`, `ToNow`, `To`, `StartOf`, `EndOf` and `CalendarTime`. Attempts are also being made to add some functionalities that might not exist in moment.js.
 
-This library aims to port as many bits of functionality from moment.js as is necessary. A few have been ported thus far `FromNow`, `From`, `ToNow`, `To`, `StartOf`, `EndOf` and `CalendarTime`.
+## Getting started
+We recommend getting Moment.net via nuget package manager.
 
-## Usages
+#### Package Manager
+```
+PM > Install-Package moment.net
+```
+
+#### .NET CLI
+```
+> dotnet add package moment.net
+```
+
+#### PackageReference
+```csharp
+<PackageReference Include="moment.net" />
+```
+
+#### Package Manager
+``PM > Install-Package moment.net -Version 1.1.0``
+
+## Example Usage
 
 #### FromNow
 ```csharp
@@ -88,10 +109,31 @@ The example above uses the current ``CultureInfo`` for the system in use, to spe
 #### Next
 Returns the date of the next Thursday.
 ```csharp
+var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
 date.Next(DayOfWeek.Thursday) // 08/05/2008 08:30:52
+```
+Returns the 3rd next Thursday use
+```csharp
+date.Next(DayOfWeek.Thursday, 3) // 22/05/2008 08:30:52
 ```
 #### Last
 Returns the date of the previous Friday.
 ```csharp
+var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
 date.Last(DayOfWeek.Friday) // 25/04/2008 08:30:52
+```
+Returns the 3rd previous Thursday.
+```csharp
+date.Next(DayOfWeek.Thursday, 3) // 10/04/2008 08:30:52
+```
+#### Final
+Fluently returns the final day of the week in a month or year given a date
+
+```csharp
+var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
+// final monday in may 2008
+date.Final().Monday().InMonth(); // 26/05/2008 00:00:00
+
+// final sunday in 2008
+date.Final().Sunday().InYear();  // 28/12/2008 00:00:00
 ```
