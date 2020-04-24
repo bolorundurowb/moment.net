@@ -146,19 +146,19 @@ namespace moment.net
             switch (timeAnchor)
             {
                 case DateTimeAnchor.Minute:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59, 999);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59, 999, This.Kind);
                 case DateTimeAnchor.Hour:
-                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 59, 59, 999);
+                    return new DateTime(This.Year, This.Month, This.Day, This.Hour, 59, 59, 999, This.Kind);
                 case DateTimeAnchor.Day:
-                    return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59, 999);
+                    return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59, 999, This.Kind);
                 case DateTimeAnchor.Week:
                     var tmp = This.LastDateInWeek(cultureInfo);
-                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999);
+                    return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999, This.Kind);
                 case DateTimeAnchor.Month:
                     var days = DateTime.DaysInMonth(This.Year, This.Month);
-                    return new DateTime(This.Year, This.Month, days, 23, 59, 59, 999);
+                    return new DateTime(This.Year, This.Month, days, 23, 59, 59, 999, This.Kind);
                 case DateTimeAnchor.Year:
-                    return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999);
+                    return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Kind);
                 default:
                     throw new ArgumentException();
             }
