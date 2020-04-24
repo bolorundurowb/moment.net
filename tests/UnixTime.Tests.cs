@@ -14,7 +14,7 @@ namespace moment.net.Tests
             var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds();
             millisecondsElapsed.ShouldBe(365.0 * 24 * 60 * 60 * 1000);
         }
-        
+
         [Test]
         public void UnixTimeInSecondsOneUtcYearFromEpoch()
         {
