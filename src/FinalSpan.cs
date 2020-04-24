@@ -19,7 +19,7 @@ namespace moment.net
         {
             int m = _dt.Month;
             // only loop through the last seven days of the month
-            _dt = new DateTime(_dt.Year,_dt.Month, (DateTime.DaysInMonth(_dt.Year, _dt.Month)-7));
+            _dt = new DateTime(_dt.Year,_dt.Month, (DateTime.DaysInMonth(_dt.Year, _dt.Month)-7), 0, 0, 0, _dt.Kind);
             while (_dt.Month == m)
             {
                 if(_dt.DayOfWeek == _dow)
@@ -33,7 +33,7 @@ namespace moment.net
 
         public DateTime InYear()
         {
-            var dt = new DateTime(_dt.Year, 12, (DateTime.DaysInMonth(_dt.Year, 12) - 7));
+            var dt = new DateTime(_dt.Year, 12, (DateTime.DaysInMonth(_dt.Year, 12) - 7), 0, 0, 0, _dt.Kind);
             return new FinalSpan(dt, _dow).InMonth();
         }
     }
