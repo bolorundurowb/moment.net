@@ -20,7 +20,7 @@ namespace moment.net.Tests
         public void StartOfHourTest()
         {
             DateTime date = DateTime.Parse(dateString,System.Globalization.CultureInfo.InvariantCulture);
-            date.StartOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:00:00"); 
+            date.StartOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:00:00");
         }
 
         [Test]
