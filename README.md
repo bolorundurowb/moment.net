@@ -24,7 +24,7 @@ PM > Install-Package moment.net
 ```
 
 #### Package Manager
-``PM > Install-Package moment.net -Version 1.1.0``
+`PM > Install-Package moment.net`
 
 ## Example Usage
 
