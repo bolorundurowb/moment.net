@@ -2,9 +2,9 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
-        <PackageVersion>1.2.0</PackageVersion>
+        <PackageVersion>1.3.0</PackageVersion>
         <Title>moment.net</Title>
-        <Authors>bolorundurowb YemiKudaisi</Authors>
+        <Authors>bolorundurowb yemikudaisi pengelbrecht2627</Authors>
         <Description>A library aimed at adding in some relevant functionality as seen in moment.js that is missing in the System.DateTime construct</Description>
         <Copyright>(c) 2019</Copyright>
         <PackageProjectUrl>https://github.com/bolorundurowb/moment.net</PackageProjectUrl>
@@ -12,7 +12,7 @@
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment datetime relative time</PackageTags>
-        <PackageReleaseNotes>Add last and final support</PackageReleaseNotes>
+        <PackageReleaseNotes>Fixes the issue with the datetime kind not being persisted</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
