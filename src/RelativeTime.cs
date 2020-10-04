@@ -429,11 +429,12 @@ namespace moment.net
         /// </summary>
         /// <param name="dateTime">DateTime instance</param>
         /// <param name="format">Optional format string</param>
-        /// <returns>The date of the last day in a week</returns>
-        public static string Format(this DateTime dateTime, string format = null)
+        /// <param name="cultureInfo">The culture information to be formatted with</param>
+        /// <returns>The formatted date string</returns>
+        public static string Format(this DateTime dateTime, string format = null, CultureInfo cultureInfo = null)
         {
             format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
-            return dateTime.ToString(format);
+            return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
         }
     }
 }
