@@ -17,7 +17,7 @@ namespace moment.net
             return new FinalSpan(dateTime, DayOfWeek.Monday);
         }
 
-        public FinalSpan Teusday()
+        public FinalSpan Tuesday()
         {
             return new FinalSpan(dateTime, DayOfWeek.Tuesday);
         }
