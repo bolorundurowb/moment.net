@@ -35,8 +35,10 @@ namespace moment.net.Tests
         [Test]
         public void UnixTimeInSecondsOneLocalYearFromEpoch()
         {
-            var tz = TZConvert.GetTimeZoneInfo("W. Central Africa Standard Time");
-            var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 1, 0, 0, DateTimeKind.Local), tz);
+            // var tz = TZConvert.GetTimeZoneInfo("W. Central Africa Standard Time");
+            var tz = TZConvert.GetTimeZoneInfo("Pacific Standard Time");
+            // var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 1, 0, 0, DateTimeKind.Local), tz);
+            var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 8, 0, 0, DateTimeKind.Local), tz);
             var secondsElapsed = dateTime.UnixTimestampInSeconds();
             secondsElapsed.ShouldBe(365.0 * 24 * 60 * 60);
         }
