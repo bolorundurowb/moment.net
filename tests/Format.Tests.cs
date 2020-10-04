@@ -25,18 +25,18 @@ namespace moment.net.Tests
             var formattedDate = date.Format("yyy MMM hh");
 
             formattedDate
-                .ShouldBe("2020 Oct 12", Case.Insensitive);
+                .ShouldBe("2020 Oct 12");
         }
 
         [Test]
         public void FormatShouldReturnIsoStringWithSpecifiedFormatStringAndCulture()
         {
             var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
-            var culture = new CultureInfo("fr-FR", false);
+            var culture = new CultureInfo("fr-CA", false);
             var formattedDate = date.Format("yyy MMM hh", culture);
 
             formattedDate
-                .ShouldBe("2020 oct. 12");
+                .ShouldBe("2020 oct. 12", Case.Insensitive);
         }
     }
 }
