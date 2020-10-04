@@ -418,5 +418,11 @@ namespace moment.net
             var firstDayInWeek = FirstDateInWeek(dayInWeek, cultureInfo);
             return firstDayInWeek.AddDays(6);
         }
+
+        public static string Format(this DateTime dateTime, string format = null)
+        {
+            format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
+            return dateTime.ToString(format);
+        }
     }
 }
