@@ -25,6 +25,7 @@ namespace moment.net
             {
                 This = This.AddDays(1);
             }
+
             return This;
         }
 
@@ -40,6 +41,7 @@ namespace moment.net
             {
                 This = This.Next(dayOfWeek);
             }
+
             return This;
         }
 
@@ -57,6 +59,7 @@ namespace moment.net
             {
                 This = This.AddDays(-1);
             }
+
             return This;
         }
 
@@ -72,6 +75,7 @@ namespace moment.net
             {
                 This = This.Last(dayOfWeek);
             }
+
             return This;
         }
 
@@ -109,7 +113,7 @@ namespace moment.net
                 case DateTimeAnchor.Hour:
                     return new DateTime(This.Year, This.Month, This.Day, This.Hour, 0, 0, 0, This.Kind);
                 case DateTimeAnchor.Day:
-                    return new DateTime(This.Year, This.Month, This.Day,0,0,0,0, This.Kind);
+                    return new DateTime(This.Year, This.Month, This.Day, 0, 0, 0, 0, This.Kind);
                 case DateTimeAnchor.Week:
                     var tmp = This.FirstDateInWeek(cultureInfo);
                     return new DateTime(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0, This.Kind);
@@ -417,6 +421,20 @@ namespace moment.net
         {
             var firstDayInWeek = FirstDateInWeek(dayInWeek, cultureInfo);
             return firstDayInWeek.AddDays(6);
+        }
+
+        /// <summary>
+        /// Returns a formatted date string
+        /// If no format is specified it returns an ISO-8601 string with no fractional seconds
+        /// </summary>
+        /// <param name="dateTime">DateTime instance</param>
+        /// <param name="format">Optional format string</param>
+        /// <param name="cultureInfo">The culture information to be formatted with</param>
+        /// <returns>The formatted date string</returns>
+        public static string Format(this DateTime dateTime, string format = null, CultureInfo cultureInfo = null)
+        {
+            format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
+            return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
         }
     }
 }

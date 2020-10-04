@@ -6,7 +6,8 @@ namespace moment.net
 {
     public class FinalDays
     {
-        DateTime dateTime;
+        readonly DateTime dateTime;
+        
         public FinalDays(DateTime dateTime)
         {
             this.dateTime = dateTime;
@@ -17,7 +18,7 @@ namespace moment.net
             return new FinalSpan(dateTime, DayOfWeek.Monday);
         }
 
-        public FinalSpan Teusday()
+        public FinalSpan Tuesday()
         {
             return new FinalSpan(dateTime, DayOfWeek.Tuesday);
         }
