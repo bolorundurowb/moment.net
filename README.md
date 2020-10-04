@@ -124,8 +124,9 @@ date.Last(DayOfWeek.Friday) // 25/04/2008 08:30:52
 ```
 Returns the 3rd previous Thursday.
 ```csharp
-date.Next(DayOfWeek.Thursday, 3) // 10/04/2008 08:30:52
+date.Last(DayOfWeek.Thursday, 3) // 10/04/2008 08:30:52
 ```
+
 #### Final
 Fluently returns the final day of the week in a month or year given a date
 
@@ -136,4 +137,13 @@ date.Final().Monday().InMonth(); // 26/05/2008 00:00:00
 
 // final sunday in 2008
 date.Final().Sunday().InYear();  // 28/12/2008 00:00:00
+```
+
+#### Format
+Fluently returns a formatted string for a given date. if no format string is provided the format defaults to the `ISO-8601` standard with no fractional seconds.
+
+```csharp
+var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+date.Format(); // 1971-01-01T00:00:00+00:00
+date.Format("yyyy MMM dd"); // 1971 Jan 01
 ```
