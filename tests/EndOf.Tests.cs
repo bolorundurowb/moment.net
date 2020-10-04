@@ -12,7 +12,7 @@ namespace moment.net.Tests
         [Test]
         public void EndOfMinuteTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.EndOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:30:59");
             date.EndOf(DateTimeAnchor.Minute).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -20,7 +20,7 @@ namespace moment.net.Tests
         [Test]
         public void EndOfHourTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.EndOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:59:59");
             date.EndOf(DateTimeAnchor.Hour).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -28,7 +28,7 @@ namespace moment.net.Tests
         [Test]
         public void EndOfDayTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.EndOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 23:59:59");
             date.EndOf(DateTimeAnchor.Day).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -36,7 +36,7 @@ namespace moment.net.Tests
         [Test]
         public void EndOfWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.EndOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 23:59:59");
             date.EndOf(DateTimeAnchor.Week).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -44,7 +44,7 @@ namespace moment.net.Tests
         [Test]
         public void EndOfMonthTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.EndOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/05/2008 23:59:59");
             date.EndOf(DateTimeAnchor.Month).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -52,7 +52,7 @@ namespace moment.net.Tests
         [Test]
         public void EndOfYearTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/12/2008 23:59:59");
             date.EndOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
         }

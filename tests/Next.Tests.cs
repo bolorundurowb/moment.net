@@ -12,7 +12,7 @@ namespace moment.net.Tests
         [Test]
         public void NextDayOfWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.Next(DayOfWeek.Thursday).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("08/05/2008 08:30:52");
             date.Next(DayOfWeek.Thursday).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -20,7 +20,7 @@ namespace moment.net.Tests
         [Test]
         public void NextNthDayOfWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.Next(DayOfWeek.Thursday, 3).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("22/05/2008 08:30:52");
             date.Next(DayOfWeek.Thursday, 3).Kind.ShouldBe(DateTimeKind.Utc);
         }

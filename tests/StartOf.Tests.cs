@@ -12,7 +12,7 @@ namespace moment.net.Tests
         [Test]
         public void StartOfMinuteTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.StartOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:30:00");
             date.StartOf(DateTimeAnchor.Minute).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -20,7 +20,7 @@ namespace moment.net.Tests
         [Test]
         public void StartOfHourTest()
         {
-            DateTime date = DateTime.Parse(dateString,System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString,System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.StartOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:00:00");
             date.StartOf(DateTimeAnchor.Hour).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -28,7 +28,7 @@ namespace moment.net.Tests
         [Test]
         public void StartOfDayTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.StartOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 00:00:00");
             date.StartOf(DateTimeAnchor.Day).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -36,7 +36,7 @@ namespace moment.net.Tests
         [Test]
         public void StartOfWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.StartOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("27/04/2008 00:00:00");
             date.StartOf(DateTimeAnchor.Week).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -44,7 +44,7 @@ namespace moment.net.Tests
         [Test]
         public void StartOfMonthTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.StartOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 00:00:00");
             date.StartOf(DateTimeAnchor.Month).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -52,7 +52,7 @@ namespace moment.net.Tests
         [Test]
         public void StartOfYearTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.StartOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/01/2008 00:00:00");
             date.StartOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
         }

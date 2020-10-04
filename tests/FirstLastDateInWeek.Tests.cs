@@ -12,7 +12,7 @@ namespace moment.net.Tests
         [Test]
         public void FirstDateInWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.FirstDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("27/04/2008 00:00:00");
             date.FirstDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -20,7 +20,7 @@ namespace moment.net.Tests
         [Test]
         public void LastDateInWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.LastDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 00:00:00");
             date.LastDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
         }

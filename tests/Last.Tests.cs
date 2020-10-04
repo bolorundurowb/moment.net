@@ -11,7 +11,7 @@ namespace moment.net.Tests
         [Test]
         public void LastDayOfWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.Last(DayOfWeek.Thursday).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("24/04/2008 08:30:52");
             date.Last(DayOfWeek.Thursday).Kind.ShouldBe(DateTimeKind.Utc);
         }
@@ -19,7 +19,7 @@ namespace moment.net.Tests
         [Test]
         public void LastNthDayOfWeekTest()
         {
-            DateTime date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
             date.Last(DayOfWeek.Thursday, 3).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("10/04/2008 08:30:52");
             date.Last(DayOfWeek.Thursday, 3).Kind.ShouldBe(DateTimeKind.Utc);
         }
