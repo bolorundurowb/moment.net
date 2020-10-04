@@ -5,7 +5,7 @@ using Shouldly;
 
 namespace moment.net.Tests
 {
-    public class Final
+    public class FinalTests
     {
         string dateString = "5/1/2008 8:30:52Z AM";
 

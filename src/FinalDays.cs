@@ -6,7 +6,8 @@ namespace moment.net
 {
     public class FinalDays
     {
-        DateTime dateTime;
+        readonly DateTime dateTime;
+        
         public FinalDays(DateTime dateTime)
         {
             this.dateTime = dateTime;
