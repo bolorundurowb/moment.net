@@ -25,7 +25,7 @@ namespace moment.net.Tests
             var formattedDate = date.Format("yyy MMM hh");
 
             formattedDate
-                .ShouldBe("2020 Oct 12");
+                .ShouldBe("2020 Oct 12", Case.Insensitive);
         }
 
         [Test]
