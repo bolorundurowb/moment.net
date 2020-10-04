@@ -11,8 +11,8 @@ namespace moment.net
 
         public FinalSpan(DateTime dateTime, DayOfWeek dayOfWeek)
         {
-            this._dt = dateTime;
-            this._dow = dayOfWeek;
+            _dt = dateTime;
+            _dow = dayOfWeek;
         }
 
         public DateTime InMonth()
