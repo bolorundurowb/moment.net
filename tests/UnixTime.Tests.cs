@@ -14,12 +14,14 @@ namespace moment.net.Tests
             var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds();
             millisecondsElapsed.ShouldBe(365.0 * 24 * 60 * 60 * 1000);
         }
-        
+
         [Test]
         public void UnixTimeInMillisecondsOneLocalYearFromEpoch()
         {
-            var tz = TZConvert.GetTimeZoneInfo("W. Central Africa Standard Time");
-            var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 1, 0, 0, DateTimeKind.Local), tz);
+            // var tz = TZConvert.GetTimeZoneInfo("W. Central Africa Standard Time");
+            var tz = TZConvert.GetTimeZoneInfo("Pacific Standard Time");
+            // var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 1, 0, 0, DateTimeKind.Local), tz);
+            var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 8, 0, 0, DateTimeKind.Local), tz);
             var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds();
             millisecondsElapsed.ShouldBe(365.0 * 24 * 60 * 60 * 1000);
         }
