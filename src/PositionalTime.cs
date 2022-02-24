@@ -12,7 +12,11 @@ public static class PositionalTime
     public static bool IsLeapYear(this DateTime dateTime)
     {
         var year = dateTime.Year;
-        return year % 4 == 0 && year % 100 == 0 && year % 400 == 0;
+
+        if (year % 4 != 0) 
+            return false;
+
+        return year % 100 != 0 || year % 400 == 0;
     }
 
     /// <summary>
