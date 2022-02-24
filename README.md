@@ -1,6 +1,6 @@
 # Moment.net
 
-[![Build Status](https://travis-ci.org/bolorundurowb/moment.net.svg?branch=master)](https://travis-ci.org/bolorundurowb/moment.net)  [![Coverage Status](https://coveralls.io/repos/github/bolorundurowb/moment.net/badge.svg)](https://coveralls.io/github/bolorundurowb/moment.net)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NuGet Badge](https://buildstats.info/nuget/moment.net)](https://www.nuget.org/packages/moment.net)
+[![Build Status](https://app.travis-ci.com/bolorundurowb/moment.net.svg?branch=master)](https://app.travis-ci.com/bolorundurowb/moment.net) [![Coverage Status](https://coveralls.io/repos/github/bolorundurowb/moment.net/badge.svg)](https://coveralls.io/github/bolorundurowb/moment.net)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NuGet Badge](https://buildstats.info/nuget/moment.net)](https://www.nuget.org/packages/moment.net)
 
 ## Overview
 This library aims to port as many bits of functionality from moment.js as is necessary. A few have been ported thus far `FromNow`, `From`, `ToNow`, `To`, `StartOf`, `EndOf` and `CalendarTime`. Attempts are also being made to add some functionalities that might not exist in moment.js.
@@ -146,4 +146,81 @@ Fluently returns a formatted string for a given date. if no format string is pro
 var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 date.Format(); // 1971-01-01T00:00:00+00:00
 date.Format("yyyy MMM dd"); // 1971 Jan 01
+```
+
+#### IsLeapYear
+Determines if a given date falls in a leap year.
+
+```csharp
+var dateTime = DateTime.Parse("1992-02-01");
+dateTime.IsLeapYear(); // True
+
+var dateTime = DateTime.Parse("1900-02-01");
+dateTime.IsLeapYear(); // False
+```
+
+#### IsSame
+Checks in a timezone-safe manner whether two dates are the same
+
+```csharp
+var one = DateTime.Parse("2022-01-01T23:00:00-01:00");
+var another = DateTime.Parse("2022-01-02T03:00:00+03:00");
+one.IsSame(another); // True
+
+var wrong = DateTime.Parse("1900-02-01");
+wrong.IsSame(one); // False
+```
+
+#### IsBefore
+Checks in a timezone-safe manner whether one date comes before another
+
+```csharp
+var one = DateTime.Parse("2022-01-02");
+var another = DateTime.Parse("2022-01-03");
+one.IsSameOrBefore(another); // True
+
+var wrong = DateTime.Parse("2022-02-01");
+one.IsBefore(wrong); // False
+```
+
+#### IsSameOrBefore
+Checks in a timezone-safe manner whether one date is the same as or comes before another
+
+```csharp
+var one = DateTime.Parse("2022-01-02");
+var another = DateTime.Parse("2022-01-03");
+one.IsSameOrBefore(another); // True
+
+var same = DateTime.Parse("2022-01-02");
+one.IsSameOrBefore(same); // True
+
+var wrong = DateTime.Parse("2022-01-01");
+one.IsSameOrBefore(wrong); // False
+```
+
+#### IsAfter
+Checks in a timezone-safe manner whether one date comes after another
+
+```csharp
+var one = DateTime.Parse("2022-01-03");
+var another = DateTime.Parse("2022-01-02");
+one.IsAfter(another); // True
+
+var wrong = DateTime.Parse("2022-02-01");
+one.IsAfter(wrong); // False
+```
+
+#### IsSameOrAfter
+Checks in a timezone-safe manner whether one date is the same as or comes after another
+
+```csharp
+var one = DateTime.Parse("2022-01-03");
+var another = DateTime.Parse("2022-01-02");
+one.IsSameOrAfter(another); // True
+
+var same = DateTime.Parse("2022-01-03");
+one.IsSameOrAfter(same); // True
+
+var wrong = DateTime.Parse("2022-02-01");
+one.IsSameOrAfter(wrong); // False
 ```
