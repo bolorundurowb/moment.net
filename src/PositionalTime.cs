@@ -5,6 +5,20 @@ namespace moment.net;
 public static class PositionalTime
 {
     /// <summary>
+    /// Check if date time instance is the same as a given date
+    /// </summary>
+    /// <param name="dateTime">The given date</param>
+    /// <param name="dateToCompare">The date to compare against</param>
+    /// <returns>A boolean value stating whether the compared date is the same as this date</returns>
+    public static bool IsSame(this DateTime dateTime, DateTime dateToCompare)
+    {
+        var normalizedCurrent = dateTime.ToUniversalTime();
+        var normalizedComparison = dateToCompare.ToUniversalTime();
+
+        return normalizedCurrent == normalizedComparison;
+    }
+
+    /// <summary>
     /// Check if date time instance comes before a given date
     /// </summary>
     /// <param name="dateTime">The given date</param>
@@ -29,7 +43,7 @@ public static class PositionalTime
         var normalizedCurrent = dateTime.ToUniversalTime();
         var normalizedComparison = dateToCompare.ToUniversalTime();
 
-        return normalizedCurrent == normalizedComparison || normalizedCurrent.IsBefore(normalizedComparison);
+        return normalizedCurrent.IsSame(normalizedComparison) || normalizedCurrent.IsBefore(normalizedComparison);
     }
 
     /// <summary>
@@ -57,6 +71,6 @@ public static class PositionalTime
         var normalizedCurrent = dateTime.ToUniversalTime();
         var normalizedComparison = dateToCompare.ToUniversalTime();
 
-        return normalizedCurrent == normalizedComparison || normalizedCurrent.IsAfter(normalizedComparison);
+        return normalizedCurrent.IsSame(normalizedComparison) || normalizedCurrent.IsAfter(normalizedComparison);
     }
 }
