@@ -5,6 +5,17 @@ namespace moment.net;
 public static class PositionalTime
 {
     /// <summary>
+    /// Check if date time instance is a leap year
+    /// </summary>
+    /// <param name="dateTime">The given date</param>
+    /// <returns>A boolean value stating whether this date is a leap year</returns>
+    public static bool IsLeapYear(this DateTime dateTime)
+    {
+        var year = dateTime.Year;
+        return year % 4 == 0 && year % 100 == 0 && year % 400 == 0;
+    }
+
+    /// <summary>
     /// Check if date time instance is the same as a given date
     /// </summary>
     /// <param name="dateTime">The given date</param>
