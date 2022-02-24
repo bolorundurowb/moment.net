@@ -2,23 +2,25 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
-        <PackageVersion>1.3.1</PackageVersion>
+        <PackageVersion>1.3.2</PackageVersion>
         <Title>moment.net</Title>
         <Authors>bolorundurowb yemikudaisi pengelbrecht2627</Authors>
         <Description>A library aimed at adding in some relevant functionality as seen in moment.js that is missing in the System.DateTime construct</Description>
-        <Copyright>(c) 2020</Copyright>
+        <Copyright>(c) 2022</Copyright>
         <PackageProjectUrl>https://github.com/bolorundurowb/moment.net</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/bolorundurowb/moment.net/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment datetime relative time</PackageTags>
-        <PackageReleaseNotes>- add support for the format method
-- fix typographic errors</PackageReleaseNotes>
+        <PackageReleaseNotes>- add nullable support
+- add date positioning support</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <AssemblyVersion>1.3.1</AssemblyVersion>
-        <FileVersion>1.3.1</FileVersion>
+        <AssemblyVersion>1.3.2</AssemblyVersion>
+        <FileVersion>1.3.2</FileVersion>
         <NeutralLanguage>en-NG</NeutralLanguage>
+        <LangVersion>10</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
 </Project>
