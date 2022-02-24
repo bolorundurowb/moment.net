@@ -1,12 +1,11 @@
-﻿namespace moment.net.Enums
+﻿namespace moment.net.Enums;
+
+public enum DateTimeAnchor
 {
-    public enum DateTimeAnchor
-    {
-        Minute,
-        Hour,
-        Day,
-        Week,
-        Month,
-        Year
-    }
+    Minute,
+    Hour,
+    Day,
+    Week,
+    Month,
+    Year
 }
