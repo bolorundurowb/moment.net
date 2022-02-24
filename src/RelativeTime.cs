@@ -21,10 +21,8 @@ public static class RelativeTime
         if (This.DayOfWeek == dayOfWeek)
             This = This.AddDays(1);
 
-        while (This.DayOfWeek != dayOfWeek)
-        {
+        while (This.DayOfWeek != dayOfWeek) 
             This = This.AddDays(1);
-        }
 
         return This;
     }
@@ -34,13 +32,11 @@ public static class RelativeTime
     /// </summary>
     /// <param name="dayOfWeek">The day of the week whose date is to be returned</param>
     /// <param name="count">A number indicating the nth next</param>
-    /// <returns>The <see cref
+    /// <returns>The <see cref="DateTime"/> for the nth <see cref="DayOfWeek"/> supplied</returns>
     public static DateTime Next(this DateTime This, DayOfWeek dayOfWeek, int count)
     {
-        for (var i = 0; i < count; i++)
-        {
+        for (var i = 0; i < count; i++) 
             This = This.Next(dayOfWeek);
-        }
 
         return This;
     }
@@ -55,10 +51,8 @@ public static class RelativeTime
         if (This.DayOfWeek == dayOfWeek)
             This = This.AddDays(-1);
 
-        while (This.DayOfWeek != dayOfWeek)
-        {
+        while (This.DayOfWeek != dayOfWeek) 
             This = This.AddDays(-1);
-        }
 
         return This;
     }
@@ -71,19 +65,14 @@ public static class RelativeTime
     /// <returns>The <see cref="DateTime"/> for the previous <see cref="DayOfWeek"/> supplied</returns>
     public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek, int count)
     {
-        for (var i = 0; i < count; i++)
-        {
+        for (var i = 0; i < count; i++) 
             This = This.Last(dayOfWeek);
-        }
 
         return This;
     }
 
 
-    public static FinalDays Final(this DateTime This)
-    {
-        return new FinalDays(This);
-    }
+    public static FinalDays Final(this DateTime This) => new FinalDays(This);
 
     /// <summary>
     /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>
@@ -92,10 +81,7 @@ public static class RelativeTime
     /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
     /// <returns></returns>
     /// <exception cref="ArgumentException">Thrown when an invalid  value is casted to timeAnchor</exception>
-    public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor)
-    {
-        return This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
-    }
+    public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor) => This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
 
     /// <summary>
     /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>
@@ -133,10 +119,7 @@ public static class RelativeTime
     /// <param name="timeAnchor">Anchors the returned value to a starting point (year/month/week/day/hour)</param>
     /// <returns></returns>
     /// <exception cref="InvalidCastException">Thrown when an invalid value is casted to <see cref="DateTimeAnchor"/></exception>
-    public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor)
-    {
-        return This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
-    }
+    public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor) => This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
 
     /// <summary>
     /// Returns the end of a year, month, week, day or hour for the given  <see cref="DateTime"/>
@@ -173,12 +156,10 @@ public static class RelativeTime
     /// </summary>
     /// <param name="This">A time frame in the past</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string FromNow(this DateTime This)
-    {
-        return This.Kind == DateTimeKind.Utc
+    public static string FromNow(this DateTime This) =>
+        This.Kind == DateTimeKind.Utc
             ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
             : ParseFromPastTimeSpan(DateTime.Now - This);
-    }
 
     /// <summary>
     /// Get the relative time from a given date time to another date time instance
@@ -198,12 +179,10 @@ public static class RelativeTime
     /// </summary>
     /// <param name="This">A time frame in the future</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string ToNow(this DateTime This)
-    {
-        return This.Kind == DateTimeKind.Utc
+    public static string ToNow(this DateTime This) =>
+        This.Kind == DateTimeKind.Utc
             ? ParseFromFutureTimeSpan(This - DateTime.UtcNow)
             : ParseFromFutureTimeSpan(This - DateTime.Now);
-    }
 
     /// <summary>
     /// Get the relative time from the a date time instance to a time frame in the future
@@ -224,10 +203,7 @@ public static class RelativeTime
     /// <param name="This">The date instance which to compare with the current date</param>
     /// <param name="formats">An object describing how the output string should be displayed</param>
     /// <returns></returns>
-    public static string CalendarTime(this DateTime This, CalendarTimeFormats formats = null)
-    {
-        return CalendarTime(This, DateTime.Now, formats);
-    }
+    public static string CalendarTime(this DateTime This, CalendarTimeFormats? formats = null) => CalendarTime(This, DateTime.Now, formats);
 
     /// <summary>
     /// Get the calendar time description from this DateTime instance to a specified DateTime instance
@@ -237,7 +213,7 @@ public static class RelativeTime
     /// <param name="formats">An object describing how the output string should be displayed</param>
     /// <returns></returns>
     public static string CalendarTime(this DateTime This, DateTime dateTime,
-        CalendarTimeFormats formats = null)
+        CalendarTimeFormats? formats = null)
     {
         formats = formats ?? new CalendarTimeFormats();
         var startDate = This.Kind == DateTimeKind.Local ? This : This.ToLocalTime();
@@ -245,29 +221,19 @@ public static class RelativeTime
         var timeDiff = endDate - startDate;
 
         if (startDate.Date == endDate.Date)
-        {
             return endDate.ToString(formats.SameDay);
-        }
 
         if (startDate.AddDays(1).Date == endDate.Date)
-        {
             return endDate.ToString(formats.NextDay);
-        }
 
         if (startDate.AddDays(-1).Date == endDate.Date)
-        {
             return endDate.ToString(formats.LastDay);
-        }
 
         if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
-        {
             return endDate.ToString(formats.NextWeek);
-        }
 
         if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
-        {
             return endDate.ToString(formats.LastWeek);
-        }
 
         return endDate.ToString(formats.EverythingElse);
     }
@@ -296,80 +262,52 @@ public static class RelativeTime
         return timeSpan.TotalMilliseconds;
     }
 
-    private static string ParseFromPastTimeSpan(TimeSpan timeSpan)
-    {
-        return $"{ParseTimeDifference(timeSpan)} ago";
-    }
+    private static string ParseFromPastTimeSpan(TimeSpan timeSpan) => $"{ParseTimeDifference(timeSpan)} ago";
 
-    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan)
-    {
-        return $"in {ParseTimeDifference(timeSpan)}";
-    }
+    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan) => $"in {ParseTimeDifference(timeSpan)}";
 
     private static string ParseTimeDifference(TimeSpan timeSpan)
     {
         var totalTimeInSeconds = timeSpan.TotalSeconds;
 
         if (totalTimeInSeconds <= 44.0)
-        {
             return "few seconds";
-        }
 
         if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
-        {
             return "one minute";
-        }
 
         var totalTimeInMinutes = timeSpan.TotalMinutes;
 
-        if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
-        {
+        if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44) 
             return $"{Math.Round(totalTimeInMinutes)} minutes";
-        }
 
         if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
-        {
             return "one hour";
-        }
 
         var totalTimeInHours = timeSpan.TotalHours;
 
         if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
-        {
             return $"{Math.Round(totalTimeInHours)} hours";
-        }
 
         if (totalTimeInHours > 21 && totalTimeInHours <= 35)
-        {
             return "one day";
-        }
 
         var totalTimeInDays = timeSpan.TotalDays;
 
         if (totalTimeInHours > 35 && totalTimeInDays <= 25)
-        {
             return $"{Math.Round(totalTimeInDays)} days";
-        }
 
         if (totalTimeInDays > 25 && totalTimeInDays <= 45)
-        {
             return "one month";
-        }
 
         if (totalTimeInDays > 45 && totalTimeInDays <= 319)
-        {
             return $"{Math.Round(totalTimeInDays / DaysInAMonth)} months";
-        }
 
         if (totalTimeInDays > 319 && totalTimeInDays <= 547)
-        {
             return "one year";
-        }
 
         if (totalTimeInDays > 547)
-        {
             return $"{Math.Round(totalTimeInDays / DaysInAYear)} years";
-        }
 
         throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
             "in The time span sent could not be parsed.");
@@ -380,10 +318,7 @@ public static class RelativeTime
     /// </summary>
     /// <param name="dayInWeek">A day in the week of interest</param>
     /// <returns></returns>
-    public static DateTime FirstDateInWeek(this DateTime dayInWeek)
-    {
-        return dayInWeek.FirstDateInWeek(CultureInfo.CurrentCulture);
-    }
+    public static DateTime FirstDateInWeek(this DateTime dayInWeek) => dayInWeek.FirstDateInWeek(CultureInfo.CurrentCulture);
 
     /// <summary>
     /// Returns the first day of the week for the given date and <see cref="CultureInfo"/>
@@ -405,10 +340,7 @@ public static class RelativeTime
     /// </summary>
     /// <param name="dayInWeek">A day in the week of interest</param>
     /// <returns>The date of the last day in a week</returns>
-    public static DateTime LastDateInWeek(this DateTime dayInWeek)
-    {
-        return dayInWeek.LastDateInWeek(CultureInfo.CurrentCulture);
-    }
+    public static DateTime LastDateInWeek(this DateTime dayInWeek) => dayInWeek.LastDateInWeek(CultureInfo.CurrentCulture);
 
     /// <summary>
     /// Returns the last day of the week for the given date and culture info
@@ -431,7 +363,7 @@ public static class RelativeTime
     /// <param name="format">Optional format string</param>
     /// <param name="cultureInfo">The culture information to be formatted with</param>
     /// <returns>The formatted date string</returns>
-    public static string Format(this DateTime dateTime, string format = null, CultureInfo cultureInfo = null)
+    public static string Format(this DateTime dateTime, string? format = null, CultureInfo? cultureInfo = null)
     {
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
         return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
