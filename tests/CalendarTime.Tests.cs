@@ -1,12 +1,19 @@
 using System;
+using System.Globalization;
 using moment.net.Models;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests;
 
-public class CalendarTimeTests
+public class CalendarTimeTests : IDisposable
 {
+    private CultureWrapper _cultureWrapper;
+    public CalendarTimeTests()
+    {
+        _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
+    }
+
     [Test]
     public void CalendarTimeSameDay()
     {
@@ -33,7 +40,7 @@ public class CalendarTimeTests
     {
         var initialDate = new DateTime(2012,12,12);
         var nextDate = new DateTime(2012,12,18);
-        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToString("dddd 'at' "));
+        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'at' "));
     }
 
     [Test]
@@ -41,7 +48,7 @@ public class CalendarTimeTests
     {
         var earlierDate = new DateTime(2012,12,12);
         var laterDate = new DateTime(2012,12,18);
-        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToString("'Last' dddd 'at' "));
+        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'Last' dddd 'at' "));
     }
 
     [Test]
@@ -49,6 +56,11 @@ public class CalendarTimeTests
     {
         var initialDate = new DateTime(2012,12,12);
         var nextDate = new DateTime(2018,12,12);
-        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(nextDate.ToString("dd/MM/yyyy"));
+        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(nextDate.ToLocalTime().ToString("dd/MM/yyyy"));
+    }
+
+    public void Dispose()
+    {
+        _cultureWrapper.Dispose();
     }
 }

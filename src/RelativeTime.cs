@@ -108,7 +108,7 @@ public static class RelativeTime
             case DateTimeAnchor.Year:
                 return new DateTime(This.Year, 1, 1, 0, 0, 0, 0, This.Kind);
             default:
-                throw new ArgumentException();
+                throw new ArgumentException("Invalid timeAnchor argument.");
         }
     }
 
@@ -147,7 +147,7 @@ public static class RelativeTime
             case DateTimeAnchor.Year:
                 return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Kind);
             default:
-                throw new ArgumentException();
+                throw new ArgumentException("Invalid timeAnchor argument.");
         }
     }
 
@@ -156,10 +156,10 @@ public static class RelativeTime
     /// </summary>
     /// <param name="This">A time frame in the past</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string FromNow(this DateTime This) =>
+    public static string FromNow(this DateTime This, CultureInfo? ci = null) =>
         This.Kind == DateTimeKind.Utc
-            ? ParseFromPastTimeSpan(DateTime.UtcNow - This)
-            : ParseFromPastTimeSpan(DateTime.Now - This);
+            ? ParseFromPastTimeSpan(DateTime.UtcNow - This, ci)
+            : ParseFromPastTimeSpan(DateTime.Now - This, ci);
 
     /// <summary>
     /// Get the relative time from a given date time to another date time instance
@@ -167,11 +167,11 @@ public static class RelativeTime
     /// <param name="This">A time frame in the past</param>
     /// <param name="dateTime">A time frame sometime after the one being compared to</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string From(this DateTime This, DateTime dateTime)
+    public static string From(this DateTime This, DateTime dateTime, CultureInfo? ci = null)
     {
         var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
         var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
-        return ParseFromPastTimeSpan(endDate - startDate);
+        return ParseFromPastTimeSpan(endDate - startDate, ci);
     }
 
     /// <summary>
@@ -213,9 +213,9 @@ public static class RelativeTime
     /// <param name="formats">An object describing how the output string should be displayed</param>
     /// <returns></returns>
     public static string CalendarTime(this DateTime This, DateTime dateTime,
-        CalendarTimeFormats? formats = null)
+        CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
-        formats = formats ?? new CalendarTimeFormats();
+        formats = formats ?? new CalendarTimeFormats(ci);
         var startDate = This.Kind == DateTimeKind.Local ? This : This.ToLocalTime();
         var endDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
         var timeDiff = endDate - startDate;
@@ -262,55 +262,74 @@ public static class RelativeTime
         return timeSpan.TotalMilliseconds;
     }
 
-    private static string ParseFromPastTimeSpan(TimeSpan timeSpan) => $"{ParseTimeDifference(timeSpan)} ago";
-
-    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan) => $"in {ParseTimeDifference(timeSpan)}";
-
-    private static string ParseTimeDifference(TimeSpan timeSpan)
+    private static string ParseFromPastTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null)
     {
+        if (ci is null)
+            ci = CultureWrapper.GetDefaultCulture();
+
+        using (var lm = new LocalizationManager(ci))
+            return $"{ParseTimeDifference(timeSpan)} {lm.GetString("TIME_AGO")}";
+    }
+
+    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null) {
+        if (ci is null)
+            ci = CultureWrapper.GetDefaultCulture();
+
+        using (var lm = new LocalizationManager(ci))
+            return $"{lm.GetString("TIME_IN")} {ParseTimeDifference(timeSpan, ci)}";
+    }
+
+    private static string ParseTimeDifference(TimeSpan timeSpan, CultureInfo? ci = null)
+    {
+        if (ci is null)
+            ci = CultureWrapper.GetDefaultCulture();
+
         var totalTimeInSeconds = timeSpan.TotalSeconds;
 
-        if (totalTimeInSeconds <= 44.0)
-            return "few seconds";
+        using (var lm = new LocalizationManager(ci))
+        {
+            if (totalTimeInSeconds <= 44.0)
+                return lm.GetString("TIME_FEW_SECONDS");
 
-        if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
-            return "one minute";
+            if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
+                return lm.GetString("TIME_ONE_MINUTE");
 
-        var totalTimeInMinutes = timeSpan.TotalMinutes;
+            var totalTimeInMinutes = timeSpan.TotalMinutes;
 
-        if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44) 
-            return $"{Math.Round(totalTimeInMinutes)} minutes";
+            if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
+                return $"{Math.Round(totalTimeInMinutes)} {lm.GetString("TIME_MINUTES")}";
 
-        if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
-            return "one hour";
+            if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
+                return lm.GetString("TIME_ONE_HOUR");
 
-        var totalTimeInHours = timeSpan.TotalHours;
+            var totalTimeInHours = timeSpan.TotalHours;
 
-        if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
-            return $"{Math.Round(totalTimeInHours)} hours";
+            if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
+                return $"{Math.Round(totalTimeInHours)} {lm.GetString("TIME_HOURS")}";
 
-        if (totalTimeInHours > 21 && totalTimeInHours <= 35)
-            return "one day";
+            if (totalTimeInHours > 21 && totalTimeInHours <= 35)
+                return lm.GetString("TIME_ONE_DAY");
 
-        var totalTimeInDays = timeSpan.TotalDays;
+            var totalTimeInDays = timeSpan.TotalDays;
 
-        if (totalTimeInHours > 35 && totalTimeInDays <= 25)
-            return $"{Math.Round(totalTimeInDays)} days";
+            if (totalTimeInHours > 35 && totalTimeInDays <= 25)
+                return $"{Math.Round(totalTimeInDays)} {lm.GetString("TIME_DAYS")}";
 
-        if (totalTimeInDays > 25 && totalTimeInDays <= 45)
-            return "one month";
+            if (totalTimeInDays > 25 && totalTimeInDays <= 45)
+                return lm.GetString("TIME_ONE_MONTH");
 
-        if (totalTimeInDays > 45 && totalTimeInDays <= 319)
-            return $"{Math.Round(totalTimeInDays / DaysInAMonth)} months";
+            if (totalTimeInDays > 45 && totalTimeInDays <= 319)
+                return $"{Math.Round(totalTimeInDays / DaysInAMonth)} {lm.GetString("TIME_MONTHS")}";
 
-        if (totalTimeInDays > 319 && totalTimeInDays <= 547)
-            return "one year";
+            if (totalTimeInDays > 319 && totalTimeInDays <= 547)
+                return lm.GetString("TIME_ONE_YEAR");
 
-        if (totalTimeInDays > 547)
-            return $"{Math.Round(totalTimeInDays / DaysInAYear)} years";
+            if (totalTimeInDays > 547)
+                return $"{Math.Round(totalTimeInDays / DaysInAYear)} {lm.GetString("TIME_YEARS")}";
 
-        throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
-            "in The time span sent could not be parsed.");
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
+                "in The time span sent could not be parsed.");
+        }
     }
 
     /// <summary>

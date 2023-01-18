@@ -1,11 +1,18 @@
 using System;
+using System.Globalization;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests;
 
-public class TimeFromTests
+public class TimeFromTests : IDisposable
 {
+    private CultureWrapper _cultureWrapper;
+    public TimeFromTests()
+    {
+        _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
+    }
+
     [Test]
     public void TimeFromAFewSecondsTest()
     {
@@ -104,5 +111,10 @@ public class TimeFromTests
         var twoThousandAndEighteen = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         twoThousandAndTwelve.From(twoThousandAndEighteen).ShouldBe("6 years ago");
+    }
+
+    public void Dispose()
+    {
+        _cultureWrapper.Dispose();
     }
 }
