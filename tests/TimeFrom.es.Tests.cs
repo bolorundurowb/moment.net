@@ -7,12 +7,9 @@ namespace moment.net.Tests;
 
 public class TimeFromTests_ES : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
+    private readonly CultureWrapper _cultureWrapper;
 
-    public TimeFromTests_ES()
-    {
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("es-AR")); // spanish argentina
-    }
+    public TimeFromTests_ES() => _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("es-AR")); // spanish argentina
 
     [Test]
     public void TimeFromAFewSecondsTest()

@@ -10,8 +10,8 @@ namespace moment.net
     /// </summary>
     public class CultureWrapper : IDisposable
     {
-        private CultureInfo _prevCi;
-        private CultureInfo _prevUiCi;
+        private readonly CultureInfo _prevCi;
+        private readonly CultureInfo _prevUiCi;
 
         public CultureWrapper(CultureInfo ci)
         {

@@ -6,7 +6,7 @@ namespace moment.net.Tests;
 
 public class Last
 {
-    string dateString = "5/1/2008 8:30:52Z AM";
+    readonly string dateString = "5/1/2008 8:30:52Z AM";
 
     [Test]
     public void LastDayOfWeekTest()

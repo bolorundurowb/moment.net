@@ -7,11 +7,8 @@ namespace moment.net.Tests;
 
 public class TimeFromTests : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
-    public TimeFromTests()
-    {
-        _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-    }
+    private readonly CultureWrapper _cultureWrapper;
+    public TimeFromTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
     public void TimeFromAFewSecondsTest()

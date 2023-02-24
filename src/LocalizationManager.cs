@@ -7,8 +7,8 @@ namespace moment.net
 {
     internal class LocalizationManager : IDisposable
     {
-        private CultureWrapper _cw;
-        private ResourceManager _rm;
+        private readonly CultureWrapper _cw;
+        private readonly ResourceManager _rm;
 
         public LocalizationManager(CultureInfo ci)
         {
@@ -16,10 +16,7 @@ namespace moment.net
             _rm = new ResourceManager(Globals.STRINGS, Assembly.GetExecutingAssembly());
         }
 
-        public string GetString(string key)
-        {
-            return _rm.GetString(key);
-        }
+        public string GetString(string key) => _rm.GetString(key);
 
         public void Dispose()
         {

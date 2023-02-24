@@ -8,12 +8,9 @@ namespace moment.net.Tests;
 
 public class CalendarTimeTests_ES : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
+    private readonly CultureWrapper _cultureWrapper;
 
-    public CalendarTimeTests_ES()
-    {
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("es-AR")); // spanish argentina
-    }
+    public CalendarTimeTests_ES() => _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("es-AR")); // spanish argentina
 
     [Test]
     public void CalendarTimeSameDay()

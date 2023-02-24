@@ -8,12 +8,9 @@ namespace moment.net.Tests;
 
 public class UnixTimeTests : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
+    private readonly CultureWrapper _cultureWrapper;
 
-    public UnixTimeTests()
-    {
-        _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-    }
+    public UnixTimeTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
     public void UnixTimeInMillisecondsOneYearFromEpoch()

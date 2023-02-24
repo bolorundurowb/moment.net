@@ -8,11 +8,8 @@ namespace moment.net.Tests;
 [TestFixture]
 public class FormatTests : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
-    public FormatTests()
-    {
-        _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-    }
+    private readonly CultureWrapper _cultureWrapper;
+    public FormatTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
     public void FormatShouldReturnIsoStringWithNoSpecifiedFormatString()

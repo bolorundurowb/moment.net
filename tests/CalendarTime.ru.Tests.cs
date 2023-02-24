@@ -8,13 +8,11 @@ namespace moment.net.Tests;
 
 public class CalendarTimeTests_RU : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
+    private readonly CultureWrapper _cultureWrapper;
 
-    public CalendarTimeTests_RU()
-    {
+    public CalendarTimeTests_RU() =>
         // russian not implemented. Used to check if a fallback is done to english resources localization
         _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("ru"));
-    }
 
     [Test]
     public void CalendarTimeSameDay()

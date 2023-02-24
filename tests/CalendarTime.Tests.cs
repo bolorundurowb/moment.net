@@ -8,11 +8,8 @@ namespace moment.net.Tests;
 
 public class CalendarTimeTests : IDisposable
 {
-    private CultureWrapper _cultureWrapper;
-    public CalendarTimeTests()
-    {
-        _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-    }
+    private readonly CultureWrapper _cultureWrapper;
+    public CalendarTimeTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
     public void CalendarTimeSameDay()
