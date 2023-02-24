@@ -1,3 +1,8 @@
+using System;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
+
 namespace moment.net.Models;
 
 public class CalendarTimeFormats
@@ -17,15 +22,21 @@ public class CalendarTimeFormats
     /// <summary>
     /// Default constructor, sets the time formats to the default
     /// </summary>
-    public CalendarTimeFormats()
+    public CalendarTimeFormats(CultureInfo? ci = null)
     {
-        const string baseSuffix = " 'at' hh:mm tt";
-        SameDay = "'Today'" + baseSuffix;
-        NextDay = "'Tomorrow'" + baseSuffix;
-        NextWeek = "dddd" + baseSuffix;
-        LastDay = "'Yesterday'" + baseSuffix;
-        LastWeek = "'Last' dddd" + baseSuffix;
-        EverythingElse = "MM/dd/yyyy";
+        if (ci is null)
+            ci = CultureWrapper.GetDefaultCulture();
+
+        using (var lm = new LocalizationManager(ci))
+        {
+            string baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
+            SameDay = $"'{lm.GetString("TIME_TODAY")}'" + baseSuffix;
+            NextDay = $"'{lm.GetString("TIME_TOMORROW")}'" + baseSuffix;
+            NextWeek = "dddd" + baseSuffix;
+            LastDay = $"'{lm.GetString("TIME_YESTERDAY")}'" + baseSuffix;
+            LastWeek = $"'{lm.GetString("TIME_LAST")}' dddd" + baseSuffix;
+            EverythingElse = "MM/dd/yyyy";
+        }
     }
 
     /// <summary>

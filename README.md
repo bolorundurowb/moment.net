@@ -224,3 +224,44 @@ one.IsSameOrAfter(same); // True
 var wrong = DateTime.Parse("2022-02-01");
 one.IsSameOrAfter(wrong); // False
 ```
+
+## Localization
+The methods from the class `RelativeTime` that return a string now accept an optional parameter `ci` of the type `CultureInfo`.
+
+This optional parameter is used to retrieve the corresponding string resources from the main assembly (for english/invariant culture) or the satellite assemblies for other cultures.
+
+If the `ci` parameter for an *unsupported* language is passed in, the library falls back to the invariant culture (english).
+
+If the `ci` parameter is **not** passed in, or it is null, the library uses the culture returned by the static method `CultureWrapper.GetDefaultCulture`.
+
+The value returned by this method is in turn controlled by the value of the property `CultureInfo.UseCurrentThreadCultureAsDefault`. 
+- When **true**, `GetDefaultCulture` returns the CultureInfo associated with the running thread.
+- When **false**, the value specified in the `CultureWrapper.DefaultCulture` property is returned.
+
+### Examples using localization
+
+#### FromNow
+```csharp
+var dateTime = new DateTime(2017, 1, 1);
+var relativeTime = dateTime.FromNow(new CultureInfo("es")); // 6 años atrás (spanish culture)
+```
+
+#### From
+```csharp
+var past = new DateTime(2017, 1, 1);
+var future = new DateTime(2020, 1, 1);
+var relativeTime = past.From(future, new CultureInfo("ru")); // 3 years ago (russian culture -unsupported-, so fallback to invariant is used)
+```
+
+#### ToNow
+```csharp
+var dateTime = new DateTime(2024, 1, 1);
+var relativeTime = dateTime.ToNow(new CultureInfo("es")); // en un año (spanish culture)
+```
+
+### Adding additional resources for localization
+Currently, the library contains english and spanish resources for localized strings.
+
+If you want to contribute with support for more languages, just add the corresponding `String.[language identifier].resx` to the root folder, and use the `Strings.es.resx` as a guide to fill the key-value pairs.
+
+Be sure to set the Build Action of the .resx file to `Embedded resource` to avoid problems resolving the string resources.
