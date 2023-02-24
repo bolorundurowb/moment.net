@@ -13,7 +13,7 @@ public class CalendarTimeTests_RU : IDisposable
     public CalendarTimeTests_RU()
     {
         // russian not implemented. Used to check if a fallback is done to english resources localization
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("ru")); 
+        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("ru"));
     }
 
     [Test]

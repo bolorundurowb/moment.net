@@ -21,7 +21,7 @@ public static class RelativeTime
         if (This.DayOfWeek == dayOfWeek)
             This = This.AddDays(1);
 
-        while (This.DayOfWeek != dayOfWeek) 
+        while (This.DayOfWeek != dayOfWeek)
             This = This.AddDays(1);
 
         return This;
@@ -35,7 +35,7 @@ public static class RelativeTime
     /// <returns>The <see cref="DateTime"/> for the nth <see cref="DayOfWeek"/> supplied</returns>
     public static DateTime Next(this DateTime This, DayOfWeek dayOfWeek, int count)
     {
-        for (var i = 0; i < count; i++) 
+        for (var i = 0; i < count; i++)
             This = This.Next(dayOfWeek);
 
         return This;
@@ -51,7 +51,7 @@ public static class RelativeTime
         if (This.DayOfWeek == dayOfWeek)
             This = This.AddDays(-1);
 
-        while (This.DayOfWeek != dayOfWeek) 
+        while (This.DayOfWeek != dayOfWeek)
             This = This.AddDays(-1);
 
         return This;
@@ -65,7 +65,7 @@ public static class RelativeTime
     /// <returns>The <see cref="DateTime"/> for the previous <see cref="DayOfWeek"/> supplied</returns>
     public static DateTime Last(this DateTime This, DayOfWeek dayOfWeek, int count)
     {
-        for (var i = 0; i < count; i++) 
+        for (var i = 0; i < count; i++)
             This = This.Last(dayOfWeek);
 
         return This;
@@ -271,7 +271,8 @@ public static class RelativeTime
             return $"{ParseTimeDifference(timeSpan)} {lm.GetString("TIME_AGO")}";
     }
 
-    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null) {
+    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null)
+    {
         if (ci is null)
             ci = CultureWrapper.GetDefaultCulture();
 
@@ -349,7 +350,7 @@ public static class RelativeTime
     {
         var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
         var firstDateInWeek = dayInWeek.Date;
-        var diff = (int) firstDateInWeek.DayOfWeek - (int) firstDayOfWeek;
+        var diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
         var value = firstDateInWeek.AddDays(-(Math.Abs(diff)));
         return value;
     }

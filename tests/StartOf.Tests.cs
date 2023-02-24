@@ -20,7 +20,7 @@ public class StartOfTests
     [Test]
     public void StartOfHourTest()
     {
-        var date = DateTime.Parse(dateString,System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:00:00");
         date.StartOf(DateTimeAnchor.Hour).Kind.ShouldBe(DateTimeKind.Utc);
     }

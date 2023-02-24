@@ -38,24 +38,24 @@ public class CalendarTimeTests : IDisposable
     [Test]
     public void CalendarTimeFromTwoFixedDates()
     {
-        var initialDate = new DateTime(2012,12,12);
-        var nextDate = new DateTime(2012,12,18);
+        var initialDate = new DateTime(2012, 12, 12);
+        var nextDate = new DateTime(2012, 12, 18);
         initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'at' "));
     }
 
     [Test]
     public void CalendarTimeToTwoFixedDates()
     {
-        var earlierDate = new DateTime(2012,12,12);
-        var laterDate = new DateTime(2012,12,18);
+        var earlierDate = new DateTime(2012, 12, 12);
+        var laterDate = new DateTime(2012, 12, 18);
         laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'Last' dddd 'at' "));
     }
 
     [Test]
     public void CalendarTimeForEcessiveTimeSpanWithSpecifiedFormat()
     {
-        var initialDate = new DateTime(2012,12,12);
-        var nextDate = new DateTime(2018,12,12);
+        var initialDate = new DateTime(2012, 12, 12);
+        var nextDate = new DateTime(2018, 12, 12);
         initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(nextDate.ToLocalTime().ToString("dd/MM/yyyy"));
     }
 

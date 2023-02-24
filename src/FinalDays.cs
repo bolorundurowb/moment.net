@@ -7,7 +7,7 @@ namespace moment.net;
 public class FinalDays
 {
     readonly DateTime dateTime;
-        
+
     public FinalDays(DateTime dateTime) => this.dateTime = dateTime;
 
     public FinalSpan Monday() => new(dateTime, DayOfWeek.Monday);
