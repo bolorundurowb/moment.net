@@ -310,20 +310,15 @@ public static class RelativeTime
         if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             return $"{Math.Round(totalTimeInDays)} {lm.GetString("TIME_DAYS")}";
 
-        if (totalTimeInDays > 25 && totalTimeInDays <= 45)
-            return lm.GetString("TIME_ONE_MONTH");
-
-        if (totalTimeInDays > 45 && totalTimeInDays <= 319)
-            return $"{Math.Round(totalTimeInDays / DaysInAMonth)} {lm.GetString("TIME_MONTHS")}";
-
-        if (totalTimeInDays > 319 && totalTimeInDays <= 547)
-            return lm.GetString("TIME_ONE_YEAR");
-
-        if (totalTimeInDays > 547)
-            return $"{Math.Round(totalTimeInDays / DaysInAYear)} {lm.GetString("TIME_YEARS")}";
-
-        throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
-            "in the time span sent could not be parsed.");
+        return totalTimeInDays switch
+        {
+            > 25 and <= 45 => lm.GetString("TIME_ONE_MONTH"),
+            > 45 and <= 319 => $"{Math.Round(totalTimeInDays / DaysInAMonth)} {lm.GetString("TIME_MONTHS")}",
+            > 319 and <= 547 => lm.GetString("TIME_ONE_YEAR"),
+            > 547 => $"{Math.Round(totalTimeInDays / DaysInAYear)} {lm.GetString("TIME_YEARS")}",
+            _ => throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
+                "in the time span sent could not be parsed.")
+        };
     }
 
     /// <summary>
