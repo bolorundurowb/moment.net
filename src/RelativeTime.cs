@@ -279,9 +279,9 @@ public static class RelativeTime
     private static string ParseTimeDifference(TimeSpan timeSpan, CultureInfo? ci = null)
     {
         ci ??= CultureWrapper.GetDefaultCulture();
-        var totalTimeInSeconds = timeSpan.TotalSeconds;
-
         using var lm = new LocalizationManager(ci);
+        
+        var totalTimeInSeconds = Math.Abs(timeSpan.TotalSeconds);
         
         if (totalTimeInSeconds <= 44.0)
             return lm.GetString("TIME_FEW_SECONDS");
@@ -289,7 +289,7 @@ public static class RelativeTime
         if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
             return lm.GetString("TIME_ONE_MINUTE");
 
-        var totalTimeInMinutes = timeSpan.TotalMinutes;
+        var totalTimeInMinutes = Math.Abs(timeSpan.TotalMinutes);
 
         if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
             return $"{Math.Round(totalTimeInMinutes)} {lm.GetString("TIME_MINUTES")}";
@@ -297,7 +297,7 @@ public static class RelativeTime
         if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
             return lm.GetString("TIME_ONE_HOUR");
 
-        var totalTimeInHours = timeSpan.TotalHours;
+        var totalTimeInHours = Math.Abs(timeSpan.TotalHours);
 
         if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
             return $"{Math.Round(totalTimeInHours)} {lm.GetString("TIME_HOURS")}";
@@ -305,7 +305,7 @@ public static class RelativeTime
         if (totalTimeInHours > 21 && totalTimeInHours <= 35)
             return lm.GetString("TIME_ONE_DAY");
 
-        var totalTimeInDays = timeSpan.TotalDays;
+        var totalTimeInDays = Math.Abs(timeSpan.TotalDays);
 
         if (totalTimeInHours > 35 && totalTimeInDays <= 25)
             return $"{Math.Round(totalTimeInDays)} {lm.GetString("TIME_DAYS")}";
