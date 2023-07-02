@@ -1,7 +1,4 @@
-using System;
 using System.Globalization;
-using System.Reflection;
-using System.Resources;
 
 namespace moment.net.Models;
 
@@ -27,16 +24,14 @@ public class CalendarTimeFormats
         if (ci is null)
             ci = CultureWrapper.GetDefaultCulture();
 
-        using (var lm = new LocalizationManager(ci))
-        {
-            string baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
-            SameDay = $"'{lm.GetString("TIME_TODAY")}'" + baseSuffix;
-            NextDay = $"'{lm.GetString("TIME_TOMORROW")}'" + baseSuffix;
-            NextWeek = "dddd" + baseSuffix;
-            LastDay = $"'{lm.GetString("TIME_YESTERDAY")}'" + baseSuffix;
-            LastWeek = $"'{lm.GetString("TIME_LAST")}' dddd" + baseSuffix;
-            EverythingElse = "MM/dd/yyyy";
-        }
+        using var lm = new LocalizationManager(ci);
+        string baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
+        SameDay = $"'{lm.GetString("TIME_TODAY")}'" + baseSuffix;
+        NextDay = $"'{lm.GetString("TIME_TOMORROW")}'" + baseSuffix;
+        NextWeek = "dddd" + baseSuffix;
+        LastDay = $"'{lm.GetString("TIME_YESTERDAY")}'" + baseSuffix;
+        LastWeek = $"'{lm.GetString("TIME_LAST")}' dddd" + baseSuffix;
+        EverythingElse = "MM/dd/yyyy";
     }
 
     /// <summary>
