@@ -215,7 +215,7 @@ public static class RelativeTime
     public static string CalendarTime(this DateTime This, DateTime dateTime,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
-        formats = formats ?? new CalendarTimeFormats(ci);
+        formats ??= new CalendarTimeFormats(ci);
         var startDate = This.Kind == DateTimeKind.Local ? This : This.ToLocalTime();
         var endDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
         var timeDiff = endDate - startDate;
@@ -264,73 +264,61 @@ public static class RelativeTime
 
     private static string ParseFromPastTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null)
     {
-        if (ci is null)
-            ci = CultureWrapper.GetDefaultCulture();
-
-        using (var lm = new LocalizationManager(ci))
-            return $"{ParseTimeDifference(timeSpan)} {lm.GetString("TIME_AGO")}";
+        ci ??= CultureWrapper.GetDefaultCulture();
+        using var lm = new LocalizationManager(ci);
+        return $"{ParseTimeDifference(timeSpan)} {lm.GetString("TIME_AGO")}";
     }
 
     private static string ParseFromFutureTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null)
     {
-        if (ci is null)
-            ci = CultureWrapper.GetDefaultCulture();
-
-        using (var lm = new LocalizationManager(ci))
-            return $"{lm.GetString("TIME_IN")} {ParseTimeDifference(timeSpan, ci)}";
+        ci ??= CultureWrapper.GetDefaultCulture();
+        using var lm = new LocalizationManager(ci);
+        return $"{lm.GetString("TIME_IN")} {ParseTimeDifference(timeSpan, ci)}";
     }
 
     private static string ParseTimeDifference(TimeSpan timeSpan, CultureInfo? ci = null)
     {
-        if (ci is null)
-            ci = CultureWrapper.GetDefaultCulture();
+        ci ??= CultureWrapper.GetDefaultCulture();
+        using var lm = new LocalizationManager(ci);
+        
+        var totalTimeInSeconds = Math.Abs(timeSpan.TotalSeconds);
+        
+        if (totalTimeInSeconds <= 44.0)
+            return lm.GetString("TIME_FEW_SECONDS");
 
-        var totalTimeInSeconds = timeSpan.TotalSeconds;
+        if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
+            return lm.GetString("TIME_ONE_MINUTE");
 
-        using (var lm = new LocalizationManager(ci))
+        var totalTimeInMinutes = Math.Abs(timeSpan.TotalMinutes);
+
+        if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
+            return $"{Math.Round(totalTimeInMinutes)} {lm.GetString("TIME_MINUTES")}";
+
+        if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
+            return lm.GetString("TIME_ONE_HOUR");
+
+        var totalTimeInHours = Math.Abs(timeSpan.TotalHours);
+
+        if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
+            return $"{Math.Round(totalTimeInHours)} {lm.GetString("TIME_HOURS")}";
+
+        if (totalTimeInHours > 21 && totalTimeInHours <= 35)
+            return lm.GetString("TIME_ONE_DAY");
+
+        var totalTimeInDays = Math.Abs(timeSpan.TotalDays);
+
+        if (totalTimeInHours > 35 && totalTimeInDays <= 25)
+            return $"{Math.Round(totalTimeInDays)} {lm.GetString("TIME_DAYS")}";
+
+        return totalTimeInDays switch
         {
-            if (totalTimeInSeconds <= 44.0)
-                return lm.GetString("TIME_FEW_SECONDS");
-
-            if (totalTimeInSeconds > 44.0 && totalTimeInSeconds <= 89.0)
-                return lm.GetString("TIME_ONE_MINUTE");
-
-            var totalTimeInMinutes = timeSpan.TotalMinutes;
-
-            if (totalTimeInSeconds > 89 && totalTimeInMinutes <= 44)
-                return $"{Math.Round(totalTimeInMinutes)} {lm.GetString("TIME_MINUTES")}";
-
-            if (totalTimeInMinutes > 44 && totalTimeInMinutes <= 89)
-                return lm.GetString("TIME_ONE_HOUR");
-
-            var totalTimeInHours = timeSpan.TotalHours;
-
-            if (totalTimeInMinutes > 89 && totalTimeInHours <= 21)
-                return $"{Math.Round(totalTimeInHours)} {lm.GetString("TIME_HOURS")}";
-
-            if (totalTimeInHours > 21 && totalTimeInHours <= 35)
-                return lm.GetString("TIME_ONE_DAY");
-
-            var totalTimeInDays = timeSpan.TotalDays;
-
-            if (totalTimeInHours > 35 && totalTimeInDays <= 25)
-                return $"{Math.Round(totalTimeInDays)} {lm.GetString("TIME_DAYS")}";
-
-            if (totalTimeInDays > 25 && totalTimeInDays <= 45)
-                return lm.GetString("TIME_ONE_MONTH");
-
-            if (totalTimeInDays > 45 && totalTimeInDays <= 319)
-                return $"{Math.Round(totalTimeInDays / DaysInAMonth)} {lm.GetString("TIME_MONTHS")}";
-
-            if (totalTimeInDays > 319 && totalTimeInDays <= 547)
-                return lm.GetString("TIME_ONE_YEAR");
-
-            if (totalTimeInDays > 547)
-                return $"{Math.Round(totalTimeInDays / DaysInAYear)} {lm.GetString("TIME_YEARS")}";
-
-            throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
-                "in The time span sent could not be parsed.");
-        }
+            > 25 and <= 45 => lm.GetString("TIME_ONE_MONTH"),
+            > 45 and <= 319 => $"{Math.Round(totalTimeInDays / DaysInAMonth)} {lm.GetString("TIME_MONTHS")}",
+            > 319 and <= 547 => lm.GetString("TIME_ONE_YEAR"),
+            > 547 => $"{Math.Round(totalTimeInDays / DaysInAYear)} {lm.GetString("TIME_YEARS")}",
+            _ => throw new ArgumentOutOfRangeException(nameof(timeSpan), timeSpan,
+                "in the time span sent could not be parsed.")
+        };
     }
 
     /// <summary>

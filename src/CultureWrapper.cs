@@ -27,10 +27,7 @@ namespace moment.net
 
         public static CultureInfo GetDefaultCulture()
         {
-            if (UseCurrentThreadCultureAsDefault)
-                return Thread.CurrentThread.CurrentCulture;
-            else
-                return DefaultCulture;
+            return UseCurrentThreadCultureAsDefault ? Thread.CurrentThread.CurrentCulture : DefaultCulture;
         }
 
         public void Dispose()
