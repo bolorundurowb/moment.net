@@ -21,8 +21,7 @@ public class CalendarTimeFormats
     /// </summary>
     public CalendarTimeFormats(CultureInfo? ci = null)
     {
-        if (ci is null)
-            ci = CultureWrapper.GetDefaultCulture();
+        ci ??= CultureWrapper.GetDefaultCulture();
 
         using var lm = new LocalizationManager(ci);
         string baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
