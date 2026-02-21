@@ -17,14 +17,14 @@ public class CalendarTimeFormats
     public string EverythingElse { get; }
 
     /// <summary>
-    /// Default constructor, sets the time formats to the default
+    /// Initialises a new instance and sets the time formats to standard defaults based on culture.
     /// </summary>
     public CalendarTimeFormats(CultureInfo? ci = null)
     {
         ci ??= CultureWrapper.GetDefaultCulture();
 
         using var lm = new LocalizationManager(ci);
-        string baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
+        var baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
         SameDay = $"'{lm.GetString("TIME_TODAY")}'" + baseSuffix;
         NextDay = $"'{lm.GetString("TIME_TOMORROW")}'" + baseSuffix;
         NextWeek = "dddd" + baseSuffix;
@@ -34,14 +34,14 @@ public class CalendarTimeFormats
     }
 
     /// <summary>
-    /// Overload constructor, allows for setting the format expected for each calendar time group 
+    /// Initialises a new instance, allowing for manual provisioning of format strings expected for each calendar time group.
     /// </summary>
-    /// <param name="sameDay">Format for dates that fall on the same day</param>
-    /// <param name="nextDay">Format for dates that fall on the next day</param>
-    /// <param name="nextWeek">Format for dates that fall in the next week</param>
-    /// <param name="lastDay">Format for dates that fall on the day before</param>
-    /// <param name="lastWeek">Format for dates that fall in the preceding week</param>
-    /// <param name="everythingElse">Format for dates that do not fall into the predefined categories</param>
+    /// <param name="sameDay">Format applied to dates evaluating to the same day.</param>
+    /// <param name="nextDay">Format applied to dates evaluating to the subsequent day.</param>
+    /// <param name="nextWeek">Format applied to dates evaluating to the upcoming week.</param>
+    /// <param name="lastDay">Format applied to dates evaluating to the preceding day.</param>
+    /// <param name="lastWeek">Format applied to dates evaluating to the preceding week.</param>
+    /// <param name="everythingElse">Format applied to dates sitting outside the predefined bounds.</param>
     public CalendarTimeFormats(string sameDay, string nextDay, string nextWeek, string lastDay, string lastWeek,
         string everythingElse)
     {
