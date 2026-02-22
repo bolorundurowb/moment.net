@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Threading;
 
-namespace moment.net;
+namespace moment.net.Localization;
 
 /// <summary>
 /// Changes the current thread's CurrentCulture and CurrentUICulture to allow accessing

@@ -3,12 +3,12 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 
-namespace moment.net;
+namespace moment.net.Localization;
 
 internal class LocalizationManager : IDisposable
 {
     private const string LocalisationResourceBaseName = "moment.net.Strings";
-    
+
     private readonly CultureWrapper _cw;
     private readonly ResourceManager _rm;
 

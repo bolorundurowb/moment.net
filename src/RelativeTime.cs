@@ -2,6 +2,7 @@
 using moment.net.Models;
 using System.Globalization;
 using moment.net.Enums;
+using moment.net.Localization;
 
 namespace moment.net;
 
@@ -112,7 +113,7 @@ public static class RelativeTime
     /// <param name="timeAnchor">The anchor point (year, month, week, day, or hour).</param>
     /// <returns>The <see cref="DateTimeOffset"/> representing the start of the anchored period.</returns>
     /// <exception cref="ArgumentException">Thrown when an invalid value is passed to the timeAnchor.</exception>
-    public static DateTimeOffset StartOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor) => 
+    public static DateTimeOffset StartOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor) =>
         dateTimeOffset.StartOf(timeAnchor, CultureInfo.CurrentCulture);
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
@@ -160,7 +161,7 @@ public static class RelativeTime
     /// <param name="timeAnchor">The anchor point (year, month, week, day, or hour).</param>
     /// <returns>The <see cref="DateTimeOffset"/> representing the end of the anchored period.</returns>
     /// <exception cref="ArgumentException">Thrown when an invalid value is passed to the timeAnchor.</exception>
-    public static DateTimeOffset EndOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor) => 
+    public static DateTimeOffset EndOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor) =>
         dateTimeOffset.EndOf(timeAnchor, CultureInfo.CurrentCulture);
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
@@ -268,7 +269,7 @@ public static class RelativeTime
     /// <param name="dateTimeOffset">The date instance to compare with the current date.</param>
     /// <param name="formats">An object dictating how the output string should be formatted.</param>
     /// <returns>A string characterising the calendar time difference.</returns>
-    public static string CalendarTime(this DateTimeOffset dateTimeOffset, CalendarTimeFormats? formats = null) => 
+    public static string CalendarTime(this DateTimeOffset dateTimeOffset, CalendarTimeFormats? formats = null) =>
         CalendarTime(dateTimeOffset, DateTimeOffset.Now, formats);
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
@@ -357,9 +358,9 @@ public static class RelativeTime
     {
         ci ??= CultureWrapper.GetDefaultCulture();
         using var lm = new LocalizationManager(ci);
-        
+
         var totalTimeInSeconds = Math.Abs(timeSpan.TotalSeconds);
-        
+
         if (totalTimeInSeconds <= 44.0)
             return lm.GetString("TIME_FEW_SECONDS");
 
@@ -406,7 +407,7 @@ public static class RelativeTime
     /// </summary>
     /// <param name="dateTimeOffset">A day in the week of interest.</param>
     /// <returns>The <see cref="DateTimeOffset"/> representing the first date in the week.</returns>
-    public static DateTimeOffset FirstDateInWeek(this DateTimeOffset dateTimeOffset) => 
+    public static DateTimeOffset FirstDateInWeek(this DateTimeOffset dateTimeOffset) =>
         dateTimeOffset.FirstDateInWeek(CultureInfo.CurrentCulture);
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
@@ -437,7 +438,7 @@ public static class RelativeTime
     /// </summary>
     /// <param name="dateTimeOffset">A day in the week of interest.</param>
     /// <returns>The <see cref="DateTimeOffset"/> representing the last date in the week.</returns>
-    public static DateTimeOffset LastDateInWeek(this DateTimeOffset dateTimeOffset) => 
+    public static DateTimeOffset LastDateInWeek(this DateTimeOffset dateTimeOffset) =>
         dateTimeOffset.LastDateInWeek(CultureInfo.CurrentCulture);
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
@@ -473,7 +474,7 @@ public static class RelativeTime
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
         return dateTimeOffset.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
     }
-    
+
     /// <summary>
     /// Adds the specified number of business days (Monday-Friday) to the date.
     /// </summary>
