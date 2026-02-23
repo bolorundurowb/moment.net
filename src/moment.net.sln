@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moment.net", "src\moment.net.csproj", "{13472E42-68FB-47C4-AB32-01A96F3BA884}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moment.net", "moment.net\moment.net.csproj", "{13472E42-68FB-47C4-AB32-01A96F3BA884}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moment.net.Tests", "tests\moment.net.Tests.csproj", "{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "moment.net.Tests", "moment.net.tests\moment.net.Tests.csproj", "{793C71CD-2CDF-4BBF-BFD3-039B5948F8F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
