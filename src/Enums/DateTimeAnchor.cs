@@ -1,4 +1,6 @@
-﻿namespace moment.net.Enums;
+﻿using System;
+
+namespace moment.net.Enums;
 
 /// <summary>
 /// Specifies anchors for date and time operations to define the starting point for calculations

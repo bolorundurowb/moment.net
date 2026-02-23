@@ -23,5 +23,4 @@ public class FirstLastDateInWeek
         date.LastDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 00:00:00");
         date.LastDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
     }
-
 }

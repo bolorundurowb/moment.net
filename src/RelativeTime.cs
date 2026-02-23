@@ -8,13 +8,13 @@ namespace moment.net;
 
 public static class RelativeTime
 {
-    private static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+    private static readonly DateTimeOffset UnixEpoch = new(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
     private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
     private const double DaysInAMonth = DaysInAYear / 12;
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime Next(this DateTime dateTime, DayOfWeek dayOfWeek) =>
-        new DateTimeOffset(dateTime).Next(dayOfWeek).DateTime;
+        new DateTimeOffset(dateTime).Next(dayOfWeek).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the <see cref="DateTimeOffset"/> for the next specified <see cref="DayOfWeek"/>.
@@ -35,7 +35,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime Next(this DateTime dateTime, DayOfWeek dayOfWeek, int count) =>
-        new DateTimeOffset(dateTime).Next(dayOfWeek, count).DateTime;
+        new DateTimeOffset(dateTime).Next(dayOfWeek, count).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the <see cref="DateTimeOffset"/> for the nth next specified <see cref="DayOfWeek"/>.
@@ -54,7 +54,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime Last(this DateTime dateTime, DayOfWeek dayOfWeek) =>
-        new DateTimeOffset(dateTime).Last(dayOfWeek).DateTime;
+        new DateTimeOffset(dateTime).Last(dayOfWeek).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the <see cref="DateTimeOffset"/> for the previous specified <see cref="DayOfWeek"/>.
@@ -75,7 +75,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime Last(this DateTime dateTime, DayOfWeek dayOfWeek, int count) =>
-        new DateTimeOffset(dateTime).Last(dayOfWeek, count).DateTime;
+        new DateTimeOffset(dateTime).Last(dayOfWeek, count).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the <see cref="DateTimeOffset"/> for the nth previous specified <see cref="DayOfWeek"/>.
@@ -93,18 +93,18 @@ public static class RelativeTime
     }
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
-    public static FinalDays Final(this DateTime dateTime) => new FinalDays(dateTime);
+    public static FinalDays Final(this DateTime dateTime) => new(new DateTimeOffset(dateTime));
 
     /// <summary>
     /// Provides a fluent interface to evaluate the final occurrences of days within a month or year.
     /// </summary>
     /// <param name="dateTimeOffset">The starting date and time.</param>
     /// <returns>A <see cref="FinalDays"/> instance for evaluating final days.</returns>
-    public static FinalDays Final(this DateTimeOffset dateTimeOffset) => new FinalDays(dateTimeOffset);
+    public static FinalDays Final(this DateTimeOffset dateTimeOffset) => new(dateTimeOffset);
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime StartOf(this DateTime dateTime, DateTimeAnchor timeAnchor) =>
-        new DateTimeOffset(dateTime).StartOf(timeAnchor).DateTime;
+        new DateTimeOffset(dateTime).StartOf(timeAnchor).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the start of the year, month, week, day, or hour for the given <see cref="DateTimeOffset"/> using the current culture.
@@ -118,7 +118,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime StartOf(this DateTime dateTime, DateTimeAnchor timeAnchor, CultureInfo cultureInfo) =>
-        new DateTimeOffset(dateTime).StartOf(timeAnchor, cultureInfo).DateTime;
+        new DateTimeOffset(dateTime).StartOf(timeAnchor, cultureInfo).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the start of the year, month, week, day, or hour for the given <see cref="DateTimeOffset"/> using a specified culture.
@@ -152,7 +152,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime EndOf(this DateTime dateTime, DateTimeAnchor timeAnchor) =>
-        new DateTimeOffset(dateTime).EndOf(timeAnchor).DateTime;
+        new DateTimeOffset(dateTime).EndOf(timeAnchor).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the end of a year, month, week, day, or hour for the given <see cref="DateTimeOffset"/> using the current culture.
@@ -166,7 +166,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime EndOf(this DateTime dateTime, DateTimeAnchor timeAnchor, CultureInfo cultureInfo) =>
-        new DateTimeOffset(dateTime).EndOf(timeAnchor, cultureInfo).DateTime;
+        new DateTimeOffset(dateTime).EndOf(timeAnchor, cultureInfo).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the end of a year, month, week, day, or hour for the given <see cref="DateTimeOffset"/> using a specified culture.
@@ -400,7 +400,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime FirstDateInWeek(this DateTime dateTime) =>
-        new DateTimeOffset(dateTime).FirstDateInWeek().DateTime;
+        new DateTimeOffset(dateTime).FirstDateInWeek().DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the first day of the week for the given date using the current <see cref="CultureInfo"/>.
@@ -412,7 +412,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime FirstDateInWeek(this DateTime dateTime, CultureInfo cultureInfo) =>
-        new DateTimeOffset(dateTime).FirstDateInWeek(cultureInfo).DateTime;
+        new DateTimeOffset(dateTime).FirstDateInWeek(cultureInfo).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the first day of the week for the given date and <see cref="CultureInfo"/>.
@@ -431,7 +431,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime LastDateInWeek(this DateTime dateTime) =>
-        new DateTimeOffset(dateTime).LastDateInWeek().DateTime;
+        new DateTimeOffset(dateTime).LastDateInWeek().DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the last day of the week for the given date using the current <see cref="CultureInfo"/>.
@@ -443,7 +443,7 @@ public static class RelativeTime
 
     [Obsolete("This method will be removed in the next major version. Use the DateTimeOffset overload instead.", false)]
     public static DateTime LastDateInWeek(this DateTime dateTime, CultureInfo cultureInfo) =>
-        new DateTimeOffset(dateTime).LastDateInWeek(cultureInfo).DateTime;
+        new DateTimeOffset(dateTime).LastDateInWeek(cultureInfo).DateTime.ToUniversalTime();
 
     /// <summary>
     /// Returns the last day of the week for the given date and culture info.

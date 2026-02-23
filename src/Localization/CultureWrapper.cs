@@ -13,6 +13,10 @@ internal class CultureWrapper : IDisposable
     private readonly CultureInfo _prevCi;
     private readonly CultureInfo _prevUiCi;
 
+    private static bool UseCurrentThreadCultureAsDefault => true;
+
+    private static CultureInfo DefaultCulture { get; } = CultureInfo.InvariantCulture;
+
     public CultureWrapper(CultureInfo ci)
     {
         _prevCi = Thread.CurrentThread.CurrentCulture;
@@ -20,10 +24,6 @@ internal class CultureWrapper : IDisposable
         Thread.CurrentThread.CurrentCulture = ci;
         Thread.CurrentThread.CurrentUICulture = ci;
     }
-
-    public static bool UseCurrentThreadCultureAsDefault { get; set; } = true;
-
-    public static CultureInfo DefaultCulture { get; set; } = CultureInfo.InvariantCulture;
 
     public static CultureInfo GetDefaultCulture() =>
         UseCurrentThreadCultureAsDefault ? Thread.CurrentThread.CurrentCulture : DefaultCulture;

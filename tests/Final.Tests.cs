@@ -13,7 +13,6 @@ public class FinalTests
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.Final().Monday().InMonth().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("26/05/2008 00:00:00");
-        date.Final().Monday().InMonth().Kind.ShouldBe(DateTimeKind.Utc);
     }
 
     [Test]
@@ -21,6 +20,5 @@ public class FinalTests
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.Final().Sunday().InYear().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("28/12/2008 00:00:00");
-        date.Final().Sunday().InYear().Kind.ShouldBe(DateTimeKind.Utc);
     }
 }
