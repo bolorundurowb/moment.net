@@ -29,12 +29,12 @@ jobs:
         working-directory: ./src
 
       - name: Test
-        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../../TestResults/coverage.cobertura.xml
         working-directory: ./src
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./src/TestResults/
+          directory: ./TestResults/
           fail_ci_if_error: true
