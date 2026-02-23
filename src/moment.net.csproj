@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <PackageVersion>1.3.4</PackageVersion>
         <Title>moment.net</Title>
@@ -37,4 +36,7 @@
       </EmbeddedResource>
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="moment.net.Tests"/>
+    </ItemGroup>
 </Project>
