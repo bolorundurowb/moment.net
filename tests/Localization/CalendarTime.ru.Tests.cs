@@ -3,34 +3,37 @@ using NUnit.Framework;
 using Shouldly;
 using System;
 using System.Globalization;
+using moment.net.Localization;
 
 namespace moment.net.Tests;
 
-public class CalendarTimeTests_ES : IDisposable
+public class CalendarTimeTests_RU : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
 
-    public CalendarTimeTests_ES() => _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("es-AR")); // spanish argentina
+    public CalendarTimeTests_RU() =>
+        // russian not implemented. Used to check if a fallback is done to english resources localization
+        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("ru"));
 
     [Test]
     public void CalendarTimeSameDay()
     {
         var today = DateTime.Now.Date.AddHours(2);
-        today.CalendarTime().ShouldStartWith("Hoy a las ");
+        today.CalendarTime().ShouldStartWith("Today at ");
     }
 
     [Test]
     public void CalendarTimeFromYesterday()
     {
         var yesterday = DateTime.Now.AddDays(-1);
-        yesterday.CalendarTime().ShouldStartWith("Mañana a las ");
+        yesterday.CalendarTime().ShouldStartWith("Tomorrow at ");
     }
 
     [Test]
     public void CalendarTimeFromTomorrow()
     {
         var tomorrow = DateTime.Now.AddDays(1);
-        tomorrow.CalendarTime().ShouldStartWith("Ayer a las ");
+        tomorrow.CalendarTime().ShouldStartWith("Yesterday at ");
     }
 
     [Test]
@@ -38,7 +41,7 @@ public class CalendarTimeTests_ES : IDisposable
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2012, 12, 18);
-        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'a las' "));
+        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'at' "));
     }
 
     [Test]
@@ -46,7 +49,7 @@ public class CalendarTimeTests_ES : IDisposable
     {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
-        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'El último' dddd 'a las' "));
+        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'Last' dddd 'at' "));
     }
 
     [Test]
