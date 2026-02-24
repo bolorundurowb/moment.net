@@ -120,6 +120,47 @@ var dateTime = DateTime.Parse("2023-10-20");
 dateTime.IsBusinessDay(); // True (Friday)
 ```
 
+### IsWeekend 🏖️
+```csharp
+var dateTime = DateTime.Parse("2023-10-21");
+dateTime.IsWeekend(); // True (Saturday)
+```
+
+### IsWeekday 🏢
+```csharp
+var dateTime = DateTime.Parse("2023-10-23");
+dateTime.IsWeekday(); // True (Monday)
+```
+
+### IsBetween ↔️
+```csharp
+var date = DateTime.Parse("2023-10-23");
+var start = DateTime.Parse("2023-10-20");
+var end = DateTime.Parse("2023-10-25");
+date.IsBetween(start, end); // True
+```
+
+### DiffInDays 📆
+```csharp
+var date = DateTime.Parse("2023-10-25");
+var otherDate = DateTime.Parse("2023-10-23");
+date.DiffInDays(otherDate); // 2.0
+```
+
+### DiffInMonths 📅
+```csharp
+var date = DateTime.Parse("2023-11-23");
+var otherDate = DateTime.Parse("2023-10-23");
+date.DiffInMonths(otherDate); // 1.0
+```
+
+### DiffInYears 🗓️
+```csharp
+var date = DateTime.Parse("2024-10-23");
+var otherDate = DateTime.Parse("2023-10-23");
+date.DiffInYears(otherDate); // 1.0
+```
+
 ### AddBusinessDays ➕
 ```csharp
 var dateTime = DateTime.Parse("2023-10-20");
