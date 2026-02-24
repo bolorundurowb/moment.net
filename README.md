@@ -114,11 +114,24 @@ var dateTime = DateTime.Parse("1992-02-01");
 dateTime.IsLeapYear(); // True
 ```
 
+### IsBusinessDay 💼
+```csharp
+var dateTime = DateTime.Parse("2023-10-20");
+dateTime.IsBusinessDay(); // True (Friday)
+```
+
+### AddBusinessDays ➕
+```csharp
+var dateTime = DateTime.Parse("2023-10-20");
+dateTime.AddBusinessDays(2); // 2023-10-24 (skips weekend)
+```
+
 ### Localization 🌍
 ```csharp
 var dateTime = new DateTime(2017, 1, 1);
 var relativeTime = dateTime.FromNow(new CultureInfo("es")); // 6 años atrás
 ```
+Currently supported languages: English, Spanish, French, Portuguese.
 
 ### Contributing 🤝
 Want to add more languages? Simply create a `String.[language identifier].resx` file and follow the `Strings.es.resx` example.
