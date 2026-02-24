@@ -88,4 +88,16 @@ public static class PositionalTime
 
         return normalizedCurrent.IsSame(normalizedComparison) || normalizedCurrent.IsAfter(normalizedComparison);
     }
+
+    /// <summary>
+    /// Check if date time instance is between two given dates
+    /// </summary>
+    /// <param name="dt">The given date</param>
+    /// <param name="start">The start date</param>
+    /// <param name="end">The end date</param>
+    /// <returns>A boolean value stating whether this date is between the start and end date</returns>
+    public static bool IsBetween(this DateTime dt, DateTime start, DateTime end)
+    {
+        return dt.IsSameOrAfter(start) && dt.IsSameOrBefore(end);
+    }
 }

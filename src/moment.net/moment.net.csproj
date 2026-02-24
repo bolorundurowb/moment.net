@@ -11,7 +11,9 @@
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment datetime relative time</PackageTags>
-        <PackageReleaseNotes>- Update dependencies</PackageReleaseNotes>
+        <PackageReleaseNotes>- Update dependencies
+- Add more utility methods
+- Update documentation</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AssemblyVersion>1.3.4</AssemblyVersion>

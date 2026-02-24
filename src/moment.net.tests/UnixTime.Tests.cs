@@ -23,11 +23,10 @@ public class UnixTimeTests : IDisposable
     [Test]
     public void UnixTimeInMillisecondsOneLocalYearFromEpoch()
     {
-        // var tz = TZConvert.GetTimeZoneInfo("W. Central Africa Standard Time");
-        var tz = TZConvert.GetTimeZoneInfo("Pacific Standard Time");
-        // var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 1, 0, 0, DateTimeKind.Local), tz);
-        var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 8, 0, 0, DateTimeKind.Local), tz);
-        var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds();
+        // Create the exact instant one year after the epoch (UTC) and convert to local time
+        var oneYearAfterEpochUtc = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+        var localEquivalent = oneYearAfterEpochUtc.ToLocalTime();
+        var millisecondsElapsed = localEquivalent.UnixTimestampInMilliseconds();
         millisecondsElapsed.ShouldBe(365.0 * 24 * 60 * 60 * 1000);
     }
 
@@ -42,11 +41,10 @@ public class UnixTimeTests : IDisposable
     [Test]
     public void UnixTimeInSecondsOneLocalYearFromEpoch()
     {
-        // var tz = TZConvert.GetTimeZoneInfo("W. Central Africa Standard Time");
-        var tz = TZConvert.GetTimeZoneInfo("Pacific Standard Time");
-        // var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 1, 0, 0, DateTimeKind.Local), tz);
-        var dateTime = TimeZoneInfo.ConvertTime(new DateTime(1971, 01, 01, 8, 0, 0, DateTimeKind.Local), tz);
-        var secondsElapsed = dateTime.UnixTimestampInSeconds();
+        // Create the exact instant one year after the epoch (UTC) and convert to local time
+        var oneYearAfterEpochUtc = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+        var localEquivalent = oneYearAfterEpochUtc.ToLocalTime();
+        var secondsElapsed = localEquivalent.UnixTimestampInSeconds();
         secondsElapsed.ShouldBe(365.0 * 24 * 60 * 60);
     }
 

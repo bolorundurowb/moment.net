@@ -1,13 +1,21 @@
 using System;
+using System.Globalization;
 using moment.net.Enums;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests;
 
-public class EndOfTests
+public class EndOfTests : IDisposable
 {
+    private readonly CultureWrapper _cultureWrapper;
     readonly string dateString = "5/1/2008 8:30:52Z AM";
+
+    public EndOfTests()
+    {
+        // Ensure week calculations assume Sunday as first day (en-US)
+        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+    }
 
     [Test]
     public void EndOfMinuteTest()
@@ -55,5 +63,10 @@ public class EndOfTests
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/12/2008 23:59:59");
         date.EndOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    public void Dispose()
+    {
+        _cultureWrapper.Dispose();
     }
 }
