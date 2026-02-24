@@ -1,12 +1,20 @@
 using System;
+using System.Globalization;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests;
 
-public class FirstLastDateInWeek
+public class FirstLastDateInWeek : IDisposable
 {
+    private readonly CultureWrapper _cultureWrapper;
     readonly string dateString = "5/1/2008 8:30:52Z AM";
+
+    public FirstLastDateInWeek()
+    {
+        // Ensure week calculations assume Sunday as first day (en-US)
+        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+    }
 
     [Test]
     public void FirstDateInWeekTest()
@@ -24,4 +32,8 @@ public class FirstLastDateInWeek
         date.LastDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
     }
 
+    public void Dispose()
+    {
+        _cultureWrapper.Dispose();
+    }
 }

@@ -1,13 +1,21 @@
 using System;
+using System.Globalization;
 using moment.net.Enums;
 using NUnit.Framework;
 using Shouldly;
 
 namespace moment.net.Tests;
 
-public class StartOfTests
+public class StartOfTests : IDisposable
 {
+    private readonly CultureWrapper _cultureWrapper;
     readonly string dateString = "5/1/2008 8:30:52Z AM";
+
+    public StartOfTests()
+    {
+        // Ensure week calculations assume Sunday as first day (en-US)
+        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+    }
 
     [Test]
     public void StartOfMinuteTest()
@@ -55,5 +63,10 @@ public class StartOfTests
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/01/2008 00:00:00");
         date.StartOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    public void Dispose()
+    {
+        _cultureWrapper.Dispose();
     }
 }
