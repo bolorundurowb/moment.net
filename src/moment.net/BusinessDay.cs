@@ -15,6 +15,26 @@ public static class BusinessDay
     }
 
     /// <summary>
+    /// Check if date time instance is a weekend (Saturday or Sunday)
+    /// </summary>
+    /// <param name="dt">The given date</param>
+    /// <returns>A boolean value stating whether this date is a weekend</returns>
+    public static bool IsWeekend(this DateTime dt)
+    {
+        return dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday;
+    }
+
+    /// <summary>
+    /// Check if date time instance is a weekday (Monday to Friday)
+    /// </summary>
+    /// <param name="dt">The given date</param>
+    /// <returns>A boolean value stating whether this date is a weekday</returns>
+    public static bool IsWeekday(this DateTime dt)
+    {
+        return !dt.IsWeekend();
+    }
+
+    /// <summary>
     /// Adds business days to the current date time instance
     /// </summary>
     /// <param name="dateTime">The given date</param>

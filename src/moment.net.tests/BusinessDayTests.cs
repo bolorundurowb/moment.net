@@ -20,6 +20,26 @@ public class BusinessDayTests
         date.IsBusinessDay().ShouldBe(expected);
     }
 
+    [TestCase("2023-10-23", false)] // Monday
+    [TestCase("2023-10-27", false)] // Friday
+    [TestCase("2023-10-28", true)] // Saturday
+    [TestCase("2023-10-29", true)] // Sunday
+    public void IsWeekendShouldReturnExpectedResult(string dateString, bool expected)
+    {
+        var date = DateTime.Parse(dateString);
+        date.IsWeekend().ShouldBe(expected);
+    }
+
+    [TestCase("2023-10-23", true)] // Monday
+    [TestCase("2023-10-27", true)] // Friday
+    [TestCase("2023-10-28", false)] // Saturday
+    [TestCase("2023-10-29", false)] // Sunday
+    public void IsWeekdayShouldReturnExpectedResult(string dateString, bool expected)
+    {
+        var date = DateTime.Parse(dateString);
+        date.IsWeekday().ShouldBe(expected);
+    }
+
     [TestCase("2023-10-20", 1, "2023-10-23")] // Friday to Monday
     [TestCase("2023-10-20", 2, "2023-10-24")] // Friday to Tuesday
     [TestCase("2023-10-23", 1, "2023-10-24")] // Monday to Tuesday

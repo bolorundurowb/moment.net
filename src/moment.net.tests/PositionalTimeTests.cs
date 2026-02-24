@@ -105,4 +105,17 @@ public class PositionalTimeTests
 
         result.ShouldBeTrue();
     }
+
+    [TestCase("2023-10-23", "2023-10-20", "2023-10-25", true)]
+    [TestCase("2023-10-20", "2023-10-20", "2023-10-25", true)]
+    [TestCase("2023-10-25", "2023-10-20", "2023-10-25", true)]
+    [TestCase("2023-10-19", "2023-10-20", "2023-10-25", false)]
+    [TestCase("2023-10-26", "2023-10-20", "2023-10-25", false)]
+    public void IsBetweenShouldReturnExpectedResult(string dateString, string startString, string endString, bool expected)
+    {
+        var date = DateTime.Parse(dateString);
+        var start = DateTime.Parse(startString);
+        var end = DateTime.Parse(endString);
+        date.IsBetween(start, end).ShouldBe(expected);
+    }
 }
