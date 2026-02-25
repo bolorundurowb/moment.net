@@ -1,12 +1,10 @@
-﻿name: Build, Test and Coverage
+﻿name: Build, Test & Coverage
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   pull_request:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET 10 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.x'
@@ -24,17 +22,17 @@ jobs:
         run: dotnet restore
         working-directory: ./src
 
-      - name: Build
+      - name: Build all projects
         run: dotnet build --configuration Release --no-restore
         working-directory: ./src
 
-      - name: Test
-        run: dotnet test --configuration Release --no-build  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../../TestResults/coverage.cobertura.xml
+      - name: Run tests with code coverage
+        run: dotnet test --configuration Release --no-build  /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=../../coverage/coverage.cobertura.xml
         working-directory: ./src
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./TestResults/
+          directory: ./coverage/
           fail_ci_if_error: true
