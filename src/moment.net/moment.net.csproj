@@ -10,7 +10,7 @@
         <PackageLicenseUrl>https://github.com/bolorundurowb/moment.net/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>moment datetime relative time</PackageTags>
+        <PackageTags>moment momentjs datetime relative-time time date calendar</PackageTags>
         <PackageReleaseNotes>- Update dependencies
 - Add more utility methods
 - Update documentation</PackageReleaseNotes>

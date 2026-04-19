@@ -1,182 +1,114 @@
-# Moment.net ⏰
+# moment.net
 
-[![.NET Build, Test and Coverage](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml) [![codecov](https://codecov.io/gh/bolorundurowb/moment.net/graph/badge.svg?token=WIGQVIAR70)](https://codecov.io/gh/bolorundurowb/moment.net)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NuGet Version](https://img.shields.io/nuget/v/moment.net)](https://www.nuget.org/packages/moment.net)
+[![.NET Build, Test and Coverage](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml) [![codecov](https://codecov.io/gh/bolorundurowb/moment.net/graph/badge.svg?token=WIGQVIAR70)](https://codecov.io/gh/bolorundurowb/moment.net) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NuGet Version](https://img.shields.io/nuget/v/moment.net)](https://www.nuget.org/packages/moment.net)
 
+**moment.net** is a .NET library that provides a set of extension methods for `DateTime` and `DateTimeOffset` to simplify common date and time operations. It is inspired by the popular moment.js library, offering a more fluent and readable API for handling relative time, date anchors, business days, and more.
 
-## Overview 📌
-This library aims to port as many bits of functionality from moment.js as necessary. Currently supported features include:
-`FromNow`, `From`, `ToNow`, `To`, `StartOf`, `EndOf`, and `CalendarTime`. Additional functionalities not present in moment.js are also being added.
+## Installation
 
-## Getting Started 🚀
-Install Moment.net via NuGet:
+You can install Moment.net via NuGet using any of the following methods:
 
-### Package Manager 📦
-```
-PM > Install-Package moment.net
+### .NET CLI
+```bash
+dotnet add package moment.net
 ```
 
-### .NET CLI 💻
-```
-> dotnet add package moment.net
+### Package Manager
+```powershell
+Install-Package moment.net
 ```
 
-### PackageReference 📝
-```csharp
+### PackageReference
+```xml
 <PackageReference Include="moment.net" />
 ```
 
-## Example Usage 🛠️
+## Features
 
-### FromNow ⏳
+### Relative Time
+Calculate human-readable relative time strings.
+
 ```csharp
 var dateTime = new DateTime(2017, 1, 1);
-var relativeTime = dateTime.FromNow(); // 2 years ago
-```
+dateTime.FromNow(); // "9 years ago" (depending on current date)
 
-### From ⏪
-```csharp
 var past = new DateTime(2017, 1, 1);
 var future = new DateTime(2020, 1, 1);
-var relativeTime = past.From(future); // 3 years ago
-```
+past.From(future); // "3 years ago"
 
-### ToNow ⏩
-```csharp
-var dateTime = new DateTime(2020, 1, 1);
-var relativeTime = dateTime.ToNow(); // in one year
-```
-
-### To 🎯
-```csharp
-var past = new DateTime(2019, 1, 1);
-var future = new DateTime(2021, 1, 1);
-var relativeTime = past.To(future); // in 2 years
-```
-
-### StartOf 🏁
-```csharp
-var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
-var startOfDay = date.StartOf(DateTimeAnchor.Day); // 01/05/2008 00:00:00
-```
-
-### EndOf 🔚
-```csharp
-var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
-var endOfDay = date.EndOf(DateTimeAnchor.Day); // 01/05/2008 23:59:59
-```
-
-### CalendarTime 📅
-```csharp
 var startDateTime = new DateTime(2012, 12, 12);
 var sameDay = new DateTime(2012, 12, 12, 12, 0, 0);
-var calendarTime = startDateTime.CalendarTime(sameDay); // Today at 12:00 PM
+startDateTime.CalendarTime(sameDay); // "Today at 12:00 PM"
 ```
 
-### UnixTime ⌛
+### Date Anchors and Manipulation
+Fluent methods to find specific points in time.
+
 ```csharp
-var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
-var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds(); // 31536000000
+var date = DateTime.Parse("5/1/2008 8:30:52 AM");
+
+date.StartOf(DateTimeAnchor.Day);    // 01/05/2008 00:00:00
+date.EndOf(DateTimeAnchor.Day);      // 01/05/2008 23:59:59
+date.FirstDateInWeek();              // Start of the week
+date.LastDateInWeek();               // End of the week
+date.Next(DayOfWeek.Thursday);       // Next occurrence of Thursday
+date.Last(DayOfWeek.Friday);         // Previous occurrence of Friday
+date.Final().Monday().InMonth();     // The last Monday of the month
 ```
 
-### First and Last Date in a Week 📆
+### Business Days
+Support for business day calculations, useful for financial and scheduling applications.
+
 ```csharp
-date.FirstDateInWeek();  // 27/04/2008 00:00:00 (previous month)
-date.LastDateInWeek();   // 03/05/2008 00:00:00
+var dateTime = DateTime.Parse("2023-10-20"); // Friday
+dateTime.IsBusinessDay();      // True
+dateTime.AddBusinessDays(2);   // 2023-10-24 (skips the weekend)
 ```
 
-### Next 🔜
+### Validation and Comparison
+Readable methods for checking dates and calculating differences.
+
 ```csharp
-var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
-date.Next(DayOfWeek.Thursday); // 08/05/2008 08:30:52
+date.IsLeapYear();
+date.IsWeekend();
+date.IsWeekday();
+date.IsBetween(start, end);
+
+date.DiffInDays(otherDate);
+date.DiffInMonths(otherDate);
+date.DiffInYears(otherDate);
 ```
 
-### Last 🔙
+### Formatting and Unix Time
 ```csharp
-var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
-date.Last(DayOfWeek.Friday); // 25/04/2008 08:30:52
+date.Format("yyyy MMM dd");             // "1971 Jan 01"
+date.UnixTimestampInMilliseconds();     // 31536000000
 ```
 
-### Final 📍
-```csharp
-var date = DateTime.Parse("5/1/2008 8:30:52 AM", System.Globalization.CultureInfo.InvariantCulture);
-date.Final().Monday().InMonth(); // 26/05/2008 00:00:00
-```
+## Localization
 
-### Format 🖋️
-```csharp
-var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
-date.Format("yyyy MMM dd"); // 1971 Jan 01
-```
+Moment.net supports multiple languages for relative time strings. Currently supported languages include:
+- English (default)
+- Spanish
+- French
+- Portuguese
+- German
+- Russian
 
-### IsLeapYear 🏅
-```csharp
-var dateTime = DateTime.Parse("1992-02-01");
-dateTime.IsLeapYear(); // True
-```
-
-### IsBusinessDay 💼
-```csharp
-var dateTime = DateTime.Parse("2023-10-20");
-dateTime.IsBusinessDay(); // True (Friday)
-```
-
-### IsWeekend 🏖️
-```csharp
-var dateTime = DateTime.Parse("2023-10-21");
-dateTime.IsWeekend(); // True (Saturday)
-```
-
-### IsWeekday 🏢
-```csharp
-var dateTime = DateTime.Parse("2023-10-23");
-dateTime.IsWeekday(); // True (Monday)
-```
-
-### IsBetween ↔️
-```csharp
-var date = DateTime.Parse("2023-10-23");
-var start = DateTime.Parse("2023-10-20");
-var end = DateTime.Parse("2023-10-25");
-date.IsBetween(start, end); // True
-```
-
-### DiffInDays 📆
-```csharp
-var date = DateTime.Parse("2023-10-25");
-var otherDate = DateTime.Parse("2023-10-23");
-date.DiffInDays(otherDate); // 2.0
-```
-
-### DiffInMonths 📅
-```csharp
-var date = DateTime.Parse("2023-11-23");
-var otherDate = DateTime.Parse("2023-10-23");
-date.DiffInMonths(otherDate); // 1.0
-```
-
-### DiffInYears 🗓️
-```csharp
-var date = DateTime.Parse("2024-10-23");
-var otherDate = DateTime.Parse("2023-10-23");
-date.DiffInYears(otherDate); // 1.0
-```
-
-### AddBusinessDays ➕
-```csharp
-var dateTime = DateTime.Parse("2023-10-20");
-dateTime.AddBusinessDays(2); // 2023-10-24 (skips weekend)
-```
-
-### Localization 🌍
+To use a specific culture:
 ```csharp
 var dateTime = new DateTime(2017, 1, 1);
-var relativeTime = dateTime.FromNow(new CultureInfo("es")); // 6 años atrás
+var relativeTime = dateTime.FromNow(new CultureInfo("es")); // "6 años atrás"
 ```
-Currently supported languages: English, Spanish, French, Portuguese.
 
-### Contributing 🤝
-Want to add more languages? Simply create a `String.[language identifier].resx` file and follow the `Strings.es.resx` example.
+## Contributing
 
-## License 📜
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Contributions are welcome! If you'd like to help improve Moment.net:
 
+1.  **Add Languages:** Create a new `Strings.[language-code].resx` file in the `moment.net` project, following the pattern of existing localization files.
+2.  **Report Bugs:** Open an issue on GitHub to report bugs or request features.
+3.  **Pull Requests:** Submit pull requests for bug fixes or new features. Please ensure your changes include relevant tests.
+
+## License
+
+This project is licensed under the MIT License; see the [LICENSE](LICENSE) file for details.
