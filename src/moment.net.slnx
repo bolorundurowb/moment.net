@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="moment.net.tests/moment.net.Tests.csproj" />
+  <Project Path="moment.net/moment.net.csproj" />
+</Solution>
