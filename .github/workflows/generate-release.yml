@@ -1,0 +1,76 @@
+name: Generate Release
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read package version
+        id: version
+        run: |
+          VERSION=$(grep -oP '(?<=<PackageVersion>)[^<]+' src/moment.net/moment.net.csproj)
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag already exists
+        id: tag_check
+        run: |
+          if git rev-parse "refs/tags/v${{ steps.version.outputs.value }}" &>/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup .NET 10 SDK
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Restore dependencies
+        if: steps.tag_check.outputs.exists == 'false'
+        run: dotnet restore
+        working-directory: ./src
+
+      - name: Build
+        if: steps.tag_check.outputs.exists == 'false'
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ./src
+
+      - name: Run tests
+        if: steps.tag_check.outputs.exists == 'false'
+        run: dotnet test --configuration Release --no-build
+        working-directory: ./src
+
+      - name: Pack
+        if: steps.tag_check.outputs.exists == 'false'
+        run: dotnet pack src/moment.net/moment.net.csproj --configuration Release --no-build --output ./artifacts
+
+      - name: Create tag
+        if: steps.tag_check.outputs.exists == 'false'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
+      - name: Create GitHub release
+        if: steps.tag_check.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          make_latest: true
+          files: ./artifacts/*.nupkg
