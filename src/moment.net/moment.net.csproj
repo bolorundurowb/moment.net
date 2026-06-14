@@ -11,10 +11,12 @@
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment momentjs datetime relative-time time date calendar</PackageTags>
-        <PackageReleaseNotes>- Add German and Russian localization
-- Fix FinalSpan.InMonth() off-by-one error
-- Fix Spanish TIME_LAST string ("el pasado")
-- Expand test coverage for Final, RelativeTime, and CalendarTime</PackageReleaseNotes>
+        <PackageReleaseNotes>- Add DateTimeOffset overloads for every DateTime API (RelativeTime, BusinessDay, PositionalTime, DateTimeDiff)
+- Add FinalDaysOffset and FinalSpanOffset for offset-aware last-day-of-period queries
+- DateTimeOffset methods preserve the original UTC offset in returned values
+- DateTimeOffset comparisons are offset-aware (compare underlying UTC instants)
+- Full unit test coverage for all new DateTimeOffset APIs
+- README updated with DateTimeOffset documentation and examples</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <AssemblyVersion>1.4.0</AssemblyVersion>
