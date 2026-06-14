@@ -20,7 +20,7 @@ Install-Package moment.net
 
 ### PackageReference
 ```xml
-<PackageReference Include="moment.net" />
+<PackageReference Include="moment.net" Version="1.4.0" />
 ```
 
 ## Features
@@ -29,12 +29,12 @@ Install-Package moment.net
 Calculate human-readable relative time strings.
 
 ```csharp
-var dateTime = new DateTime(2017, 1, 1);
-dateTime.FromNow(); // "9 years ago" (depending on current date)
+var past = new DateTime(2020, 1, 1);
+var future = new DateTime(2026, 1, 1);
+past.From(future);   // "6 years ago"
+future.From(past);   // "6 years from now"
 
-var past = new DateTime(2017, 1, 1);
-var future = new DateTime(2020, 1, 1);
-past.From(future); // "3 years ago"
+past.FromNow();      // relative to DateTime.UtcNow
 
 var startDateTime = new DateTime(2012, 12, 12);
 var sameDay = new DateTime(2012, 12, 12, 12, 0, 0);
@@ -47,13 +47,14 @@ Fluent methods to find specific points in time.
 ```csharp
 var date = DateTime.Parse("5/1/2008 8:30:52 AM");
 
-date.StartOf(DateTimeAnchor.Day);    // 01/05/2008 00:00:00
-date.EndOf(DateTimeAnchor.Day);      // 01/05/2008 23:59:59
-date.FirstDateInWeek();              // Start of the week
-date.LastDateInWeek();               // End of the week
-date.Next(DayOfWeek.Thursday);       // Next occurrence of Thursday
-date.Last(DayOfWeek.Friday);         // Previous occurrence of Friday
-date.Final().Monday().InMonth();     // The last Monday of the month
+date.StartOf(DateTimeAnchor.Day);      // 01/05/2008 00:00:00
+date.EndOf(DateTimeAnchor.Day);        // 01/05/2008 23:59:59
+date.FirstDateInWeek();                // Start of the week
+date.LastDateInWeek();                 // End of the week
+date.Next(DayOfWeek.Thursday);         // Next occurrence of Thursday
+date.Last(DayOfWeek.Friday);           // Previous occurrence of Friday
+date.Final().Monday().InMonth();       // Last Monday of the month
+date.Final().Monday().InYear();        // Last Monday of the year
 ```
 
 ### Business Days
@@ -61,7 +62,7 @@ Support for business day calculations, useful for financial and scheduling appli
 
 ```csharp
 var dateTime = DateTime.Parse("2023-10-20"); // Friday
-dateTime.IsBusinessDay();      // True
+dateTime.IsBusinessDay();      // true
 dateTime.AddBusinessDays(2);   // 2023-10-24 (skips the weekend)
 ```
 
@@ -85,29 +86,40 @@ date.Format("yyyy MMM dd");             // "1971 Jan 01"
 date.UnixTimestampInMilliseconds();     // 31536000000
 ```
 
-## Localization
+## Localisation
 
-Moment.net supports multiple languages for relative time strings. Currently supported languages include:
-- English (default)
-- Spanish
-- French
-- Portuguese
-- German
-- Russian
+Moment.net supports multiple languages for relative time and calendar time strings. Pass a `CultureInfo` to any method that produces human-readable output:
 
-To use a specific culture:
 ```csharp
-var dateTime = new DateTime(2017, 1, 1);
-var relativeTime = dateTime.FromNow(new CultureInfo("es")); // "6 años atrás"
+var past = new DateTime(2020, 1, 1);
+var future = new DateTime(2026, 1, 1);
+
+past.From(future, new CultureInfo("es"));   // "6 años atrás"
+past.From(future, new CultureInfo("de"));   // "6 Jahre her"
+past.From(future, new CultureInfo("fr"));   // "6 ans il y a"
+past.From(future, new CultureInfo("ru"));   // "6 лет назад"
 ```
+
+Currently supported languages:
+
+| Code | Language          |
+|------|-------------------|
+| `en` | English (default) |
+| `es` | Spanish           |
+| `fr` | French            |
+| `pt` | Portuguese        |
+| `de` | German            |
+| `ru` | Russian           |
 
 ## Contributing
 
 Contributions are welcome! If you'd like to help improve Moment.net:
 
-1.  **Add Languages:** Create a new `Strings.[language-code].resx` file in the `moment.net` project, following the pattern of existing localization files.
-2.  **Report Bugs:** Open an issue on GitHub to report bugs or request features.
-3.  **Pull Requests:** Submit pull requests for bug fixes or new features. Please ensure your changes include relevant tests.
+1. **Add Languages:** Create a new `Strings.[language-code].resx` file in the `src/moment.net` project, following the pattern of existing localization files. No `.csproj` changes are needed — .NET picks up satellite resource files by convention.
+2. **Report Bugs:** Open an issue on GitHub to report bugs or request features.
+3. **Pull Requests:** Submit pull requests for bug fixes or new features. Please ensure your changes include relevant tests.
+
+See [CHANGELOG.md](CHANGELOG.md) for a full history of changes.
 
 ## License
 

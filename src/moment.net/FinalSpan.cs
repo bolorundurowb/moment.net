@@ -17,7 +17,7 @@ public class FinalSpan
     {
         var month = _dateTime.Month;
         // only loop through the last seven days of the month
-        _dateTime = new DateTime(_dateTime.Year, _dateTime.Month, (DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month) - 7), 0, 0, 0, _dateTime.Kind);
+        _dateTime = new DateTime(_dateTime.Year, _dateTime.Month, (DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month) - 6), 0, 0, 0, _dateTime.Kind);
         while (_dateTime.Month == month)
         {
             if (_dateTime.DayOfWeek == _dayOfWeek)
