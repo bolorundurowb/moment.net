@@ -18,7 +18,7 @@ public class EndOfTests : IDisposable
     }
 
     [Test]
-    public void EndOfMinuteTest()
+    public void EndOf_Minute_SetsSecondsTo59()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:30:59");
@@ -26,7 +26,7 @@ public class EndOfTests : IDisposable
     }
 
     [Test]
-    public void EndOfHourTest()
+    public void EndOf_Hour_SetsMinutesAndSecondsTo59()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:59:59");
@@ -34,7 +34,7 @@ public class EndOfTests : IDisposable
     }
 
     [Test]
-    public void EndOfDayTest()
+    public void EndOf_Day_ReturnsFinalSecondOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 23:59:59");
@@ -42,7 +42,7 @@ public class EndOfTests : IDisposable
     }
 
     [Test]
-    public void EndOfWeekTest()
+    public void EndOf_Week_ReturnsSaturdayAtEndOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 23:59:59");
@@ -50,7 +50,7 @@ public class EndOfTests : IDisposable
     }
 
     [Test]
-    public void EndOfMonthTest()
+    public void EndOf_Month_ReturnsLastDayAtEndOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/05/2008 23:59:59");
@@ -58,7 +58,7 @@ public class EndOfTests : IDisposable
     }
 
     [Test]
-    public void EndOfYearTest()
+    public void EndOf_Year_ReturnsDecember31AtEndOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/12/2008 23:59:59");

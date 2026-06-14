@@ -9,7 +9,7 @@ public class FinalTests
     readonly string dateString = "5/1/2008 8:30:52Z AM";
 
     [Test]
-    public void FinalInMonthTest()
+    public void Final_InMonth_ReturnsLastOccurrenceOfDayInMonth()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.Final().Monday().InMonth().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("26/05/2008 00:00:00");
@@ -17,7 +17,7 @@ public class FinalTests
     }
 
     [Test]
-    public void FinalInYearTest()
+    public void Final_InYear_ReturnsLastOccurrenceOfDayInYear()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.Final().Sunday().InYear().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("28/12/2008 00:00:00");

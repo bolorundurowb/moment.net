@@ -12,28 +12,28 @@ public class CalendarTimeTests : IDisposable
     public CalendarTimeTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
-    public void CalendarTimeSameDay()
+    public void CalendarTime_Today_ReturnsToday()
     {
         var today = DateTime.Now.Date.AddHours(2);
         today.CalendarTime().ShouldStartWith("Today at ");
     }
 
     [Test]
-    public void CalendarTimeFromYesterday()
+    public void CalendarTime_CalledOnYesterday_ReturnsTomorrow()
     {
         var yesterday = DateTime.Now.AddDays(-1);
         yesterday.CalendarTime().ShouldStartWith("Tomorrow at ");
     }
 
     [Test]
-    public void CalendarTimeFromTomorrow()
+    public void CalendarTime_CalledOnTomorrow_ReturnsYesterday()
     {
         var tomorrow = DateTime.Now.AddDays(1);
         tomorrow.CalendarTime().ShouldStartWith("Yesterday at ");
     }
 
     [Test]
-    public void CalendarTimeFromTwoFixedDates()
+    public void CalendarTime_FutureDateWithinAWeek_ReturnsDayName()
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2012, 12, 18);
@@ -41,7 +41,7 @@ public class CalendarTimeTests : IDisposable
     }
 
     [Test]
-    public void CalendarTimeToTwoFixedDates()
+    public void CalendarTime_PastDateWithinAWeek_ReturnsLastDayName()
     {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
@@ -49,7 +49,7 @@ public class CalendarTimeTests : IDisposable
     }
 
     [Test]
-    public void CalendarTimeForEcessiveTimeSpanWithSpecifiedFormat()
+    public void CalendarTime_DateBeyondWeekWithCustomFormat_ReturnsFormattedDate()
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2018, 12, 12);

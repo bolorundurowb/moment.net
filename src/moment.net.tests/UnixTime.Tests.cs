@@ -13,7 +13,7 @@ public class UnixTimeTests : IDisposable
     public UnixTimeTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
-    public void UnixTimeInMillisecondsOneYearFromEpoch()
+    public void UnixTimestampInMilliseconds_UtcDateTime_ReturnsCorrectTimestamp()
     {
         var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
         var millisecondsElapsed = dateTime.UnixTimestampInMilliseconds();
@@ -21,7 +21,7 @@ public class UnixTimeTests : IDisposable
     }
 
     [Test]
-    public void UnixTimeInMillisecondsOneLocalYearFromEpoch()
+    public void UnixTimestampInMilliseconds_LocalDateTime_ReturnsCorrectTimestamp()
     {
         // Create the exact instant one year after the epoch (UTC) and convert to local time
         var oneYearAfterEpochUtc = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
@@ -31,7 +31,7 @@ public class UnixTimeTests : IDisposable
     }
 
     [Test]
-    public void UnixTimeInSecondsOneUtcYearFromEpoch()
+    public void UnixTimestampInSeconds_UtcDateTime_ReturnsCorrectTimestamp()
     {
         var dateTime = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
         var secondsElapsed = dateTime.UnixTimestampInSeconds();
@@ -39,7 +39,7 @@ public class UnixTimeTests : IDisposable
     }
 
     [Test]
-    public void UnixTimeInSecondsOneLocalYearFromEpoch()
+    public void UnixTimestampInSeconds_LocalDateTime_ReturnsCorrectTimestamp()
     {
         // Create the exact instant one year after the epoch (UTC) and convert to local time
         var oneYearAfterEpochUtc = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);

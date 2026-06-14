@@ -14,7 +14,7 @@ public class BusinessDayTests
     [TestCase("2023-10-27", true)] // Friday
     [TestCase("2023-10-28", false)] // Saturday
     [TestCase("2023-10-29", false)] // Sunday
-    public void IsBusinessDayShouldReturnExpectedResult(string dateString, bool expected)
+    public void IsBusinessDay_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
     {
         var date = DateTime.Parse(dateString);
         date.IsBusinessDay().ShouldBe(expected);
@@ -24,7 +24,7 @@ public class BusinessDayTests
     [TestCase("2023-10-27", false)] // Friday
     [TestCase("2023-10-28", true)] // Saturday
     [TestCase("2023-10-29", true)] // Sunday
-    public void IsWeekendShouldReturnExpectedResult(string dateString, bool expected)
+    public void IsWeekend_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
     {
         var date = DateTime.Parse(dateString);
         date.IsWeekend().ShouldBe(expected);
@@ -34,7 +34,7 @@ public class BusinessDayTests
     [TestCase("2023-10-27", true)] // Friday
     [TestCase("2023-10-28", false)] // Saturday
     [TestCase("2023-10-29", false)] // Sunday
-    public void IsWeekdayShouldReturnExpectedResult(string dateString, bool expected)
+    public void IsWeekday_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
     {
         var date = DateTime.Parse(dateString);
         date.IsWeekday().ShouldBe(expected);
@@ -48,7 +48,7 @@ public class BusinessDayTests
     [TestCase("2023-10-22", 1, "2023-10-23")] // Sunday to Monday
     [TestCase("2023-10-23", -1, "2023-10-20")] // Monday to Friday (backwards)
     [TestCase("2023-10-23", 0, "2023-10-23")] // Zero days
-    public void AddBusinessDaysShouldReturnExpectedResult(string startDateString, int daysToAdd, string expectedDateString)
+    public void AddBusinessDays_VariousStartDatesAndDayCounts_ReturnsExpectedDate(string startDateString, int daysToAdd, string expectedDateString)
     {
         var startDate = DateTime.Parse(startDateString);
         var expectedDate = DateTime.Parse(expectedDateString);

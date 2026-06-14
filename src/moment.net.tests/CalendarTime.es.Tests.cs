@@ -13,44 +13,44 @@ public class CalendarTimeTests_ES : IDisposable
     public CalendarTimeTests_ES() => _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("es-AR")); // spanish argentina
 
     [Test]
-    public void CalendarTimeSameDay()
+    public void CalendarTime_Today_ReturnsToday()
     {
         var today = DateTime.Now.Date.AddHours(2);
         today.CalendarTime().ShouldStartWith("Hoy a las ");
     }
 
     [Test]
-    public void CalendarTimeFromYesterday()
+    public void CalendarTime_CalledOnYesterday_ReturnsTomorrow()
     {
         var yesterday = DateTime.Now.AddDays(-1);
         yesterday.CalendarTime().ShouldStartWith("Mañana a las ");
     }
 
     [Test]
-    public void CalendarTimeFromTomorrow()
+    public void CalendarTime_CalledOnTomorrow_ReturnsYesterday()
     {
         var tomorrow = DateTime.Now.AddDays(1);
         tomorrow.CalendarTime().ShouldStartWith("Ayer a las ");
     }
 
     [Test]
-    public void CalendarTimeFromTwoFixedDates()
+    public void CalendarTime_FutureDateWithinAWeek_ReturnsDayName()
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2012, 12, 18);
-        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'a las' "));
+        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'a las' ", CultureInfo.GetCultureInfo("es-AR")));
     }
 
     [Test]
-    public void CalendarTimeToTwoFixedDates()
+    public void CalendarTime_PastDateWithinAWeek_ReturnsLastDayName()
     {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
-        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'El último' dddd 'a las' "));
+        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'el pasado' dddd 'a las' ", CultureInfo.GetCultureInfo("es-AR")));
     }
 
     [Test]
-    public void CalendarTimeForEcessiveTimeSpanWithSpecifiedFormat()
+    public void CalendarTime_DateBeyondWeekWithCustomFormat_ReturnsFormattedDate()
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2018, 12, 12);
