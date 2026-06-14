@@ -9,7 +9,7 @@ public class Last
     readonly string dateString = "5/1/2008 8:30:52Z AM";
 
     [Test]
-    public void LastDayOfWeekTest()
+    public void Last_DayOfWeek_ReturnsPreviousOccurrence()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.Last(DayOfWeek.Thursday).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("24/04/2008 08:30:52");
@@ -17,7 +17,7 @@ public class Last
     }
 
     [Test]
-    public void LastNthDayOfWeekTest()
+    public void Last_NthDayOfWeek_ReturnsNthPreviousOccurrence()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.Last(DayOfWeek.Thursday, 3).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("10/04/2008 08:30:52");

@@ -18,7 +18,7 @@ public class StartOfTests : IDisposable
     }
 
     [Test]
-    public void StartOfMinuteTest()
+    public void StartOf_Minute_TruncatesSecondsToZero()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:30:00");
@@ -26,7 +26,7 @@ public class StartOfTests : IDisposable
     }
 
     [Test]
-    public void StartOfHourTest()
+    public void StartOf_Hour_TruncatesMinutesAndSecondsToZero()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:00:00");
@@ -34,7 +34,7 @@ public class StartOfTests : IDisposable
     }
 
     [Test]
-    public void StartOfDayTest()
+    public void StartOf_Day_TruncatesTimeToMidnight()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 00:00:00");
@@ -42,7 +42,7 @@ public class StartOfTests : IDisposable
     }
 
     [Test]
-    public void StartOfWeekTest()
+    public void StartOf_Week_ReturnsPrecedingSunday()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("27/04/2008 00:00:00");
@@ -50,7 +50,7 @@ public class StartOfTests : IDisposable
     }
 
     [Test]
-    public void StartOfMonthTest()
+    public void StartOf_Month_ReturnsFirstDayAtMidnight()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 00:00:00");
@@ -58,7 +58,7 @@ public class StartOfTests : IDisposable
     }
 
     [Test]
-    public void StartOfYearTest()
+    public void StartOf_Year_ReturnsJanuaryFirstAtMidnight()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/01/2008 00:00:00");

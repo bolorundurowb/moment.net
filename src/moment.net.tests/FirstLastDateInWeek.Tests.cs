@@ -17,7 +17,7 @@ public class FirstLastDateInWeek : IDisposable
     }
 
     [Test]
-    public void FirstDateInWeekTest()
+    public void FirstDateInWeek_ReturnsFirstDayOfWeek()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.FirstDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("27/04/2008 00:00:00");
@@ -25,7 +25,7 @@ public class FirstLastDateInWeek : IDisposable
     }
 
     [Test]
-    public void LastDateInWeekTest()
+    public void LastDateInWeek_ReturnsLastDayOfWeek()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.LastDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 00:00:00");

@@ -12,7 +12,7 @@ public class FormatTests : IDisposable
     public FormatTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
 
     [Test]
-    public void FormatShouldReturnIsoStringWithNoSpecifiedFormatString()
+    public void Format_NoFormatString_ReturnsIso8601String()
     {
         var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
         var formattedDate = date.Format();
@@ -21,7 +21,7 @@ public class FormatTests : IDisposable
     }
 
     [Test]
-    public void FormatShouldReturnIsoStringWithSpecifiedFormatString()
+    public void Format_WithFormatString_ReturnsFormattedString()
     {
         var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
         var formattedDate = date.ToUniversalTime().Format("yyy MMM hh");
@@ -30,7 +30,7 @@ public class FormatTests : IDisposable
     }
 
     [Test]
-    public void FormatShouldReturnIsoStringWithSpecifiedFormatStringAndCulture()
+    public void Format_WithFormatStringAndCulture_ReturnsLocalisedFormattedString()
     {
         var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
         var culture = new CultureInfo("fr-CA", false);
