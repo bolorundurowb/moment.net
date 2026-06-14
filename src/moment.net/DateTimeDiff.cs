@@ -42,4 +42,29 @@ public static class DateTimeDiff
     {
         return dt.DiffInMonths(other) / 12.0;
     }
+
+    /// <summary>
+    /// Returns the difference in days between this and another <see cref="DateTimeOffset"/>.
+    /// Comparison is performed on the underlying UTC instants.
+    /// </summary>
+    public static double DiffInDays(this DateTimeOffset dt, DateTimeOffset other) =>
+        (dt - other).TotalDays;
+
+    /// <summary>
+    /// Returns the difference in months between this and another <see cref="DateTimeOffset"/>.
+    /// Uses the calendar date components of each value (in their respective local offsets).
+    /// </summary>
+    public static double DiffInMonths(this DateTimeOffset dt, DateTimeOffset other)
+    {
+        var months = (dt.Year - other.Year) * 12 + dt.Month - other.Month;
+        var daysInMonth = DateTime.DaysInMonth(other.Year, other.Month);
+        var dayDiff = (double)(dt.Day - other.Day) / daysInMonth;
+        return months + dayDiff;
+    }
+
+    /// <summary>
+    /// Returns the difference in years between this and another <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static double DiffInYears(this DateTimeOffset dt, DateTimeOffset other) =>
+        dt.DiffInMonths(other) / 12.0;
 }

@@ -62,4 +62,49 @@ public static class BusinessDay
 
         return result;
     }
+
+    /// <summary>
+    /// Check if a <see cref="DateTimeOffset"/> instance is a business day (Monday to Friday).
+    /// The day of week is evaluated in the offset's local time.
+    /// </summary>
+    public static bool IsBusinessDay(this DateTimeOffset dateTime) =>
+        dateTime.DayOfWeek != DayOfWeek.Saturday && dateTime.DayOfWeek != DayOfWeek.Sunday;
+
+    /// <summary>
+    /// Check if a <see cref="DateTimeOffset"/> instance is a weekend (Saturday or Sunday).
+    /// The day of week is evaluated in the offset's local time.
+    /// </summary>
+    public static bool IsWeekend(this DateTimeOffset dt) =>
+        dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday;
+
+    /// <summary>
+    /// Check if a <see cref="DateTimeOffset"/> instance is a weekday (Monday to Friday).
+    /// The day of week is evaluated in the offset's local time.
+    /// </summary>
+    public static bool IsWeekday(this DateTimeOffset dt) => !dt.IsWeekend();
+
+    /// <summary>
+    /// Adds business days to the given <see cref="DateTimeOffset"/>, skipping weekends.
+    /// The UTC offset is preserved in the returned value.
+    /// </summary>
+    /// <param name="dateTime">The starting date</param>
+    /// <param name="days">The number of business days to add (may be negative)</param>
+    public static DateTimeOffset AddBusinessDays(this DateTimeOffset dateTime, int days)
+    {
+        if (days == 0)
+            return dateTime;
+
+        var result = dateTime;
+        var direction = days > 0 ? 1 : -1;
+        var remainingDays = Math.Abs(days);
+
+        while (remainingDays > 0)
+        {
+            result = result.AddDays(direction);
+            if (result.IsBusinessDay())
+                remainingDays--;
+        }
+
+        return result;
+    }
 }
