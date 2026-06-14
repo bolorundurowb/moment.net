@@ -11,28 +11,27 @@ public class CalendarTimeTests_RU : IDisposable
     private readonly CultureWrapper _cultureWrapper;
 
     public CalendarTimeTests_RU() =>
-        // russian not implemented. Used to check if a fallback is done to english resources localization
         _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("ru"));
 
     [Test]
     public void CalendarTime_Today_ReturnsToday()
     {
         var today = DateTime.Now.Date.AddHours(2);
-        today.CalendarTime().ShouldStartWith("Today at ");
+        today.CalendarTime().ShouldStartWith("Сегодня в ");
     }
 
     [Test]
     public void CalendarTime_CalledOnYesterday_ReturnsTomorrow()
     {
         var yesterday = DateTime.Now.AddDays(-1);
-        yesterday.CalendarTime().ShouldStartWith("Tomorrow at ");
+        yesterday.CalendarTime().ShouldStartWith("Завтра в ");
     }
 
     [Test]
     public void CalendarTime_CalledOnTomorrow_ReturnsYesterday()
     {
         var tomorrow = DateTime.Now.AddDays(1);
-        tomorrow.CalendarTime().ShouldStartWith("Yesterday at ");
+        tomorrow.CalendarTime().ShouldStartWith("Вчера в ");
     }
 
     [Test]
@@ -40,7 +39,7 @@ public class CalendarTimeTests_RU : IDisposable
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2012, 12, 18);
-        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'at' "));
+        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'в' ", CultureInfo.GetCultureInfo("ru")));
     }
 
     [Test]
@@ -48,7 +47,7 @@ public class CalendarTimeTests_RU : IDisposable
     {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
-        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'Last' dddd 'at' "));
+        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'Последний' dddd 'в' ", CultureInfo.GetCultureInfo("ru")));
     }
 
     [Test]
