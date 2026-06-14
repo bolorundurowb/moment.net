@@ -22,14 +22,14 @@ public class CalendarTimeTests_RU : IDisposable
     }
 
     [Test]
-    public void CalendarTimeFromYesterday()
+    public void CalendarTimeCalledOnYesterday()
     {
         var yesterday = DateTime.Now.AddDays(-1);
         yesterday.CalendarTime().ShouldStartWith("Tomorrow at ");
     }
 
     [Test]
-    public void CalendarTimeFromTomorrow()
+    public void CalendarTimeCalledOnTomorrow()
     {
         var tomorrow = DateTime.Now.AddDays(1);
         tomorrow.CalendarTime().ShouldStartWith("Yesterday at ");
@@ -52,7 +52,7 @@ public class CalendarTimeTests_RU : IDisposable
     }
 
     [Test]
-    public void CalendarTimeForEcessiveTimeSpanWithSpecifiedFormat()
+    public void CalendarTimeForExcessiveTimeSpanWithSpecifiedFormat()
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2018, 12, 12);
