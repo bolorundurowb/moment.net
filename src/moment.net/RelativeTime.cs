@@ -376,4 +376,245 @@ public static class RelativeTime
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
         return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
     }
+
+    /// <summary>
+    /// Return the <see cref="DateTimeOffset"/> for the next <see cref="DayOfWeek"/> supplied
+    /// </summary>
+    public static DateTimeOffset Next(this DateTimeOffset This, DayOfWeek dayOfWeek)
+    {
+        if (This.DayOfWeek == dayOfWeek)
+            This = This.AddDays(1);
+
+        while (This.DayOfWeek != dayOfWeek)
+            This = This.AddDays(1);
+
+        return This;
+    }
+
+    /// <summary>
+    /// Return the <see cref="DateTimeOffset"/> for the nth next <see cref="DayOfWeek"/> supplied
+    /// </summary>
+    public static DateTimeOffset Next(this DateTimeOffset This, DayOfWeek dayOfWeek, int count)
+    {
+        for (var i = 0; i < count; i++)
+            This = This.Next(dayOfWeek);
+
+        return This;
+    }
+
+    /// <summary>
+    /// Return the <see cref="DateTimeOffset"/> for the previous <see cref="DayOfWeek"/> supplied
+    /// </summary>
+    public static DateTimeOffset Last(this DateTimeOffset This, DayOfWeek dayOfWeek)
+    {
+        if (This.DayOfWeek == dayOfWeek)
+            This = This.AddDays(-1);
+
+        while (This.DayOfWeek != dayOfWeek)
+            This = This.AddDays(-1);
+
+        return This;
+    }
+
+    /// <summary>
+    /// Return the <see cref="DateTimeOffset"/> for the nth previous <see cref="DayOfWeek"/> supplied
+    /// </summary>
+    public static DateTimeOffset Last(this DateTimeOffset This, DayOfWeek dayOfWeek, int count)
+    {
+        for (var i = 0; i < count; i++)
+            This = This.Last(dayOfWeek);
+
+        return This;
+    }
+
+    /// <summary>
+    /// Returns a <see cref="FinalDaysOffset"/> builder for finding the last occurrence of a weekday
+    /// </summary>
+    public static FinalDaysOffset Final(this DateTimeOffset This) => new FinalDaysOffset(This);
+
+    /// <summary>
+    /// Returns the start of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
+    /// Uses the current culture for week calculations.
+    /// </summary>
+    public static DateTimeOffset StartOf(this DateTimeOffset This, DateTimeAnchor timeAnchor) =>
+        This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the start of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
+    /// The offset of the original value is preserved.
+    /// </summary>
+    public static DateTimeOffset StartOf(this DateTimeOffset This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    {
+        switch (timeAnchor)
+        {
+            case DateTimeAnchor.Minute:
+                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0, 0, This.Offset);
+            case DateTimeAnchor.Hour:
+                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, 0, 0, 0, This.Offset);
+            case DateTimeAnchor.Day:
+                return new DateTimeOffset(This.Year, This.Month, This.Day, 0, 0, 0, 0, This.Offset);
+            case DateTimeAnchor.Week:
+                var tmp = This.FirstDateInWeek(cultureInfo);
+                return new DateTimeOffset(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0, This.Offset);
+            case DateTimeAnchor.Month:
+                return new DateTimeOffset(This.Year, This.Month, 1, 0, 0, 0, 0, This.Offset);
+            case DateTimeAnchor.Year:
+                return new DateTimeOffset(This.Year, 1, 1, 0, 0, 0, 0, This.Offset);
+            default:
+                throw new ArgumentException("Invalid timeAnchor argument.");
+        }
+    }
+
+    /// <summary>
+    /// Returns the end of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
+    /// Uses the current culture for week calculations.
+    /// </summary>
+    public static DateTimeOffset EndOf(this DateTimeOffset This, DateTimeAnchor timeAnchor) =>
+        This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the end of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
+    /// The offset of the original value is preserved.
+    /// </summary>
+    public static DateTimeOffset EndOf(this DateTimeOffset This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    {
+        switch (timeAnchor)
+        {
+            case DateTimeAnchor.Minute:
+                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59, 999, This.Offset);
+            case DateTimeAnchor.Hour:
+                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, 59, 59, 999, This.Offset);
+            case DateTimeAnchor.Day:
+                return new DateTimeOffset(This.Year, This.Month, This.Day, 23, 59, 59, 999, This.Offset);
+            case DateTimeAnchor.Week:
+                var tmp = This.LastDateInWeek(cultureInfo);
+                return new DateTimeOffset(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999, This.Offset);
+            case DateTimeAnchor.Month:
+                var days = DateTime.DaysInMonth(This.Year, This.Month);
+                return new DateTimeOffset(This.Year, This.Month, days, 23, 59, 59, 999, This.Offset);
+            case DateTimeAnchor.Year:
+                return new DateTimeOffset(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Offset);
+            default:
+                throw new ArgumentException("Invalid timeAnchor argument.");
+        }
+    }
+
+    /// <summary>
+    /// Get the relative time from a given <see cref="DateTimeOffset"/> to now
+    /// </summary>
+    public static string FromNow(this DateTimeOffset This, CultureInfo? ci = null) =>
+        ParseFromPastTimeSpan(DateTimeOffset.UtcNow - This, ci);
+
+    /// <summary>
+    /// Get the relative time from a given <see cref="DateTimeOffset"/> to another <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static string From(this DateTimeOffset This, DateTimeOffset dateTime, CultureInfo? ci = null) =>
+        ParseFromPastTimeSpan(dateTime - This, ci);
+
+    /// <summary>
+    /// Get the relative time from now to a future <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static string ToNow(this DateTimeOffset This) =>
+        ParseFromFutureTimeSpan(This - DateTimeOffset.UtcNow);
+
+    /// <summary>
+    /// Get the relative time from a <see cref="DateTimeOffset"/> to a future <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static string To(this DateTimeOffset This, DateTimeOffset dateTime) =>
+        ParseFromFutureTimeSpan(dateTime - This);
+
+    /// <summary>
+    /// Get the calendar time description from this <see cref="DateTimeOffset"/> to now
+    /// </summary>
+    public static string CalendarTime(this DateTimeOffset This, CalendarTimeFormats? formats = null) =>
+        CalendarTime(This, DateTimeOffset.Now, formats);
+
+    /// <summary>
+    /// Get the calendar time description from this <see cref="DateTimeOffset"/> to a specified <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static string CalendarTime(this DateTimeOffset This, DateTimeOffset dateTime,
+        CalendarTimeFormats? formats = null, CultureInfo? ci = null)
+    {
+        formats ??= new CalendarTimeFormats(ci);
+        var startDate = This.ToLocalTime();
+        var endDate = dateTime.ToLocalTime();
+        var timeDiff = endDate - startDate;
+
+        if (startDate.Date == endDate.Date)
+            return endDate.ToString(formats.SameDay);
+
+        if (startDate.AddDays(1).Date == endDate.Date)
+            return endDate.ToString(formats.NextDay);
+
+        if (startDate.AddDays(-1).Date == endDate.Date)
+            return endDate.ToString(formats.LastDay);
+
+        if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
+            return endDate.ToString(formats.NextWeek);
+
+        if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
+            return endDate.ToString(formats.LastWeek);
+
+        return endDate.ToString(formats.EverythingElse);
+    }
+
+    /// <summary>
+    /// Get the total number of seconds since the Unix epoch for a <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static double UnixTimestampInSeconds(this DateTimeOffset This) =>
+        (This.UtcDateTime - UnixEpoch).TotalSeconds;
+
+    /// <summary>
+    /// Get the total number of milliseconds since the Unix epoch for a <see cref="DateTimeOffset"/>
+    /// </summary>
+    public static double UnixTimestampInMilliseconds(this DateTimeOffset This) =>
+        (This.UtcDateTime - UnixEpoch).TotalMilliseconds;
+
+    /// <summary>
+    /// Returns the first day of the week for the given <see cref="DateTimeOffset"/> using the current culture.
+    /// The original UTC offset is preserved.
+    /// </summary>
+    public static DateTimeOffset FirstDateInWeek(this DateTimeOffset dayInWeek) =>
+        dayInWeek.FirstDateInWeek(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the first day of the week for the given <see cref="DateTimeOffset"/> and <see cref="CultureInfo"/>.
+    /// The original UTC offset is preserved.
+    /// </summary>
+    public static DateTimeOffset FirstDateInWeek(this DateTimeOffset dayInWeek, CultureInfo cultureInfo)
+    {
+        var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+        var localDate = dayInWeek.Date; // DateTime with Kind.Unspecified, in the offset's local time
+        var diff = (int)localDate.DayOfWeek - (int)firstDayOfWeek;
+        var firstDay = localDate.AddDays(-(Math.Abs(diff)));
+        return new DateTimeOffset(firstDay.Year, firstDay.Month, firstDay.Day,
+            0, 0, 0, 0, dayInWeek.Offset);
+    }
+
+    /// <summary>
+    /// Returns the last day of the week for the given <see cref="DateTimeOffset"/> using the current culture.
+    /// The original UTC offset is preserved.
+    /// </summary>
+    public static DateTimeOffset LastDateInWeek(this DateTimeOffset dayInWeek) =>
+        dayInWeek.LastDateInWeek(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the last day of the week for the given <see cref="DateTimeOffset"/> and <see cref="CultureInfo"/>.
+    /// The original UTC offset is preserved.
+    /// </summary>
+    public static DateTimeOffset LastDateInWeek(this DateTimeOffset dayInWeek, CultureInfo cultureInfo)
+    {
+        var firstDayInWeek = FirstDateInWeek(dayInWeek, cultureInfo);
+        return firstDayInWeek.AddDays(6);
+    }
+
+    /// <summary>
+    /// Returns a formatted date string for a <see cref="DateTimeOffset"/>.
+    /// If no format is specified it returns an ISO-8601 string with offset.
+    /// </summary>
+    public static string Format(this DateTimeOffset dateTime, string? format = null, CultureInfo? cultureInfo = null)
+    {
+        format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
+        return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
+    }
 }

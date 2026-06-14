@@ -6,7 +6,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/moment.net)](https://www.nuget.org/packages/moment.net)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/moment.net)](https://www.nuget.org/packages/moment.net)
 
-**moment.net** is a .NET Standard 2.0 library that brings moment.js-style fluent date/time operations to C#. It provides extension methods on `DateTime` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localization support.
+**moment.net** is a .NET Standard 2.0 library that brings moment.js-style fluent date/time operations to C#. It provides extension methods on both `DateTime` and `DateTimeOffset` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localization support.
 
 ## Table of Contents
 
@@ -22,6 +22,7 @@
   - [Business Days](#business-days)
   - [Formatting](#formatting)
   - [Unix Time](#unix-time)
+- [DateTimeOffset Support](#datetimeoffset-support)
 - [Localization](#localization)
 - [Configuration](#configuration)
 - [Contributing](#contributing)
@@ -41,7 +42,7 @@ Install-Package moment.net
 
 ### PackageReference
 ```xml
-<PackageReference Include="moment.net" Version="1.4.0" />
+<PackageReference Include="moment.net" Version="2.0.0" />
 ```
 
 ## Quick Start
@@ -69,6 +70,14 @@ date.Final().Monday().InMonth();   // last Monday of the month
 // Comparison
 date.IsWeekend();                  // false
 date.IsLeapYear();                 // true
+
+// All APIs also work with DateTimeOffset — the UTC offset is preserved
+var dto = new DateTimeOffset(2024, 3, 15, 9, 0, 0, TimeSpan.FromHours(5));
+dto.FromNow();                         // "a year ago"
+dto.StartOf(DateTimeAnchor.Month);     // 2024-03-01T00:00:00+05:00
+dto.Next(DayOfWeek.Monday);            // next Monday, same +05:00 offset
+dto.IsWeekend();                       // false
+dto.UnixTimestampInSeconds();          // seconds since epoch, normalized to UTC
 ```
 
 ## API Reference
@@ -258,6 +267,68 @@ friday.AddBusinessDays(-3);   // 2023-10-17 (Tuesday, negative works too)
 var date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 date.UnixTimestampInSeconds();      // 0
 date.UnixTimestampInMilliseconds(); // 0
+```
+
+## DateTimeOffset Support
+
+Every API in moment.net has a `DateTimeOffset` overload. The behaviour is identical to the `DateTime` counterpart with two additions:
+
+- **UTC offset is preserved.** Methods that return a new date value (e.g. `StartOf`, `EndOf`, `Next`, `Last`, `Final`, `FirstDateInWeek`, `LastDateInWeek`, `AddBusinessDays`) keep the original `TimeSpan` offset in the returned `DateTimeOffset`.
+- **Comparisons are offset-aware.** `IsSame`, `IsBefore`, `IsAfter`, `IsBetween`, `DiffInDays`, and the relative-time methods (`FromNow`, `From`, `ToNow`, `To`) compare the underlying UTC instants, so values with different offsets are handled correctly.
+
+### Examples
+
+```csharp
+var dto = new DateTimeOffset(2024, 3, 15, 9, 0, 0, TimeSpan.FromHours(5));
+
+// Relative time — always compares against DateTimeOffset.UtcNow
+dto.FromNow();                           // "a year ago"
+dto.ToNow();                             // "in X ..."
+
+// Two different representations of the same instant compare equal
+var a = new DateTimeOffset(2024, 3, 15, 9, 0, 0, TimeSpan.FromHours(5));
+var b = new DateTimeOffset(2024, 3, 15, 4, 0, 0, TimeSpan.Zero);
+a.IsSame(b);    // true  (same UTC instant)
+a.From(b);      // "few seconds ago"
+
+// Start/end of period — offset preserved
+dto.StartOf(DateTimeAnchor.Day);    // 2024-03-15T00:00:00+05:00
+dto.EndOf(DateTimeAnchor.Month);    // 2024-03-31T23:59:59+05:00
+
+// Next / Last / Final
+dto.Next(DayOfWeek.Monday);          // next Monday, +05:00
+dto.Last(DayOfWeek.Friday);          // previous Friday, +05:00
+dto.Final().Monday().InMonth();      // last Monday of March 2024, +05:00
+
+// Week boundaries
+dto.FirstDateInWeek();               // first day of week (culture-dependent), +05:00
+dto.LastDateInWeek();                // last day of week (culture-dependent), +05:00
+
+// Business days
+dto.IsBusinessDay();                 // true (Friday)
+dto.AddBusinessDays(3);              // 3 business days later, +05:00
+
+// Comparison
+dto.IsLeapYear();                    // true
+dto.IsBefore(dto.AddDays(1));        // true
+dto.IsBetween(dto.AddDays(-1), dto.AddDays(1)); // true
+
+// Differences
+var other = new DateTimeOffset(2023, 3, 15, 9, 0, 0, TimeSpan.FromHours(5));
+dto.DiffInDays(other);               // ~366.0
+dto.DiffInMonths(other);             // ~12.0
+dto.DiffInYears(other);              // ~1.0
+
+// Unix timestamps — always UTC
+dto.UnixTimestampInSeconds();        // seconds since 1970-01-01T00:00:00Z
+dto.UnixTimestampInMilliseconds();   // milliseconds since epoch
+
+// Formatting
+dto.Format();                        // "2024-03-15T09:00:00+05:00"
+dto.Format("dd MMMM yyyy");          // "15 March 2024"
+
+// Calendar time
+dto.CalendarTime();                  // relative to DateTimeOffset.Now
 ```
 
 ## Localization

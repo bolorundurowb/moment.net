@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0]
+
+### Added
+- `DateTimeOffset` overloads for every existing `DateTime` API:
+  - `RelativeTime`: `Next`, `Last`, `Final`, `StartOf`, `EndOf`, `FromNow`, `From`, `ToNow`, `To`, `CalendarTime`, `UnixTimestampInSeconds`, `UnixTimestampInMilliseconds`, `FirstDateInWeek`, `LastDateInWeek`, `Format`
+  - `BusinessDay`: `IsBusinessDay`, `IsWeekend`, `IsWeekday`, `AddBusinessDays`
+  - `PositionalTime`: `IsLeapYear`, `IsSame`, `IsBefore`, `IsSameOrBefore`, `IsAfter`, `IsSameOrAfter`, `IsBetween`
+  - `DateTimeDiff`: `DiffInDays`, `DiffInMonths`, `DiffInYears`
+- `FinalDaysOffset` and `FinalSpanOffset` classes — `DateTimeOffset` equivalents of `FinalDays` / `FinalSpan`, exposing `InMonth()` and `InYear()`
+- `DateTimeOffset` API documentation and examples in README
+- Unit tests for all `DateTimeOffset` overloads (mirrors of existing `DateTime` test suites)
+
+### Notes
+- All `DateTimeOffset` methods that return a new date value preserve the original UTC offset
+- Comparison and relative-time methods (`IsSame`, `IsBefore`, `From`, etc.) compare underlying UTC instants, so values with different offsets are handled correctly
+
 ## [1.4.0]
 
 ### Added
