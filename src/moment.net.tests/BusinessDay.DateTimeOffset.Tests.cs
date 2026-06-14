@@ -1,0 +1,67 @@
+using System;
+using NUnit.Framework;
+using Shouldly;
+
+namespace moment.net.Tests;
+
+[TestFixture]
+public class BusinessDayDateTimeOffsetTests
+{
+    private static readonly TimeSpan PlusThree = TimeSpan.FromHours(3);
+
+    private static DateTimeOffset MakeDate(string dateString) =>
+        new DateTimeOffset(DateTime.Parse(dateString), PlusThree);
+
+    [TestCase("2023-10-23", true)]  // Monday
+    [TestCase("2023-10-24", true)]  // Tuesday
+    [TestCase("2023-10-25", true)]  // Wednesday
+    [TestCase("2023-10-26", true)]  // Thursday
+    [TestCase("2023-10-27", true)]  // Friday
+    [TestCase("2023-10-28", false)] // Saturday
+    [TestCase("2023-10-29", false)] // Sunday
+    public void IsBusinessDay_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
+    {
+        MakeDate(dateString).IsBusinessDay().ShouldBe(expected);
+    }
+
+    [TestCase("2023-10-23", false)] // Monday
+    [TestCase("2023-10-27", false)] // Friday
+    [TestCase("2023-10-28", true)]  // Saturday
+    [TestCase("2023-10-29", true)]  // Sunday
+    public void IsWeekend_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
+    {
+        MakeDate(dateString).IsWeekend().ShouldBe(expected);
+    }
+
+    [TestCase("2023-10-23", true)]  // Monday
+    [TestCase("2023-10-27", true)]  // Friday
+    [TestCase("2023-10-28", false)] // Saturday
+    [TestCase("2023-10-29", false)] // Sunday
+    public void IsWeekday_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
+    {
+        MakeDate(dateString).IsWeekday().ShouldBe(expected);
+    }
+
+    [TestCase("2023-10-20", 1, "2023-10-23")] // Friday to Monday
+    [TestCase("2023-10-20", 2, "2023-10-24")] // Friday to Tuesday
+    [TestCase("2023-10-23", 1, "2023-10-24")] // Monday to Tuesday
+    [TestCase("2023-10-23", 5, "2023-10-30")] // Monday to Monday
+    [TestCase("2023-10-21", 1, "2023-10-23")] // Saturday to Monday
+    [TestCase("2023-10-22", 1, "2023-10-23")] // Sunday to Monday
+    [TestCase("2023-10-23", -1, "2023-10-20")] // Monday to Friday (backwards)
+    [TestCase("2023-10-23", 0, "2023-10-23")]  // Zero days
+    public void AddBusinessDays_VariousStartDatesAndDayCounts_ReturnsExpectedDate(
+        string startDateString, int daysToAdd, string expectedDateString)
+    {
+        var startDate = MakeDate(startDateString);
+        var expectedDate = MakeDate(expectedDateString);
+        startDate.AddBusinessDays(daysToAdd).Date.ShouldBe(expectedDate.Date);
+    }
+
+    [Test]
+    public void AddBusinessDays_PreservesOffset()
+    {
+        var date = MakeDate("2023-10-20");
+        date.AddBusinessDays(3).Offset.ShouldBe(PlusThree);
+    }
+}
