@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Shouldly;
 using System;
 using System.Globalization;
 
-namespace moment.net.Tests;
+namespace MomentNet.Tests;
 
 public class TimeFromTests_ES : IDisposable
 {

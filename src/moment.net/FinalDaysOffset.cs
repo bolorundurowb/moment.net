@@ -1,6 +1,6 @@
 using System;
 
-namespace moment.net;
+namespace MomentNet;
 
 /// <summary>
 /// Fluent builder for finding the last occurrence of a weekday within a month or year,

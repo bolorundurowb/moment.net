@@ -1,4 +1,4 @@
-﻿namespace moment.net.Enums;
+namespace MomentNet.Enums;
 
 public enum DateTimeAnchor
 {

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Shouldly;
 using TimeZoneConverter;
 
-namespace moment.net.Tests;
+namespace MomentNet.Tests;
 
 public class UnixTimeTests : IDisposable
 {

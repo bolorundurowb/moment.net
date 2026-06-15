@@ -1,7 +1,7 @@
-﻿namespace moment.net
+namespace MomentNet
 {
     internal static class Globals
     {
-        public const string STRINGS = "moment.net.Strings";
+        public const string STRINGS = "MomentNet.Strings";
     }
 }

@@ -1,9 +1,9 @@
-﻿using System;
-using moment.net.Models;
+using System;
+using MomentNet.Models;
 using System.Globalization;
-using moment.net.Enums;
+using MomentNet.Enums;
 
-namespace moment.net;
+namespace MomentNet;
 
 public static class RelativeTime
 {

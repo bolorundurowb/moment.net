@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace moment.net;
+namespace MomentNet;
 
 public static class PositionalTime
 {

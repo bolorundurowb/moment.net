@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using Shouldly;
 
-namespace moment.net.Tests;
+namespace MomentNet.Tests;
 
 [TestFixture]
 public class PositionalTimeDateTimeOffsetTests

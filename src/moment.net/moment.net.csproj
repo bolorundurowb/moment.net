@@ -19,6 +19,7 @@
 - README updated with DateTimeOffset documentation and examples</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RootNamespace>MomentNet</RootNamespace>
         <AssemblyVersion>1.4.0</AssemblyVersion>
         <FileVersion>1.4.0</FileVersion>
         <NeutralLanguage>en-NG</NeutralLanguage>

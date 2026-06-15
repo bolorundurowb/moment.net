@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace moment.net.Models;
+namespace MomentNet.Models;
 
 public class CalendarTimeFormats
 {

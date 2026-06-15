@@ -1,10 +1,10 @@
 using System;
 using System.Globalization;
-using moment.net.Enums;
+using MomentNet.Enums;
 using NUnit.Framework;
 using Shouldly;
 
-namespace moment.net.Tests;
+namespace MomentNet.Tests;
 
 public class EndOfTests : IDisposable
 {

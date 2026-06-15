@@ -1,6 +1,6 @@
 using System;
 
-namespace moment.net;
+namespace MomentNet;
 
 /// <summary>
 /// Represents the result of a <see cref="FinalDaysOffset"/> day selection, exposing

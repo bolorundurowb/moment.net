@@ -1,10 +1,10 @@
 using System;
 using System.Globalization;
-using moment.net.Models;
+using MomentNet.Models;
 using NUnit.Framework;
 using Shouldly;
 
-namespace moment.net.Tests;
+namespace MomentNet.Tests;
 
 public class CalendarTimeTests : IDisposable
 {

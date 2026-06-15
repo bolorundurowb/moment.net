@@ -48,7 +48,7 @@ Install-Package moment.net
 ## Quick Start
 
 ```csharp
-using moment.net;
+using MomentNet;
 
 var date = new DateTime(2024, 3, 15);
 
