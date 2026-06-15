@@ -4,84 +4,91 @@ namespace MomentNet.Display;
 
 public static class DateTimeDiff
 {
-    private const double DaysInAYear = 365.2425; // see https://en.wikipedia.org/wiki/Gregorian_calendar
-    private const double DaysInAMonth = DaysInAYear / 12;
-
     /// <summary>
-    /// Returns the difference in days between this and another date
+    /// Returns the difference in days between two dates.
     /// </summary>
-    /// <param name="dt">The given date</param>
-    /// <param name="other">The date to compare with</param>
-    /// <returns>The difference in days</returns>
-    public static double DiffInDays(this DateTime dt, DateTime other)
+    /// <param name="dateTime">The date to compare from.</param>
+    /// <param name="comparisonDateTime">The date to compare against.</param>
+    /// <returns>The signed difference in days.</returns>
+    public static double DiffInDays(this DateTime dateTime, DateTime comparisonDateTime)
     {
-        return (dt - other).TotalDays;
+        return (dateTime - comparisonDateTime).TotalDays;
     }
 
     /// <summary>
-    /// Returns the difference in months between this and another date
+    /// Returns the difference in months between two dates.
     /// </summary>
-    /// <param name="dt">The given date</param>
-    /// <param name="other">The date to compare with</param>
-    /// <returns>The difference in months</returns>
-    public static double DiffInMonths(this DateTime dt, DateTime other)
+    /// <param name="dateTime">The date to compare from.</param>
+    /// <param name="comparisonDateTime">The date to compare against.</param>
+    /// <returns>The signed difference in months, including the fractional month component.</returns>
+    public static double DiffInMonths(this DateTime dateTime, DateTime comparisonDateTime)
     {
-        var months = (dt.Year - other.Year) * 12 + dt.Month - other.Month;
-        var daysInMonth = DateTime.DaysInMonth(other.Year, other.Month);
-        var dayDiff = (double)(dt.Day - other.Day) / daysInMonth;
+        var months = (dateTime.Year - comparisonDateTime.Year) * 12 + dateTime.Month - comparisonDateTime.Month;
+        var daysInMonth = DateTime.DaysInMonth(comparisonDateTime.Year, comparisonDateTime.Month);
+        var dayDiff = (double)(dateTime.Day - comparisonDateTime.Day) / daysInMonth;
         return months + dayDiff;
     }
 
     /// <summary>
-    /// Returns the difference in quarters between this and another date
+    /// Returns the difference in quarters between two dates.
     /// </summary>
-    /// <param name="dt">The given date</param>
-    /// <param name="other">The date to compare with</param>
-    /// <returns>The difference in quarters</returns>
-    public static double DiffInQuarters(this DateTime dt, DateTime other)
+    /// <param name="dateTime">The date to compare from.</param>
+    /// <param name="comparisonDateTime">The date to compare against.</param>
+    /// <returns>The signed difference in quarters.</returns>
+    public static double DiffInQuarters(this DateTime dateTime, DateTime comparisonDateTime)
     {
-        return dt.DiffInMonths(other) / 3.0;
+        return dateTime.DiffInMonths(comparisonDateTime) / 3.0;
     }
 
     /// <summary>
-    /// Returns the difference in years between this and another date
+    /// Returns the difference in years between two dates.
     /// </summary>
-    /// <param name="dt">The given date</param>
-    /// <param name="other">The date to compare with</param>
-    /// <returns>The difference in years</returns>
-    public static double DiffInYears(this DateTime dt, DateTime other)
+    /// <param name="dateTime">The date to compare from.</param>
+    /// <param name="comparisonDateTime">The date to compare against.</param>
+    /// <returns>The signed difference in years.</returns>
+    public static double DiffInYears(this DateTime dateTime, DateTime comparisonDateTime)
     {
-        return dt.DiffInMonths(other) / 12.0;
+        return dateTime.DiffInMonths(comparisonDateTime) / 12.0;
     }
 
     /// <summary>
-    /// Returns the difference in days between this and another <see cref="DateTimeOffset"/>.
-    /// Comparison is performed on the underlying UTC instants.
+    /// Returns the difference in days between two offset-aware dates.
     /// </summary>
-    public static double DiffInDays(this DateTimeOffset dt, DateTimeOffset other) =>
-        (dt - other).TotalDays;
+    /// <param name="dateTimeOffset">The date to compare from.</param>
+    /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
+    /// <returns>The signed difference in days, comparing the underlying UTC instants.</returns>
+    public static double DiffInDays(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset) =>
+        (dateTimeOffset - comparisonDateTimeOffset).TotalDays;
 
     /// <summary>
-    /// Returns the difference in months between this and another <see cref="DateTimeOffset"/>.
-    /// Uses the calendar date components of each value (in their respective local offsets).
+    /// Returns the difference in months between two offset-aware dates.
     /// </summary>
-    public static double DiffInMonths(this DateTimeOffset dt, DateTimeOffset other)
+    /// <param name="dateTimeOffset">The date to compare from.</param>
+    /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
+    /// <returns>The signed difference in months, using each value's local date components.</returns>
+    public static double DiffInMonths(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset)
     {
-        var months = (dt.Year - other.Year) * 12 + dt.Month - other.Month;
-        var daysInMonth = DateTime.DaysInMonth(other.Year, other.Month);
-        var dayDiff = (double)(dt.Day - other.Day) / daysInMonth;
+        var months = (dateTimeOffset.Year - comparisonDateTimeOffset.Year) * 12 + dateTimeOffset.Month - comparisonDateTimeOffset.Month;
+        var daysInMonth = DateTime.DaysInMonth(comparisonDateTimeOffset.Year, comparisonDateTimeOffset.Month);
+        var dayDiff = (double)(dateTimeOffset.Day - comparisonDateTimeOffset.Day) / daysInMonth;
         return months + dayDiff;
     }
 
     /// <summary>
-    /// Returns the difference in quarters between this and another <see cref="DateTimeOffset"/>.
+    /// Returns the difference in quarters between two offset-aware dates.
     /// </summary>
-    public static double DiffInQuarters(this DateTimeOffset dt, DateTimeOffset other) =>
-        dt.DiffInMonths(other) / 3.0;
+    /// <param name="dateTimeOffset">The date to compare from.</param>
+    /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
+    /// <returns>The signed difference in quarters.</returns>
+    public static double DiffInQuarters(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset) =>
+        dateTimeOffset.DiffInMonths(comparisonDateTimeOffset) / 3.0;
 
     /// <summary>
-    /// Returns the difference in years between this and another <see cref="DateTimeOffset"/>
+    /// Returns the difference in years between two offset-aware dates.
     /// </summary>
-    public static double DiffInYears(this DateTimeOffset dt, DateTimeOffset other) =>
-        dt.DiffInMonths(other) / 12.0;
+    /// <param name="dateTimeOffset">The date to compare from.</param>
+    /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
+    /// <returns>The signed difference in years.</returns>
+    public static double DiffInYears(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset) =>
+        dateTimeOffset.DiffInMonths(comparisonDateTimeOffset) / 12.0;
 }

@@ -12,80 +12,120 @@ public static class RelativeTimeExtensions
     private const double DaysInAMonth = DaysInAYear / 12;
 
     /// <summary>
-    /// Get the relative time from a given date time to the current time
+    /// Returns a localised relative time string from the date to now.
     /// </summary>
-    public static string FromNow(this DateTime This, CultureInfo? ci = null) =>
-        This.FromNow(false, ci);
+    /// <param name="dateTime">The date to compare with now.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string, such as <c>5 minutes ago</c>.</returns>
+    public static string FromNow(this DateTime dateTime, CultureInfo? ci = null) =>
+        dateTime.FromNow(false, ci);
 
     /// <summary>
-    /// Get the relative time from a given date time to the current time, optionally suppressing the suffix.
+    /// Returns a localised relative time string from the date to now.
     /// </summary>
-    public static string FromNow(this DateTime This, bool withoutSuffix, CultureInfo? ci = null) =>
-        This.Kind == DateTimeKind.Utc
-            ? ParseFromPastTimeSpan(DateTime.UtcNow - This, withoutSuffix, ci)
-            : ParseFromPastTimeSpan(DateTime.Now - This, withoutSuffix, ci);
+    /// <param name="dateTime">The date to compare with now.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>ago</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string FromNow(this DateTime dateTime, bool withoutSuffix, CultureInfo? ci = null) =>
+        dateTime.Kind == DateTimeKind.Utc
+            ? ParseFromPastTimeSpan(DateTime.UtcNow - dateTime, withoutSuffix, ci)
+            : ParseFromPastTimeSpan(DateTime.Now - dateTime, withoutSuffix, ci);
 
     /// <summary>
-    /// Get the relative time from a given date time to another date time instance
+    /// Returns a localised relative time string from the date to another date.
     /// </summary>
-    public static string From(this DateTime This, DateTime dateTime, CultureInfo? ci = null) =>
-        This.From(dateTime, false, ci);
+    /// <param name="dateTime">The earlier date to compare.</param>
+    /// <param name="comparisonDateTime">The date to compare against.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string, such as <c>6 years ago</c>.</returns>
+    public static string From(this DateTime dateTime, DateTime comparisonDateTime, CultureInfo? ci = null) =>
+        dateTime.From(comparisonDateTime, false, ci);
 
     /// <summary>
-    /// Get the relative time from a given date time to another date time instance, optionally suppressing the suffix.
+    /// Returns a localised relative time string from the date to another date.
     /// </summary>
-    public static string From(this DateTime This, DateTime dateTime, bool withoutSuffix, CultureInfo? ci = null)
+    /// <param name="dateTime">The date to compare.</param>
+    /// <param name="comparisonDateTime">The date to compare against.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>ago</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string From(this DateTime dateTime, DateTime comparisonDateTime, bool withoutSuffix, CultureInfo? ci = null)
     {
-        var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
-        var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+        var startDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+        var endDate = comparisonDateTime.Kind == DateTimeKind.Utc ? comparisonDateTime : comparisonDateTime.ToUniversalTime();
         return ParseFromPastTimeSpan(endDate - startDate, withoutSuffix, ci);
     }
 
     /// <summary>
-    /// Get the relative time from the current date time instance to a time frame in the future
+    /// Returns a localised relative time string from now to the date.
     /// </summary>
-    public static string ToNow(this DateTime This, CultureInfo? ci = null) =>
-        This.ToNow(false, ci);
+    /// <param name="dateTime">The future date to compare with now.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string, such as <c>in 3 days</c>.</returns>
+    public static string ToNow(this DateTime dateTime, CultureInfo? ci = null) =>
+        dateTime.ToNow(false, ci);
 
     /// <summary>
-    /// Get the relative time from the current date time instance to a time frame in the future, optionally suppressing the suffix.
+    /// Returns a localised relative time string from now to the date.
     /// </summary>
-    public static string ToNow(this DateTime This, bool withoutSuffix, CultureInfo? ci = null) =>
-        This.Kind == DateTimeKind.Utc
-            ? ParseFromFutureTimeSpan(This - DateTime.UtcNow, withoutSuffix, ci)
-            : ParseFromFutureTimeSpan(This - DateTime.Now, withoutSuffix, ci);
+    /// <param name="dateTime">The future date to compare with now.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>in</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string ToNow(this DateTime dateTime, bool withoutSuffix, CultureInfo? ci = null) =>
+        dateTime.Kind == DateTimeKind.Utc
+            ? ParseFromFutureTimeSpan(dateTime - DateTime.UtcNow, withoutSuffix, ci)
+            : ParseFromFutureTimeSpan(dateTime - DateTime.Now, withoutSuffix, ci);
 
     /// <summary>
-    /// Get the relative time from the a date time instance to a time frame in the future
+    /// Returns a localised relative time string from the date to a future date.
     /// </summary>
-    public static string To(this DateTime This, DateTime dateTime, CultureInfo? ci = null) =>
-        This.To(dateTime, false, ci);
+    /// <param name="dateTime">The start date.</param>
+    /// <param name="comparisonDateTime">The future date to compare against.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string, such as <c>in 3 days</c>.</returns>
+    public static string To(this DateTime dateTime, DateTime comparisonDateTime, CultureInfo? ci = null) =>
+        dateTime.To(comparisonDateTime, false, ci);
 
     /// <summary>
-    /// Get the relative time from the a date time instance to a time frame in the future, optionally suppressing the suffix.
+    /// Returns a localised relative time string from the date to a future date.
     /// </summary>
-    public static string To(this DateTime This, DateTime dateTime, bool withoutSuffix, CultureInfo? ci = null)
+    /// <param name="dateTime">The start date.</param>
+    /// <param name="comparisonDateTime">The future date to compare against.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>in</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string To(this DateTime dateTime, DateTime comparisonDateTime, bool withoutSuffix, CultureInfo? ci = null)
     {
-        var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
-        var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+        var startDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
+        var endDate = comparisonDateTime.Kind == DateTimeKind.Utc ? comparisonDateTime : comparisonDateTime.ToUniversalTime();
         return ParseFromFutureTimeSpan(endDate - startDate, withoutSuffix, ci);
     }
 
     /// <summary>
-    /// Get the calendar time description from this DateTime instance to the current time
+    /// Returns a calendar-style formatted string relative to now.
     /// </summary>
-    public static string CalendarTime(this DateTime This, CalendarTimeFormats? formats = null) =>
-        CalendarTime(This, DateTime.Now, formats);
+    /// <param name="dateTime">The date to format.</param>
+    /// <param name="formats">Optional calendar format strings.</param>
+    /// <returns>A formatted calendar time string.</returns>
+    public static string CalendarTime(this DateTime dateTime, CalendarTimeFormats? formats = null) =>
+        CalendarTime(dateTime, DateTime.Now, formats);
 
     /// <summary>
-    /// Get the calendar time description from this DateTime instance to a specified DateTime instance
+    /// Returns a calendar-style formatted string relative to a reference date.
     /// </summary>
-    public static string CalendarTime(this DateTime This, DateTime dateTime,
+    /// <param name="dateTime">The date to format.</param>
+    /// <param name="comparisonDateTime">The reference date used to choose the calendar format.</param>
+    /// <param name="formats">Optional calendar format strings.</param>
+    /// <param name="ci">The culture used for default calendar format strings.</param>
+    /// <returns>A formatted calendar time string.</returns>
+    public static string CalendarTime(this DateTime dateTime, DateTime comparisonDateTime,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
         formats ??= new CalendarTimeFormats(ci);
-        var startDate = This.Kind == DateTimeKind.Local ? This : This.ToLocalTime();
-        var endDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
+        var startDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
+        var endDate = comparisonDateTime.Kind == DateTimeKind.Local ? comparisonDateTime : comparisonDateTime.ToLocalTime();
         var timeDiff = endDate - startDate;
 
         if (startDate.Date == endDate.Date)
@@ -107,21 +147,25 @@ public static class RelativeTimeExtensions
     }
 
     /// <summary>
-    /// Get the total number of seconds since the unix epoch
+    /// Returns the number of seconds between the date and the Unix epoch.
     /// </summary>
-    public static double UnixTimestampInSeconds(this DateTime This)
+    /// <param name="dateTime">The date to convert.</param>
+    /// <returns>The Unix timestamp in seconds.</returns>
+    public static double UnixTimestampInSeconds(this DateTime dateTime)
     {
-        var dateInstance = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+        var dateInstance = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
         var timeSpan = dateInstance - UnixEpoch;
         return timeSpan.TotalSeconds;
     }
 
     /// <summary>
-    /// Get the total number of milliseconds since the unix epoch
+    /// Returns the number of milliseconds between the date and the Unix epoch.
     /// </summary>
-    public static double UnixTimestampInMilliseconds(this DateTime This)
+    /// <param name="dateTime">The date to convert.</param>
+    /// <returns>The Unix timestamp in milliseconds.</returns>
+    public static double UnixTimestampInMilliseconds(this DateTime dateTime)
     {
-        var dateInstance = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
+        var dateInstance = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
         var timeSpan = dateInstance - UnixEpoch;
         return timeSpan.TotalMilliseconds;
     }
@@ -129,6 +173,10 @@ public static class RelativeTimeExtensions
     /// <summary>
     /// Returns a formatted date string. If no format is specified it returns an ISO-8601 string with no fractional seconds.
     /// </summary>
+    /// <param name="dateTime">The date to format.</param>
+    /// <param name="format">An optional custom format string.</param>
+    /// <param name="cultureInfo">The culture used for formatting.</param>
+    /// <returns>The formatted date string.</returns>
     public static string Format(this DateTime dateTime, string? format = null, CultureInfo? cultureInfo = null)
     {
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
@@ -136,68 +184,108 @@ public static class RelativeTimeExtensions
     }
 
     /// <summary>
-    /// Get the relative time from a given <see cref="DateTimeOffset"/> to now
+    /// Returns a localised relative time string from the offset-aware date to now.
     /// </summary>
-    public static string FromNow(this DateTimeOffset This, CultureInfo? ci = null) =>
-        This.FromNow(false, ci);
+    /// <param name="dateTimeOffset">The date to compare with now.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string FromNow(this DateTimeOffset dateTimeOffset, CultureInfo? ci = null) =>
+        dateTimeOffset.FromNow(false, ci);
 
     /// <summary>
-    /// Get the relative time from a given <see cref="DateTimeOffset"/> to now, optionally suppressing the suffix.
+    /// Returns a localised relative time string from the offset-aware date to now.
     /// </summary>
-    public static string FromNow(this DateTimeOffset This, bool withoutSuffix, CultureInfo? ci = null) =>
-        ParseFromPastTimeSpan(DateTimeOffset.UtcNow - This, withoutSuffix, ci);
+    /// <param name="dateTimeOffset">The date to compare with now.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>ago</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string FromNow(this DateTimeOffset dateTimeOffset, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromPastTimeSpan(DateTimeOffset.UtcNow - dateTimeOffset, withoutSuffix, ci);
 
     /// <summary>
-    /// Get the relative time from a given <see cref="DateTimeOffset"/> to another <see cref="DateTimeOffset"/>
+    /// Returns a localised relative time string from the offset-aware date to another offset-aware date.
     /// </summary>
-    public static string From(this DateTimeOffset This, DateTimeOffset dateTime, CultureInfo? ci = null) =>
-        This.From(dateTime, false, ci);
+    /// <param name="dateTimeOffset">The date to compare.</param>
+    /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string From(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset, CultureInfo? ci = null) =>
+        dateTimeOffset.From(comparisonDateTimeOffset, false, ci);
 
     /// <summary>
-    /// Get the relative time from a given <see cref="DateTimeOffset"/> to another <see cref="DateTimeOffset"/>, optionally suppressing the suffix.
+    /// Returns a localised relative time string from the offset-aware date to another offset-aware date.
     /// </summary>
-    public static string From(this DateTimeOffset This, DateTimeOffset dateTime, bool withoutSuffix, CultureInfo? ci = null) =>
-        ParseFromPastTimeSpan(dateTime - This, withoutSuffix, ci);
+    /// <param name="dateTimeOffset">The date to compare.</param>
+    /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>ago</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string From(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromPastTimeSpan(comparisonDateTimeOffset - dateTimeOffset, withoutSuffix, ci);
 
     /// <summary>
-    /// Get the relative time from now to a future <see cref="DateTimeOffset"/>
+    /// Returns a localised relative time string from now to the offset-aware date.
     /// </summary>
-    public static string ToNow(this DateTimeOffset This, CultureInfo? ci = null) =>
-        This.ToNow(false, ci);
+    /// <param name="dateTimeOffset">The future date to compare with now.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string ToNow(this DateTimeOffset dateTimeOffset, CultureInfo? ci = null) =>
+        dateTimeOffset.ToNow(false, ci);
 
     /// <summary>
-    /// Get the relative time from now to a future <see cref="DateTimeOffset"/>, optionally suppressing the suffix.
+    /// Returns a localised relative time string from now to the offset-aware date.
     /// </summary>
-    public static string ToNow(this DateTimeOffset This, bool withoutSuffix, CultureInfo? ci = null) =>
-        ParseFromFutureTimeSpan(This - DateTimeOffset.UtcNow, withoutSuffix, ci);
+    /// <param name="dateTimeOffset">The future date to compare with now.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>in</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string ToNow(this DateTimeOffset dateTimeOffset, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromFutureTimeSpan(dateTimeOffset - DateTimeOffset.UtcNow, withoutSuffix, ci);
 
     /// <summary>
-    /// Get the relative time from a <see cref="DateTimeOffset"/> to a future <see cref="DateTimeOffset"/>
+    /// Returns a localised relative time string from the offset-aware date to a future offset-aware date.
     /// </summary>
-    public static string To(this DateTimeOffset This, DateTimeOffset dateTime, CultureInfo? ci = null) =>
-        This.To(dateTime, false, ci);
+    /// <param name="dateTimeOffset">The start date.</param>
+    /// <param name="comparisonDateTimeOffset">The future date to compare against.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string To(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset, CultureInfo? ci = null) =>
+        dateTimeOffset.To(comparisonDateTimeOffset, false, ci);
 
     /// <summary>
-    /// Get the relative time from a <see cref="DateTimeOffset"/> to a future <see cref="DateTimeOffset"/>, optionally suppressing the suffix.
+    /// Returns a localised relative time string from the offset-aware date to a future offset-aware date.
     /// </summary>
-    public static string To(this DateTimeOffset This, DateTimeOffset dateTime, bool withoutSuffix, CultureInfo? ci = null) =>
-        ParseFromFutureTimeSpan(dateTime - This, withoutSuffix, ci);
+    /// <param name="dateTimeOffset">The start date.</param>
+    /// <param name="comparisonDateTimeOffset">The future date to compare against.</param>
+    /// <param name="withoutSuffix">When true, omits words such as <c>in</c>.</param>
+    /// <param name="ci">The culture used for localisation. Uses the configured default culture when omitted.</param>
+    /// <returns>A human-readable relative time string.</returns>
+    public static string To(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromFutureTimeSpan(comparisonDateTimeOffset - dateTimeOffset, withoutSuffix, ci);
 
     /// <summary>
-    /// Get the calendar time description from this <see cref="DateTimeOffset"/> to now
+    /// Returns a calendar-style formatted string relative to now.
     /// </summary>
-    public static string CalendarTime(this DateTimeOffset This, CalendarTimeFormats? formats = null) =>
-        CalendarTime(This, DateTimeOffset.Now, formats);
+    /// <param name="dateTimeOffset">The date to format.</param>
+    /// <param name="formats">Optional calendar format strings.</param>
+    /// <returns>A formatted calendar time string.</returns>
+    public static string CalendarTime(this DateTimeOffset dateTimeOffset, CalendarTimeFormats? formats = null) =>
+        CalendarTime(dateTimeOffset, DateTimeOffset.Now, formats);
 
     /// <summary>
-    /// Get the calendar time description from this <see cref="DateTimeOffset"/> to a specified <see cref="DateTimeOffset"/>
+    /// Returns a calendar-style formatted string relative to a reference date.
     /// </summary>
-    public static string CalendarTime(this DateTimeOffset This, DateTimeOffset dateTime,
+    /// <param name="dateTimeOffset">The date to format.</param>
+    /// <param name="comparisonDateTimeOffset">The reference date used to choose the calendar format.</param>
+    /// <param name="formats">Optional calendar format strings.</param>
+    /// <param name="ci">The culture used for default calendar format strings.</param>
+    /// <returns>A formatted calendar time string.</returns>
+    public static string CalendarTime(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
         formats ??= new CalendarTimeFormats(ci);
-        var startDate = This.ToLocalTime();
-        var endDate = dateTime.ToLocalTime();
+        var startDate = dateTimeOffset.ToLocalTime();
+        var endDate = comparisonDateTimeOffset.ToLocalTime();
         var timeDiff = endDate - startDate;
 
         if (startDate.Date == endDate.Date)
@@ -219,24 +307,32 @@ public static class RelativeTimeExtensions
     }
 
     /// <summary>
-    /// Get the total number of seconds since the Unix epoch for a <see cref="DateTimeOffset"/>
+    /// Returns the number of seconds between the offset-aware date and the Unix epoch.
     /// </summary>
-    public static double UnixTimestampInSeconds(this DateTimeOffset This) =>
-        (This.UtcDateTime - UnixEpoch).TotalSeconds;
+    /// <param name="dateTimeOffset">The date to convert.</param>
+    /// <returns>The Unix timestamp in seconds.</returns>
+    public static double UnixTimestampInSeconds(this DateTimeOffset dateTimeOffset) =>
+        (dateTimeOffset.UtcDateTime - UnixEpoch).TotalSeconds;
 
     /// <summary>
-    /// Get the total number of milliseconds since the Unix epoch for a <see cref="DateTimeOffset"/>
+    /// Returns the number of milliseconds between the offset-aware date and the Unix epoch.
     /// </summary>
-    public static double UnixTimestampInMilliseconds(this DateTimeOffset This) =>
-        (This.UtcDateTime - UnixEpoch).TotalMilliseconds;
+    /// <param name="dateTimeOffset">The date to convert.</param>
+    /// <returns>The Unix timestamp in milliseconds.</returns>
+    public static double UnixTimestampInMilliseconds(this DateTimeOffset dateTimeOffset) =>
+        (dateTimeOffset.UtcDateTime - UnixEpoch).TotalMilliseconds;
 
     /// <summary>
     /// Returns a formatted date string for a <see cref="DateTimeOffset"/>. If no format is specified it returns an ISO-8601 string with offset.
     /// </summary>
-    public static string Format(this DateTimeOffset dateTime, string? format = null, CultureInfo? cultureInfo = null)
+    /// <param name="dateTimeOffset">The date to format.</param>
+    /// <param name="format">An optional custom format string.</param>
+    /// <param name="cultureInfo">The culture used for formatting.</param>
+    /// <returns>The formatted date string.</returns>
+    public static string Format(this DateTimeOffset dateTimeOffset, string? format = null, CultureInfo? cultureInfo = null)
     {
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
-        return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
+        return dateTimeOffset.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
     }
 
     private static string ParseFromPastTimeSpan(TimeSpan timeSpan, bool withoutSuffix = false, CultureInfo? ci = null)

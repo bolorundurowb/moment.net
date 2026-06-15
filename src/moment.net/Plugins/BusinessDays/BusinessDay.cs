@@ -29,21 +29,21 @@ public static class BusinessDay
     /// <summary>
     /// Check if date time instance is a weekend (Saturday or Sunday)
     /// </summary>
-    /// <param name="dt">The given date</param>
+    /// <param name="dateTime">The given date.</param>
     /// <returns>A boolean value stating whether this date is a weekend</returns>
-    public static bool IsWeekend(this DateTime dt)
+    public static bool IsWeekend(this DateTime dateTime)
     {
-        return dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday;
+        return dateTime.DayOfWeek == DayOfWeek.Saturday || dateTime.DayOfWeek == DayOfWeek.Sunday;
     }
 
     /// <summary>
     /// Check if date time instance is a weekday (Monday to Friday)
     /// </summary>
-    /// <param name="dt">The given date</param>
+    /// <param name="dateTime">The given date.</param>
     /// <returns>A boolean value stating whether this date is a weekday</returns>
-    public static bool IsWeekday(this DateTime dt)
+    public static bool IsWeekday(this DateTime dateTime)
     {
-        return !dt.IsWeekend();
+        return !dateTime.IsWeekend();
     }
 
     /// <summary>
@@ -92,53 +92,53 @@ public static class BusinessDay
     /// Check if a <see cref="DateTimeOffset"/> instance is a business day (Monday to Friday).
     /// The day of week is evaluated in the offset's local time.
     /// </summary>
-    public static bool IsBusinessDay(this DateTimeOffset dateTime) =>
-        dateTime.DayOfWeek != DayOfWeek.Saturday && dateTime.DayOfWeek != DayOfWeek.Sunday;
+    public static bool IsBusinessDay(this DateTimeOffset dateTimeOffset) =>
+        dateTimeOffset.DayOfWeek != DayOfWeek.Saturday && dateTimeOffset.DayOfWeek != DayOfWeek.Sunday;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> instance is a business day, excluding weekends and supplied holidays.
     /// Holiday comparison uses the value's local date in its offset.
     /// </summary>
-    public static bool IsBusinessDay(this DateTimeOffset dateTime, IEnumerable<DateTimeOffset> holidays) =>
-        dateTime.IsBusinessDay() && !ToHolidaySet(holidays).Contains(dateTime.Date);
+    public static bool IsBusinessDay(this DateTimeOffset dateTimeOffset, IEnumerable<DateTimeOffset> holidays) =>
+        dateTimeOffset.IsBusinessDay() && !ToHolidaySet(holidays).Contains(dateTimeOffset.Date);
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> instance is a weekend (Saturday or Sunday).
     /// The day of week is evaluated in the offset's local time.
     /// </summary>
-    public static bool IsWeekend(this DateTimeOffset dt) =>
-        dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday;
+    public static bool IsWeekend(this DateTimeOffset dateTimeOffset) =>
+        dateTimeOffset.DayOfWeek == DayOfWeek.Saturday || dateTimeOffset.DayOfWeek == DayOfWeek.Sunday;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> instance is a weekday (Monday to Friday).
     /// The day of week is evaluated in the offset's local time.
     /// </summary>
-    public static bool IsWeekday(this DateTimeOffset dt) => !dt.IsWeekend();
+    public static bool IsWeekday(this DateTimeOffset dateTimeOffset) => !dateTimeOffset.IsWeekend();
 
     /// <summary>
     /// Adds business days to the given <see cref="DateTimeOffset"/>, skipping weekends.
     /// The UTC offset is preserved in the returned value.
     /// </summary>
-    /// <param name="dateTime">The starting date</param>
+    /// <param name="dateTimeOffset">The starting date.</param>
     /// <param name="days">The number of business days to add (may be negative)</param>
-    public static DateTimeOffset AddBusinessDays(this DateTimeOffset dateTime, int days)
+    public static DateTimeOffset AddBusinessDays(this DateTimeOffset dateTimeOffset, int days)
     {
-        return dateTime.AddBusinessDays(days, Array.Empty<DateTimeOffset>());
+        return dateTimeOffset.AddBusinessDays(days, Array.Empty<DateTimeOffset>());
     }
 
     /// <summary>
     /// Adds business days to the given <see cref="DateTimeOffset"/>, skipping weekends and supplied holidays.
     /// The UTC offset is preserved in the returned value.
     /// </summary>
-    /// <param name="dateTime">The starting date</param>
+    /// <param name="dateTimeOffset">The starting date.</param>
     /// <param name="days">The number of business days to add (may be negative)</param>
     /// <param name="holidays">Holiday dates to skip. Time components and offsets are ignored.</param>
-    public static DateTimeOffset AddBusinessDays(this DateTimeOffset dateTime, int days, IEnumerable<DateTimeOffset> holidays)
+    public static DateTimeOffset AddBusinessDays(this DateTimeOffset dateTimeOffset, int days, IEnumerable<DateTimeOffset> holidays)
     {
         if (days == 0)
-            return dateTime;
+            return dateTimeOffset;
 
-        var result = dateTime;
+        var result = dateTimeOffset;
         var direction = days > 0 ? 1 : -1;
         var remainingDays = Math.Abs(days);
         var holidaySet = ToHolidaySet(holidays);

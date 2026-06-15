@@ -92,21 +92,21 @@ public static class PositionalTime
     /// <summary>
     /// Check if date time instance is between two given dates
     /// </summary>
-    /// <param name="dt">The given date</param>
+    /// <param name="dateTime">The given date.</param>
     /// <param name="start">The start date</param>
     /// <param name="end">The end date</param>
     /// <returns>A boolean value stating whether this date is between the start and end date</returns>
-    public static bool IsBetween(this DateTime dt, DateTime start, DateTime end)
+    public static bool IsBetween(this DateTime dateTime, DateTime start, DateTime end)
     {
-        return dt.IsSameOrAfter(start) && dt.IsSameOrBefore(end);
+        return dateTime.IsSameOrAfter(start) && dateTime.IsSameOrBefore(end);
     }
 
     /// <summary>
     /// Check if the year of a <see cref="DateTimeOffset"/> is a leap year
     /// </summary>
-    public static bool IsLeapYear(this DateTimeOffset dateTime)
+    public static bool IsLeapYear(this DateTimeOffset dateTimeOffset)
     {
-        var year = dateTime.Year;
+        var year = dateTimeOffset.Year;
         if (year % 4 != 0)
             return false;
         return year % 100 != 0 || year % 400 == 0;
@@ -116,37 +116,37 @@ public static class PositionalTime
     /// Check if two <see cref="DateTimeOffset"/> instances represent the same instant in time.
     /// Comparison is offset-aware (equivalent to comparing the underlying UTC instants).
     /// </summary>
-    public static bool IsSame(this DateTimeOffset dateTime, DateTimeOffset dateToCompare) =>
-        dateTime == dateToCompare;
+    public static bool IsSame(this DateTimeOffset dateTimeOffset, DateTimeOffset dateToCompare) =>
+        dateTimeOffset == dateToCompare;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> comes before another
     /// </summary>
-    public static bool IsBefore(this DateTimeOffset dateTime, DateTimeOffset dateToCompare) =>
-        dateTime < dateToCompare;
+    public static bool IsBefore(this DateTimeOffset dateTimeOffset, DateTimeOffset dateToCompare) =>
+        dateTimeOffset < dateToCompare;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> is the same as or comes before another
     /// </summary>
-    public static bool IsSameOrBefore(this DateTimeOffset dateTime, DateTimeOffset dateToCompare) =>
-        dateTime <= dateToCompare;
+    public static bool IsSameOrBefore(this DateTimeOffset dateTimeOffset, DateTimeOffset dateToCompare) =>
+        dateTimeOffset <= dateToCompare;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> comes after another
     /// </summary>
-    public static bool IsAfter(this DateTimeOffset dateTime, DateTimeOffset dateToCompare) =>
-        dateTime > dateToCompare;
+    public static bool IsAfter(this DateTimeOffset dateTimeOffset, DateTimeOffset dateToCompare) =>
+        dateTimeOffset > dateToCompare;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> is the same as or comes after another
     /// </summary>
-    public static bool IsSameOrAfter(this DateTimeOffset dateTime, DateTimeOffset dateToCompare) =>
-        dateTime >= dateToCompare;
+    public static bool IsSameOrAfter(this DateTimeOffset dateTimeOffset, DateTimeOffset dateToCompare) =>
+        dateTimeOffset >= dateToCompare;
 
     /// <summary>
     /// Check if a <see cref="DateTimeOffset"/> falls within a range (inclusive on both ends).
     /// Comparison is offset-aware.
     /// </summary>
-    public static bool IsBetween(this DateTimeOffset dt, DateTimeOffset start, DateTimeOffset end) =>
-        dt.IsSameOrAfter(start) && dt.IsSameOrBefore(end);
+    public static bool IsBetween(this DateTimeOffset dateTimeOffset, DateTimeOffset start, DateTimeOffset end) =>
+        dateTimeOffset.IsSameOrAfter(start) && dateTimeOffset.IsSameOrBefore(end);
 }

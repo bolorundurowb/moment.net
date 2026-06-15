@@ -6,7 +6,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/moment.net)](https://www.nuget.org/packages/moment.net)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/moment.net)](https://www.nuget.org/packages/moment.net)
 
-**moment.net** is a .NET Standard 2.0 library that brings moment.js-style fluent date/time operations to C#. It provides extension methods on both `DateTime` and `DateTimeOffset` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localization support.
+**moment.net** is a .NET Standard 2.0 library that brings moment.js-style fluent date/time operations to C#. It provides extension methods on both `DateTime` and `DateTimeOffset` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localisation support.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@
   - [Formatting](#formatting)
   - [Unix Time](#unix-time)
 - [DateTimeOffset Support](#datetimeoffset-support)
-- [Localization](#localization)
+- [Localisation](#localisation)
 - [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
@@ -101,7 +101,7 @@ The library follows Moment.js-style groupings. Import only the groups you need:
 | `MomentNet.GetSet`               | Quarter, week, ISO week, first/last date in week                            |
 | `MomentNet.Manipulate`           | `StartOf`, `EndOf`, `Next`, `Last`, `Final`, `DateTimeAnchor`               |
 | `MomentNet.Query`                | Comparison helpers, leap year checks, daylight saving checks                |
-| `MomentNet.I18n`                 | Culture and localization configuration                                      |
+| `MomentNet.I18n`                 | Culture and localisation configuration                                      |
 | `MomentNet.Plugins.BusinessDays` | Business day and holiday-aware business day helpers                         |
 | `MomentNet.Plugins.Range`        | Date range types and range operations                                       |
 
@@ -390,7 +390,7 @@ dto.Format("dd MMMM yyyy");          // "15 March 2024"
 dto.CalendarTime();                  // relative to DateTimeOffset.Now
 ```
 
-## Localization
+## Localisation
 
 Moment.net supports multiple languages for relative time and calendar output. Pass a `CultureInfo` to any method that produces human-readable text:
 
@@ -405,7 +405,7 @@ past.From(future, new CultureInfo("pt"));  // "6 anos atrás"
 past.From(future, new CultureInfo("de"));  // "6 Jahre her"
 past.From(future, new CultureInfo("ru"));  // "6 лет назад"
 
-// Suffixless relative time is localized too
+// Suffixless relative time is localised too
 past.From(future, true, new CultureInfo("es")); // "6 años"
 past.To(future, true, new CultureInfo("de"));   // "6 Jahre"
 ```

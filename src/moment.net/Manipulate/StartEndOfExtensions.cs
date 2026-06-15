@@ -6,154 +6,176 @@ namespace MomentNet.Manipulate;
 public static class StartEndOfExtensions
 {
     /// <summary>
-    /// Returns the start of the year, month, week, day or hour for the given <see cref="DateTime"/>.
-    /// This implementation uses the current culture.
+    /// Returns the start of the requested period using the current culture for week calculations.
     /// </summary>
-    public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor) => This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
+    /// <param name="dateTime">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <returns>A new <see cref="DateTime"/> at the start of the requested period.</returns>
+    public static DateTime StartOf(this DateTime dateTime, DateTimeAnchor timeAnchor) => dateTime.StartOf(timeAnchor, CultureInfo.CurrentCulture);
 
     /// <summary>
-    /// Returns the start of the year, month, week, day or hour for the given <see cref="DateTime"/>.
+    /// Returns the start of the requested period using the supplied culture for week calculations.
     /// </summary>
-    public static DateTime StartOf(this DateTime This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    /// <param name="dateTime">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <param name="cultureInfo">The culture whose week settings should be used.</param>
+    /// <returns>A new <see cref="DateTime"/> at the start of the requested period.</returns>
+    public static DateTime StartOf(this DateTime dateTime, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
     {
         switch (timeAnchor)
         {
             case DateTimeAnchor.Minute:
-                return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0, 0, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0, 0, dateTime.Kind);
             case DateTimeAnchor.Hour:
-                return new DateTime(This.Year, This.Month, This.Day, This.Hour, 0, 0, 0, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0, 0, dateTime.Kind);
             case DateTimeAnchor.Day:
-                return new DateTime(This.Year, This.Month, This.Day, 0, 0, 0, 0, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0, 0, dateTime.Kind);
             case DateTimeAnchor.Week:
-                var tmp = FirstDateInWeek(This, cultureInfo);
-                return new DateTime(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0, This.Kind);
+                var weekStart = FirstDateInWeek(dateTime, cultureInfo);
+                return new DateTime(weekStart.Year, weekStart.Month, weekStart.Day, 0, 0, 0, 0, dateTime.Kind);
             case DateTimeAnchor.IsoWeek:
-                var isoWeekStart = This.Date.AddDays(1 - GetIsoDayOfWeek(This));
-                return new DateTime(isoWeekStart.Year, isoWeekStart.Month, isoWeekStart.Day, 0, 0, 0, 0, This.Kind);
+                var isoWeekStart = dateTime.Date.AddDays(1 - GetIsoDayOfWeek(dateTime));
+                return new DateTime(isoWeekStart.Year, isoWeekStart.Month, isoWeekStart.Day, 0, 0, 0, 0, dateTime.Kind);
             case DateTimeAnchor.Month:
-                return new DateTime(This.Year, This.Month, 1, 0, 0, 0, 0, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0, 0, dateTime.Kind);
             case DateTimeAnchor.Quarter:
-                return new DateTime(This.Year, GetStartOfQuarterMonth(This.Month), 1, 0, 0, 0, 0, This.Kind);
+                return new DateTime(dateTime.Year, GetStartOfQuarterMonth(dateTime.Month), 1, 0, 0, 0, 0, dateTime.Kind);
             case DateTimeAnchor.Year:
-                return new DateTime(This.Year, 1, 1, 0, 0, 0, 0, This.Kind);
+                return new DateTime(dateTime.Year, 1, 1, 0, 0, 0, 0, dateTime.Kind);
             default:
                 throw new ArgumentException("Invalid timeAnchor argument.");
         }
     }
 
     /// <summary>
-    /// Returns the end of a year, month, week, day or hour for the given <see cref="DateTime"/>.
-    /// This implementation uses the current culture.
+    /// Returns the end of the requested period using the current culture for week calculations.
     /// </summary>
-    public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor) => This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
+    /// <param name="dateTime">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <returns>A new <see cref="DateTime"/> at the end of the requested period.</returns>
+    public static DateTime EndOf(this DateTime dateTime, DateTimeAnchor timeAnchor) => dateTime.EndOf(timeAnchor, CultureInfo.CurrentCulture);
 
     /// <summary>
-    /// Returns the end of a year, month, week, day or hour for the given <see cref="DateTime"/>.
+    /// Returns the end of the requested period using the supplied culture for week calculations.
     /// </summary>
-    public static DateTime EndOf(this DateTime This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    /// <param name="dateTime">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <param name="cultureInfo">The culture whose week settings should be used.</param>
+    /// <returns>A new <see cref="DateTime"/> at the end of the requested period.</returns>
+    public static DateTime EndOf(this DateTime dateTime, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
     {
         switch (timeAnchor)
         {
             case DateTimeAnchor.Minute:
-                return new DateTime(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59, 999, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 59, 999, dateTime.Kind);
             case DateTimeAnchor.Hour:
-                return new DateTime(This.Year, This.Month, This.Day, This.Hour, 59, 59, 999, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 59, 59, 999, dateTime.Kind);
             case DateTimeAnchor.Day:
-                return new DateTime(This.Year, This.Month, This.Day, 23, 59, 59, 999, This.Kind);
+                return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 23, 59, 59, 999, dateTime.Kind);
             case DateTimeAnchor.Week:
-                var tmp = LastDateInWeek(This, cultureInfo);
-                return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999, This.Kind);
+                var weekEnd = LastDateInWeek(dateTime, cultureInfo);
+                return new DateTime(weekEnd.Year, weekEnd.Month, weekEnd.Day, 23, 59, 59, 999, dateTime.Kind);
             case DateTimeAnchor.IsoWeek:
-                var isoWeekEnd = This.Date.AddDays(7 - GetIsoDayOfWeek(This));
-                return new DateTime(isoWeekEnd.Year, isoWeekEnd.Month, isoWeekEnd.Day, 23, 59, 59, 999, This.Kind);
+                var isoWeekEnd = dateTime.Date.AddDays(7 - GetIsoDayOfWeek(dateTime));
+                return new DateTime(isoWeekEnd.Year, isoWeekEnd.Month, isoWeekEnd.Day, 23, 59, 59, 999, dateTime.Kind);
             case DateTimeAnchor.Month:
-                var days = DateTime.DaysInMonth(This.Year, This.Month);
-                return new DateTime(This.Year, This.Month, days, 23, 59, 59, 999, This.Kind);
+                var days = DateTime.DaysInMonth(dateTime.Year, dateTime.Month);
+                return new DateTime(dateTime.Year, dateTime.Month, days, 23, 59, 59, 999, dateTime.Kind);
             case DateTimeAnchor.Quarter:
-                var endMonth = GetStartOfQuarterMonth(This.Month) + 2;
-                var daysInQuarterEndMonth = DateTime.DaysInMonth(This.Year, endMonth);
-                return new DateTime(This.Year, endMonth, daysInQuarterEndMonth, 23, 59, 59, 999, This.Kind);
+                var endMonth = GetStartOfQuarterMonth(dateTime.Month) + 2;
+                var daysInQuarterEndMonth = DateTime.DaysInMonth(dateTime.Year, endMonth);
+                return new DateTime(dateTime.Year, endMonth, daysInQuarterEndMonth, 23, 59, 59, 999, dateTime.Kind);
             case DateTimeAnchor.Year:
-                return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Kind);
+                return new DateTime(dateTime.Year, 12, DateTime.DaysInMonth(dateTime.Year, 12), 23, 59, 59, 999, dateTime.Kind);
             default:
                 throw new ArgumentException("Invalid timeAnchor argument.");
         }
     }
 
     /// <summary>
-    /// Returns the start of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
-    /// Uses the current culture for week calculations.
+    /// Returns the start of the requested period using the current culture for week calculations.
     /// </summary>
-    public static DateTimeOffset StartOf(this DateTimeOffset This, DateTimeAnchor timeAnchor) =>
-        This.StartOf(timeAnchor, CultureInfo.CurrentCulture);
+    /// <param name="dateTimeOffset">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <returns>A new <see cref="DateTimeOffset"/> at the start of the requested period, preserving the offset.</returns>
+    public static DateTimeOffset StartOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor) =>
+        dateTimeOffset.StartOf(timeAnchor, CultureInfo.CurrentCulture);
 
     /// <summary>
-    /// Returns the start of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
-    /// The offset of the original value is preserved.
+    /// Returns the start of the requested period using the supplied culture for week calculations.
     /// </summary>
-    public static DateTimeOffset StartOf(this DateTimeOffset This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    /// <param name="dateTimeOffset">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <param name="cultureInfo">The culture whose week settings should be used.</param>
+    /// <returns>A new <see cref="DateTimeOffset"/> at the start of the requested period, preserving the offset.</returns>
+    public static DateTimeOffset StartOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
     {
         switch (timeAnchor)
         {
             case DateTimeAnchor.Minute:
-                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, This.Minute, 0, 0, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, dateTimeOffset.Hour, dateTimeOffset.Minute, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.Hour:
-                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, 0, 0, 0, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, dateTimeOffset.Hour, 0, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.Day:
-                return new DateTimeOffset(This.Year, This.Month, This.Day, 0, 0, 0, 0, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, 0, 0, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.Week:
-                var tmp = FirstDateInWeek(This, cultureInfo);
-                return new DateTimeOffset(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0, This.Offset);
+                var weekStart = FirstDateInWeek(dateTimeOffset, cultureInfo);
+                return new DateTimeOffset(weekStart.Year, weekStart.Month, weekStart.Day, 0, 0, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.IsoWeek:
-                var isoWeekStart = This.Date.AddDays(1 - GetIsoDayOfWeek(This.DateTime));
-                return new DateTimeOffset(isoWeekStart.Year, isoWeekStart.Month, isoWeekStart.Day, 0, 0, 0, 0, This.Offset);
+                var isoWeekStart = dateTimeOffset.Date.AddDays(1 - GetIsoDayOfWeek(dateTimeOffset.DateTime));
+                return new DateTimeOffset(isoWeekStart.Year, isoWeekStart.Month, isoWeekStart.Day, 0, 0, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.Month:
-                return new DateTimeOffset(This.Year, This.Month, 1, 0, 0, 0, 0, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, 1, 0, 0, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.Quarter:
-                return new DateTimeOffset(This.Year, GetStartOfQuarterMonth(This.Month), 1, 0, 0, 0, 0, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, GetStartOfQuarterMonth(dateTimeOffset.Month), 1, 0, 0, 0, 0, dateTimeOffset.Offset);
             case DateTimeAnchor.Year:
-                return new DateTimeOffset(This.Year, 1, 1, 0, 0, 0, 0, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, 1, 1, 0, 0, 0, 0, dateTimeOffset.Offset);
             default:
                 throw new ArgumentException("Invalid timeAnchor argument.");
         }
     }
 
     /// <summary>
-    /// Returns the end of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
-    /// Uses the current culture for week calculations.
+    /// Returns the end of the requested period using the current culture for week calculations.
     /// </summary>
-    public static DateTimeOffset EndOf(this DateTimeOffset This, DateTimeAnchor timeAnchor) =>
-        This.EndOf(timeAnchor, CultureInfo.CurrentCulture);
+    /// <param name="dateTimeOffset">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <returns>A new <see cref="DateTimeOffset"/> at the end of the requested period, preserving the offset.</returns>
+    public static DateTimeOffset EndOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor) =>
+        dateTimeOffset.EndOf(timeAnchor, CultureInfo.CurrentCulture);
 
     /// <summary>
-    /// Returns the end of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
-    /// The offset of the original value is preserved.
+    /// Returns the end of the requested period using the supplied culture for week calculations.
     /// </summary>
-    public static DateTimeOffset EndOf(this DateTimeOffset This, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    /// <param name="dateTimeOffset">The date to anchor.</param>
+    /// <param name="timeAnchor">The period to anchor to.</param>
+    /// <param name="cultureInfo">The culture whose week settings should be used.</param>
+    /// <returns>A new <see cref="DateTimeOffset"/> at the end of the requested period, preserving the offset.</returns>
+    public static DateTimeOffset EndOf(this DateTimeOffset dateTimeOffset, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
     {
         switch (timeAnchor)
         {
             case DateTimeAnchor.Minute:
-                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, This.Minute, 59, 999, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, dateTimeOffset.Hour, dateTimeOffset.Minute, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.Hour:
-                return new DateTimeOffset(This.Year, This.Month, This.Day, This.Hour, 59, 59, 999, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, dateTimeOffset.Hour, 59, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.Day:
-                return new DateTimeOffset(This.Year, This.Month, This.Day, 23, 59, 59, 999, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, dateTimeOffset.Day, 23, 59, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.Week:
-                var tmp = LastDateInWeek(This, cultureInfo);
-                return new DateTimeOffset(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999, This.Offset);
+                var weekEnd = LastDateInWeek(dateTimeOffset, cultureInfo);
+                return new DateTimeOffset(weekEnd.Year, weekEnd.Month, weekEnd.Day, 23, 59, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.IsoWeek:
-                var isoWeekEnd = This.Date.AddDays(7 - GetIsoDayOfWeek(This.DateTime));
-                return new DateTimeOffset(isoWeekEnd.Year, isoWeekEnd.Month, isoWeekEnd.Day, 23, 59, 59, 999, This.Offset);
+                var isoWeekEnd = dateTimeOffset.Date.AddDays(7 - GetIsoDayOfWeek(dateTimeOffset.DateTime));
+                return new DateTimeOffset(isoWeekEnd.Year, isoWeekEnd.Month, isoWeekEnd.Day, 23, 59, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.Month:
-                var days = DateTime.DaysInMonth(This.Year, This.Month);
-                return new DateTimeOffset(This.Year, This.Month, days, 23, 59, 59, 999, This.Offset);
+                var days = DateTime.DaysInMonth(dateTimeOffset.Year, dateTimeOffset.Month);
+                return new DateTimeOffset(dateTimeOffset.Year, dateTimeOffset.Month, days, 23, 59, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.Quarter:
-                var endMonth = GetStartOfQuarterMonth(This.Month) + 2;
-                var daysInQuarterEndMonth = DateTime.DaysInMonth(This.Year, endMonth);
-                return new DateTimeOffset(This.Year, endMonth, daysInQuarterEndMonth, 23, 59, 59, 999, This.Offset);
+                var endMonth = GetStartOfQuarterMonth(dateTimeOffset.Month) + 2;
+                var daysInQuarterEndMonth = DateTime.DaysInMonth(dateTimeOffset.Year, endMonth);
+                return new DateTimeOffset(dateTimeOffset.Year, endMonth, daysInQuarterEndMonth, 23, 59, 59, 999, dateTimeOffset.Offset);
             case DateTimeAnchor.Year:
-                return new DateTimeOffset(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Offset);
+                return new DateTimeOffset(dateTimeOffset.Year, 12, DateTime.DaysInMonth(dateTimeOffset.Year, 12), 23, 59, 59, 999, dateTimeOffset.Offset);
             default:
                 throw new ArgumentException("Invalid timeAnchor argument.");
         }
