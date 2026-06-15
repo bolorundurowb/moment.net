@@ -12,6 +12,7 @@
 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Namespace Groups](#namespace-groups)
 - [API Reference](#api-reference)
   - [Relative Time](#relative-time)
   - [Calendar Time](#calendar-time)
@@ -43,13 +44,20 @@ Install-Package moment.net
 
 ### PackageReference
 ```xml
-<PackageReference Include="moment.net" Version="2.0.0" />
+<PackageReference Include="moment.net" Version="1.4.0" />
 ```
 
 ## Quick Start
 
 ```csharp
 using MomentNet;
+using MomentNet.Display;
+using MomentNet.Display.Models;
+using MomentNet.GetSet;
+using MomentNet.Manipulate;
+using MomentNet.Plugins.BusinessDays;
+using MomentNet.Plugins.Range;
+using MomentNet.Query;
 
 var date = new DateTime(2024, 3, 15);
 
@@ -80,6 +88,22 @@ dto.Next(DayOfWeek.Monday);            // next Monday, same +05:00 offset
 dto.IsWeekend();                       // false
 dto.UnixTimestampInSeconds();          // seconds since epoch, normalized to UTC
 ```
+
+## Namespace Groups
+
+The library follows Moment.js-style groupings. Import only the groups you need:
+
+| Namespace                        | Includes                                                                    |
+|----------------------------------|-----------------------------------------------------------------------------|
+| `MomentNet`                      | `Moment.Min`, `Moment.Max`, `Moment.Range`                                  |
+| `MomentNet.Display`              | Relative time, calendar time, formatting, Unix timestamps, date differences |
+| `MomentNet.Display.Models`       | Display configuration models such as `CalendarTimeFormats`                  |
+| `MomentNet.GetSet`               | Quarter, week, ISO week, first/last date in week                            |
+| `MomentNet.Manipulate`           | `StartOf`, `EndOf`, `Next`, `Last`, `Final`, `DateTimeAnchor`               |
+| `MomentNet.Query`                | Comparison helpers, leap year checks, daylight saving checks                |
+| `MomentNet.I18n`                 | Culture and localization configuration                                      |
+| `MomentNet.Plugins.BusinessDays` | Business day and holiday-aware business day helpers                         |
+| `MomentNet.Plugins.Range`        | Date range types and range operations                                       |
 
 ## API Reference
 
@@ -380,6 +404,10 @@ past.From(future, new CultureInfo("fr"));  // "6 ans il y a"
 past.From(future, new CultureInfo("pt"));  // "6 anos atrás"
 past.From(future, new CultureInfo("de"));  // "6 Jahre her"
 past.From(future, new CultureInfo("ru"));  // "6 лет назад"
+
+// Suffixless relative time is localized too
+past.From(future, true, new CultureInfo("es")); // "6 años"
+past.To(future, true, new CultureInfo("de"));   // "6 Jahre"
 ```
 
 ### Supported Languages
@@ -395,7 +423,7 @@ past.From(future, new CultureInfo("ru"));  // "6 лет назад"
 
 ### Adding a New Language
 
-1. Create a new `Strings.[language-code].resx` file in `src/moment.net/`
+1. Create a new `Strings.[language-code].resx` file in `src/moment.net/I18n/`
 2. Copy all string keys from `Strings.resx` and translate the values
 3. No `.csproj` changes needed — .NET picks up satellite resource files by convention
 
@@ -406,6 +434,8 @@ past.From(future, new CultureInfo("ru"));  // "6 лет назад"
 By default, moment.net uses the current thread's culture. You can change this behavior:
 
 ```csharp
+using MomentNet.I18n;
+
 // Use a specific default culture instead of thread culture
 CultureWrapper.DefaultCulture = new CultureInfo("en-US");
 CultureWrapper.UseCurrentThreadCultureAsDefault = false;
@@ -415,7 +445,7 @@ CultureWrapper.UseCurrentThreadCultureAsDefault = false;
 
 Contributions are welcome! Here's how you can help:
 
-1. **Add Languages:** Create a new `Strings.[language-code].resx` file in `src/moment.net/`
+1. **Add Languages:** Create a new `Strings.[language-code].resx` file in `src/moment.net/I18n/`
 2. **Report Bugs:** Open an issue on GitHub
 3. **Pull Requests:** Submit PRs for bug fixes or features with tests
 
