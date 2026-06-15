@@ -75,6 +75,38 @@ public static class RelativeTime
     public static FinalDays Final(this DateTime This) => new FinalDays(This);
 
     /// <summary>
+    /// Returns the calendar quarter for the given <see cref="DateTime"/> as a value from 1 to 4.
+    /// </summary>
+    public static int Quarter(this DateTime This) => GetQuarter(This.Month);
+
+    /// <summary>
+    /// Returns the culture-specific week of year for the given <see cref="DateTime"/>.
+    /// </summary>
+    public static int Week(this DateTime This) => This.Week(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the culture-specific week of year for the given <see cref="DateTime"/>.
+    /// </summary>
+    public static int Week(this DateTime This, CultureInfo cultureInfo) =>
+        cultureInfo.Calendar.GetWeekOfYear(This, cultureInfo.DateTimeFormat.CalendarWeekRule,
+            cultureInfo.DateTimeFormat.FirstDayOfWeek);
+
+    /// <summary>
+    /// Returns the ISO-8601 week number for the given <see cref="DateTime"/>.
+    /// </summary>
+    public static int IsoWeek(this DateTime This)
+    {
+        var thursday = This.Date.AddDays(4 - GetIsoDayOfWeek(This));
+        return ((thursday.DayOfYear - 1) / 7) + 1;
+    }
+
+    /// <summary>
+    /// Returns the ISO-8601 week-numbering year for the given <see cref="DateTime"/>.
+    /// </summary>
+    public static int IsoWeekYear(this DateTime This) =>
+        This.Date.AddDays(4 - GetIsoDayOfWeek(This)).Year;
+
+    /// <summary>
     /// Returns the start of the year, month, week, day or hour for the given  <see cref="DateTime"/>
     /// This implementation uses the current culture
     /// </summary>
@@ -103,8 +135,13 @@ public static class RelativeTime
             case DateTimeAnchor.Week:
                 var tmp = This.FirstDateInWeek(cultureInfo);
                 return new DateTime(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0, This.Kind);
+            case DateTimeAnchor.IsoWeek:
+                var isoWeekStart = This.Date.AddDays(1 - GetIsoDayOfWeek(This));
+                return new DateTime(isoWeekStart.Year, isoWeekStart.Month, isoWeekStart.Day, 0, 0, 0, 0, This.Kind);
             case DateTimeAnchor.Month:
                 return new DateTime(This.Year, This.Month, 1, 0, 0, 0, 0, This.Kind);
+            case DateTimeAnchor.Quarter:
+                return new DateTime(This.Year, GetStartOfQuarterMonth(This.Month), 1, 0, 0, 0, 0, This.Kind);
             case DateTimeAnchor.Year:
                 return new DateTime(This.Year, 1, 1, 0, 0, 0, 0, This.Kind);
             default:
@@ -141,9 +178,16 @@ public static class RelativeTime
             case DateTimeAnchor.Week:
                 var tmp = This.LastDateInWeek(cultureInfo);
                 return new DateTime(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999, This.Kind);
+            case DateTimeAnchor.IsoWeek:
+                var isoWeekEnd = This.Date.AddDays(7 - GetIsoDayOfWeek(This));
+                return new DateTime(isoWeekEnd.Year, isoWeekEnd.Month, isoWeekEnd.Day, 23, 59, 59, 999, This.Kind);
             case DateTimeAnchor.Month:
                 var days = DateTime.DaysInMonth(This.Year, This.Month);
                 return new DateTime(This.Year, This.Month, days, 23, 59, 59, 999, This.Kind);
+            case DateTimeAnchor.Quarter:
+                var endMonth = GetStartOfQuarterMonth(This.Month) + 2;
+                var daysInQuarterEndMonth = DateTime.DaysInMonth(This.Year, endMonth);
+                return new DateTime(This.Year, endMonth, daysInQuarterEndMonth, 23, 59, 59, 999, This.Kind);
             case DateTimeAnchor.Year:
                 return new DateTime(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Kind);
             default:
@@ -157,9 +201,19 @@ public static class RelativeTime
     /// <param name="This">A time frame in the past</param>
     /// <returns>A string representing the time span in human readable format</returns>
     public static string FromNow(this DateTime This, CultureInfo? ci = null) =>
+        This.FromNow(false, ci);
+
+    /// <summary>
+    /// Get the relative time from a given date time to the current time, optionally suppressing the suffix.
+    /// </summary>
+    /// <param name="This">A time frame in the past</param>
+    /// <param name="withoutSuffix">When true, omits words such as "ago"</param>
+    /// <param name="ci">The culture information to localize with</param>
+    /// <returns>A string representing the time span in human readable format</returns>
+    public static string FromNow(this DateTime This, bool withoutSuffix, CultureInfo? ci = null) =>
         This.Kind == DateTimeKind.Utc
-            ? ParseFromPastTimeSpan(DateTime.UtcNow - This, ci)
-            : ParseFromPastTimeSpan(DateTime.Now - This, ci);
+            ? ParseFromPastTimeSpan(DateTime.UtcNow - This, withoutSuffix, ci)
+            : ParseFromPastTimeSpan(DateTime.Now - This, withoutSuffix, ci);
 
     /// <summary>
     /// Get the relative time from a given date time to another date time instance
@@ -167,11 +221,17 @@ public static class RelativeTime
     /// <param name="This">A time frame in the past</param>
     /// <param name="dateTime">A time frame sometime after the one being compared to</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string From(this DateTime This, DateTime dateTime, CultureInfo? ci = null)
+    public static string From(this DateTime This, DateTime dateTime, CultureInfo? ci = null) =>
+        This.From(dateTime, false, ci);
+
+    /// <summary>
+    /// Get the relative time from a given date time to another date time instance, optionally suppressing the suffix.
+    /// </summary>
+    public static string From(this DateTime This, DateTime dateTime, bool withoutSuffix, CultureInfo? ci = null)
     {
         var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
         var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
-        return ParseFromPastTimeSpan(endDate - startDate, ci);
+        return ParseFromPastTimeSpan(endDate - startDate, withoutSuffix, ci);
     }
 
     /// <summary>
@@ -179,10 +239,16 @@ public static class RelativeTime
     /// </summary>
     /// <param name="This">A time frame in the future</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string ToNow(this DateTime This) =>
+    public static string ToNow(this DateTime This, CultureInfo? ci = null) =>
+        This.ToNow(false, ci);
+
+    /// <summary>
+    /// Get the relative time from the current date time instance to a time frame in the future, optionally suppressing the suffix.
+    /// </summary>
+    public static string ToNow(this DateTime This, bool withoutSuffix, CultureInfo? ci = null) =>
         This.Kind == DateTimeKind.Utc
-            ? ParseFromFutureTimeSpan(This - DateTime.UtcNow)
-            : ParseFromFutureTimeSpan(This - DateTime.Now);
+            ? ParseFromFutureTimeSpan(This - DateTime.UtcNow, withoutSuffix, ci)
+            : ParseFromFutureTimeSpan(This - DateTime.Now, withoutSuffix, ci);
 
     /// <summary>
     /// Get the relative time from the a date time instance to a time frame in the future
@@ -190,11 +256,17 @@ public static class RelativeTime
     /// <param name="This">A time frame to be compared to</param>
     /// <param name="dateTime">A time frame in the future</param>
     /// <returns>A string representing the time span in human readable format</returns>
-    public static string To(this DateTime This, DateTime dateTime)
+    public static string To(this DateTime This, DateTime dateTime, CultureInfo? ci = null) =>
+        This.To(dateTime, false, ci);
+
+    /// <summary>
+    /// Get the relative time from the a date time instance to a time frame in the future, optionally suppressing the suffix.
+    /// </summary>
+    public static string To(this DateTime This, DateTime dateTime, bool withoutSuffix, CultureInfo? ci = null)
     {
         var startDate = This.Kind == DateTimeKind.Utc ? This : This.ToUniversalTime();
         var endDate = dateTime.Kind == DateTimeKind.Utc ? dateTime : dateTime.ToUniversalTime();
-        return ParseFromFutureTimeSpan(endDate - startDate);
+        return ParseFromFutureTimeSpan(endDate - startDate, withoutSuffix, ci);
     }
 
     /// <summary>
@@ -262,15 +334,21 @@ public static class RelativeTime
         return timeSpan.TotalMilliseconds;
     }
 
-    private static string ParseFromPastTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null)
+    private static string ParseFromPastTimeSpan(TimeSpan timeSpan, bool withoutSuffix = false, CultureInfo? ci = null)
     {
+        if (withoutSuffix)
+            return ParseTimeDifference(timeSpan, ci);
+
         ci ??= CultureWrapper.GetDefaultCulture();
         using var lm = new LocalizationManager(ci);
-        return $"{ParseTimeDifference(timeSpan)} {lm.GetString("TIME_AGO")}";
+        return $"{ParseTimeDifference(timeSpan, ci)} {lm.GetString("TIME_AGO")}";
     }
 
-    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan, CultureInfo? ci = null)
+    private static string ParseFromFutureTimeSpan(TimeSpan timeSpan, bool withoutSuffix = false, CultureInfo? ci = null)
     {
+        if (withoutSuffix)
+            return ParseTimeDifference(timeSpan, ci);
+
         ci ??= CultureWrapper.GetDefaultCulture();
         using var lm = new LocalizationManager(ci);
         return $"{lm.GetString("TIME_IN")} {ParseTimeDifference(timeSpan, ci)}";
@@ -433,6 +511,33 @@ public static class RelativeTime
     public static FinalDaysOffset Final(this DateTimeOffset This) => new FinalDaysOffset(This);
 
     /// <summary>
+    /// Returns the calendar quarter for the given <see cref="DateTimeOffset"/> as a value from 1 to 4.
+    /// </summary>
+    public static int Quarter(this DateTimeOffset This) => GetQuarter(This.Month);
+
+    /// <summary>
+    /// Returns the culture-specific week of year for the given <see cref="DateTimeOffset"/>.
+    /// </summary>
+    public static int Week(this DateTimeOffset This) => This.Week(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the culture-specific week of year for the given <see cref="DateTimeOffset"/>.
+    /// </summary>
+    public static int Week(this DateTimeOffset This, CultureInfo cultureInfo) =>
+        cultureInfo.Calendar.GetWeekOfYear(This.DateTime, cultureInfo.DateTimeFormat.CalendarWeekRule,
+            cultureInfo.DateTimeFormat.FirstDayOfWeek);
+
+    /// <summary>
+    /// Returns the ISO-8601 week number for the given <see cref="DateTimeOffset"/>.
+    /// </summary>
+    public static int IsoWeek(this DateTimeOffset This) => This.DateTime.IsoWeek();
+
+    /// <summary>
+    /// Returns the ISO-8601 week-numbering year for the given <see cref="DateTimeOffset"/>.
+    /// </summary>
+    public static int IsoWeekYear(this DateTimeOffset This) => This.DateTime.IsoWeekYear();
+
+    /// <summary>
     /// Returns the start of the year, month, week, day, hour, or minute for the given <see cref="DateTimeOffset"/>.
     /// Uses the current culture for week calculations.
     /// </summary>
@@ -456,8 +561,13 @@ public static class RelativeTime
             case DateTimeAnchor.Week:
                 var tmp = This.FirstDateInWeek(cultureInfo);
                 return new DateTimeOffset(tmp.Year, tmp.Month, tmp.Day, 0, 0, 0, 0, This.Offset);
+            case DateTimeAnchor.IsoWeek:
+                var isoWeekStart = This.Date.AddDays(1 - GetIsoDayOfWeek(This.DateTime));
+                return new DateTimeOffset(isoWeekStart.Year, isoWeekStart.Month, isoWeekStart.Day, 0, 0, 0, 0, This.Offset);
             case DateTimeAnchor.Month:
                 return new DateTimeOffset(This.Year, This.Month, 1, 0, 0, 0, 0, This.Offset);
+            case DateTimeAnchor.Quarter:
+                return new DateTimeOffset(This.Year, GetStartOfQuarterMonth(This.Month), 1, 0, 0, 0, 0, This.Offset);
             case DateTimeAnchor.Year:
                 return new DateTimeOffset(This.Year, 1, 1, 0, 0, 0, 0, This.Offset);
             default:
@@ -489,9 +599,16 @@ public static class RelativeTime
             case DateTimeAnchor.Week:
                 var tmp = This.LastDateInWeek(cultureInfo);
                 return new DateTimeOffset(tmp.Year, tmp.Month, tmp.Day, 23, 59, 59, 999, This.Offset);
+            case DateTimeAnchor.IsoWeek:
+                var isoWeekEnd = This.Date.AddDays(7 - GetIsoDayOfWeek(This.DateTime));
+                return new DateTimeOffset(isoWeekEnd.Year, isoWeekEnd.Month, isoWeekEnd.Day, 23, 59, 59, 999, This.Offset);
             case DateTimeAnchor.Month:
                 var days = DateTime.DaysInMonth(This.Year, This.Month);
                 return new DateTimeOffset(This.Year, This.Month, days, 23, 59, 59, 999, This.Offset);
+            case DateTimeAnchor.Quarter:
+                var endMonth = GetStartOfQuarterMonth(This.Month) + 2;
+                var daysInQuarterEndMonth = DateTime.DaysInMonth(This.Year, endMonth);
+                return new DateTimeOffset(This.Year, endMonth, daysInQuarterEndMonth, 23, 59, 59, 999, This.Offset);
             case DateTimeAnchor.Year:
                 return new DateTimeOffset(This.Year, 12, DateTime.DaysInMonth(This.Year, 12), 23, 59, 59, 999, This.Offset);
             default:
@@ -503,25 +620,49 @@ public static class RelativeTime
     /// Get the relative time from a given <see cref="DateTimeOffset"/> to now
     /// </summary>
     public static string FromNow(this DateTimeOffset This, CultureInfo? ci = null) =>
-        ParseFromPastTimeSpan(DateTimeOffset.UtcNow - This, ci);
+        This.FromNow(false, ci);
+
+    /// <summary>
+    /// Get the relative time from a given <see cref="DateTimeOffset"/> to now, optionally suppressing the suffix.
+    /// </summary>
+    public static string FromNow(this DateTimeOffset This, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromPastTimeSpan(DateTimeOffset.UtcNow - This, withoutSuffix, ci);
 
     /// <summary>
     /// Get the relative time from a given <see cref="DateTimeOffset"/> to another <see cref="DateTimeOffset"/>
     /// </summary>
     public static string From(this DateTimeOffset This, DateTimeOffset dateTime, CultureInfo? ci = null) =>
-        ParseFromPastTimeSpan(dateTime - This, ci);
+        This.From(dateTime, false, ci);
+
+    /// <summary>
+    /// Get the relative time from a given <see cref="DateTimeOffset"/> to another <see cref="DateTimeOffset"/>, optionally suppressing the suffix.
+    /// </summary>
+    public static string From(this DateTimeOffset This, DateTimeOffset dateTime, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromPastTimeSpan(dateTime - This, withoutSuffix, ci);
 
     /// <summary>
     /// Get the relative time from now to a future <see cref="DateTimeOffset"/>
     /// </summary>
-    public static string ToNow(this DateTimeOffset This) =>
-        ParseFromFutureTimeSpan(This - DateTimeOffset.UtcNow);
+    public static string ToNow(this DateTimeOffset This, CultureInfo? ci = null) =>
+        This.ToNow(false, ci);
+
+    /// <summary>
+    /// Get the relative time from now to a future <see cref="DateTimeOffset"/>, optionally suppressing the suffix.
+    /// </summary>
+    public static string ToNow(this DateTimeOffset This, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromFutureTimeSpan(This - DateTimeOffset.UtcNow, withoutSuffix, ci);
 
     /// <summary>
     /// Get the relative time from a <see cref="DateTimeOffset"/> to a future <see cref="DateTimeOffset"/>
     /// </summary>
-    public static string To(this DateTimeOffset This, DateTimeOffset dateTime) =>
-        ParseFromFutureTimeSpan(dateTime - This);
+    public static string To(this DateTimeOffset This, DateTimeOffset dateTime, CultureInfo? ci = null) =>
+        This.To(dateTime, false, ci);
+
+    /// <summary>
+    /// Get the relative time from a <see cref="DateTimeOffset"/> to a future <see cref="DateTimeOffset"/>, optionally suppressing the suffix.
+    /// </summary>
+    public static string To(this DateTimeOffset This, DateTimeOffset dateTime, bool withoutSuffix, CultureInfo? ci = null) =>
+        ParseFromFutureTimeSpan(dateTime - This, withoutSuffix, ci);
 
     /// <summary>
     /// Get the calendar time description from this <see cref="DateTimeOffset"/> to now
@@ -617,4 +758,11 @@ public static class RelativeTime
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
         return dateTime.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
     }
+
+    private static int GetQuarter(int month) => ((month - 1) / 3) + 1;
+
+    private static int GetStartOfQuarterMonth(int month) => ((month - 1) / 3 * 3) + 1;
+
+    private static int GetIsoDayOfWeek(DateTime dateTime) =>
+        dateTime.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)dateTime.DayOfWeek;
 }

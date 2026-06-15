@@ -20,6 +20,7 @@
   - [Date Comparison](#date-comparison)
   - [Date Differences](#date-differences)
   - [Business Days](#business-days)
+  - [Utilities and Ranges](#utilities-and-ranges)
   - [Formatting](#formatting)
   - [Unix Time](#unix-time)
 - [DateTimeOffset Support](#datetimeoffset-support)
@@ -98,9 +99,11 @@ var past = new DateTime(2020, 1, 1);
 var future = new DateTime(2026, 1, 1);
 
 past.From(future);    // "6 years ago"
-future.From(past);    // "6 years from now" (via From logic)
+past.From(future, true); // "6 years"
 past.FromNow();       // relative to DateTime.UtcNow or DateTime.Now
+past.FromNow(true);   // "6 years" (no "ago" suffix)
 future.ToNow();       // "in X years/months/days"
+future.ToNow(true);   // "X years/months/days"
 ```
 
 ### Calendar Time
@@ -140,20 +143,28 @@ Get the start or end of a time period.
 | `StartOf(anchor)` | Start of period | `date.StartOf(DateTimeAnchor.Day)` → `01/05/2008 00:00:00` |
 | `EndOf(anchor)`   | End of period   | `date.EndOf(DateTimeAnchor.Day)` → `01/05/2008 23:59:59`   |
 
-Supported anchors: `Minute`, `Hour`, `Day`, `Week`, `Month`, `Year`
+Supported anchors: `Minute`, `Hour`, `Day`, `Week`, `IsoWeek`, `Month`, `Quarter`, `Year`
 
 ```csharp
 var date = new DateTime(2008, 5, 1, 8, 30, 52);
 
 date.StartOf(DateTimeAnchor.Year);   // 01/01/2008 00:00:00
+date.StartOf(DateTimeAnchor.Quarter); // first day of quarter
 date.StartOf(DateTimeAnchor.Month);  // 01/05/2008 00:00:00
 date.StartOf(DateTimeAnchor.Week);   // varies by culture
+date.StartOf(DateTimeAnchor.IsoWeek); // Monday of ISO week
 date.StartOf(DateTimeAnchor.Day);    // 01/05/2008 00:00:00
 date.StartOf(DateTimeAnchor.Hour);   // 01/05/2008 08:00:00
 date.StartOf(DateTimeAnchor.Minute); // 01/05/2008 08:30:00
 
 date.EndOf(DateTimeAnchor.Year);     // 12/31/2008 23:59:59
+date.EndOf(DateTimeAnchor.Quarter);  // last day of quarter
 date.EndOf(DateTimeAnchor.Month);    // 05/31/2008 23:59:59
+
+date.Quarter();       // 2
+date.Week();          // culture-specific week of year
+date.IsoWeek();       // ISO-8601 week number
+date.IsoWeekYear();   // ISO-8601 week-numbering year
 ```
 
 ### Date Positioning
@@ -194,6 +205,7 @@ Boolean checks for date properties and relationships.
 | `IsWeekend()`           | Check if Saturday or Sunday     | `date.IsWeekend()`                               |
 | `IsWeekday()`           | Check if Monday to Friday       | `date.IsWeekday()`                               |
 | `IsBusinessDay()`       | Alias for IsWeekday             | `date.IsBusinessDay()`                           |
+| `IsDaylightSavingTime()` | Check daylight saving time      | `date.IsDaylightSavingTime()`                    |
 | `IsSame(other)`         | Exact equality (UTC normalized) | `date.IsSame(other)`                             |
 | `IsBefore(other)`       | Comes before another date       | `date.IsBefore(other)`                           |
 | `IsSameOrBefore(other)` | Same or before                  | `date.IsSameOrBefore(other)`                     |
@@ -220,6 +232,7 @@ Calculate the difference between two dates.
 |-----------------------|----------------------|----------|
 | `DiffInDays(other)`   | Difference in days   | `double` |
 | `DiffInMonths(other)` | Difference in months | `double` |
+| `DiffInQuarters(other)` | Difference in quarters | `double` |
 | `DiffInYears(other)`  | Difference in years  | `double` |
 
 ```csharp
@@ -228,6 +241,7 @@ var end = new DateTime(2024, 6, 15);
 
 end.DiffInDays(start);    // ~1627.0
 end.DiffInMonths(start);  // ~53.5
+end.DiffInQuarters(start); // ~17.8
 end.DiffInYears(start);   // ~4.46
 ```
 
@@ -235,17 +249,33 @@ end.DiffInYears(start);   // ~4.46
 
 Utilities for business day calculations.
 
-| Method               | Description                          | Example                   |
-|----------------------|--------------------------------------|---------------------------|
-| `IsBusinessDay()`    | Check if Mon-Fri                     | `date.IsBusinessDay()`    |
-| `AddBusinessDays(n)` | Add n business days (skips weekends) | `date.AddBusinessDays(5)` |
+| Method                         | Description                                      | Example                              |
+|--------------------------------|--------------------------------------------------|--------------------------------------|
+| `IsBusinessDay()`              | Check if Mon-Fri                                 | `date.IsBusinessDay()`               |
+| `IsBusinessDay(holidays)`      | Check if Mon-Fri and not a supplied holiday      | `date.IsBusinessDay(holidays)`       |
+| `AddBusinessDays(n)`           | Add n business days (skips weekends)             | `date.AddBusinessDays(5)`            |
+| `AddBusinessDays(n, holidays)` | Add n business days, skipping weekends/holidays  | `date.AddBusinessDays(5, holidays)`  |
 
 ```csharp
 var friday = DateTime.Parse("2023-10-20"); // Friday
+var holidays = new[] { DateTime.Parse("2023-10-23") };
 
 friday.IsBusinessDay();       // true
 friday.AddBusinessDays(2);    // 2023-10-24 (Tuesday, skips weekend)
 friday.AddBusinessDays(-3);   // 2023-10-17 (Tuesday, negative works too)
+friday.AddBusinessDays(1, holidays); // 2023-10-24 (skips Monday holiday)
+```
+
+### Utilities and Ranges
+
+```csharp
+Moment.Min(date1, date2, date3); // earliest date
+Moment.Max(date1, date2, date3); // latest date
+
+var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+range.Contains(new DateTime(2024, 1, 15)); // true
+range.Overlaps(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5))); // true
+range.Intersect(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5))); // Jan 20-31
 ```
 
 ### Formatting
@@ -293,6 +323,8 @@ a.From(b);      // "few seconds ago"
 
 // Start/end of period — offset preserved
 dto.StartOf(DateTimeAnchor.Day);    // 2024-03-15T00:00:00+05:00
+dto.StartOf(DateTimeAnchor.Quarter); // 2024-01-01T00:00:00+05:00
+dto.StartOf(DateTimeAnchor.IsoWeek); // Monday of ISO week, +05:00
 dto.EndOf(DateTimeAnchor.Month);    // 2024-03-31T23:59:59+05:00
 
 // Next / Last / Final
@@ -303,6 +335,8 @@ dto.Final().Monday().InMonth();      // last Monday of March 2024, +05:00
 // Week boundaries
 dto.FirstDateInWeek();               // first day of week (culture-dependent), +05:00
 dto.LastDateInWeek();                // last day of week (culture-dependent), +05:00
+dto.IsoWeek();                       // ISO-8601 week number
+dto.IsoWeekYear();                   // ISO-8601 week-numbering year
 
 // Business days
 dto.IsBusinessDay();                 // true (Friday)
@@ -317,6 +351,7 @@ dto.IsBetween(dto.AddDays(-1), dto.AddDays(1)); // true
 var other = new DateTimeOffset(2023, 3, 15, 9, 0, 0, TimeSpan.FromHours(5));
 dto.DiffInDays(other);               // ~366.0
 dto.DiffInMonths(other);             // ~12.0
+dto.DiffInQuarters(other);           // ~4.0
 dto.DiffInYears(other);              // ~1.0
 
 // Unix timestamps — always UTC

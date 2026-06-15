@@ -33,6 +33,17 @@ public static class DateTimeDiff
     }
 
     /// <summary>
+    /// Returns the difference in quarters between this and another date
+    /// </summary>
+    /// <param name="dt">The given date</param>
+    /// <param name="other">The date to compare with</param>
+    /// <returns>The difference in quarters</returns>
+    public static double DiffInQuarters(this DateTime dt, DateTime other)
+    {
+        return dt.DiffInMonths(other) / 3.0;
+    }
+
+    /// <summary>
     /// Returns the difference in years between this and another date
     /// </summary>
     /// <param name="dt">The given date</param>
@@ -61,6 +72,12 @@ public static class DateTimeDiff
         var dayDiff = (double)(dt.Day - other.Day) / daysInMonth;
         return months + dayDiff;
     }
+
+    /// <summary>
+    /// Returns the difference in quarters between this and another <see cref="DateTimeOffset"/>.
+    /// </summary>
+    public static double DiffInQuarters(this DateTimeOffset dt, DateTimeOffset other) =>
+        dt.DiffInMonths(other) / 3.0;
 
     /// <summary>
     /// Returns the difference in years between this and another <see cref="DateTimeOffset"/>

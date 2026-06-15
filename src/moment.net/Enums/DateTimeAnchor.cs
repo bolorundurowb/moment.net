@@ -6,6 +6,8 @@ public enum DateTimeAnchor
     Hour,
     Day,
     Week,
+    IsoWeek,
     Month,
+    Quarter,
     Year
 }
