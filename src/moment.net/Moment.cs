@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using MomentNet.Range;
+using MomentNet.Plugins.Range;
 
 namespace MomentNet;
 

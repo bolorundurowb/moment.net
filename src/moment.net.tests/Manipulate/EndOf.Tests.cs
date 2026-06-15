@@ -1,0 +1,72 @@
+using System;
+using System.Globalization;
+using MomentNet.Manipulate;
+using NUnit.Framework;
+using Shouldly;
+
+namespace MomentNet.Tests.Manipulate;
+
+public class EndOfTests : IDisposable
+{
+    private readonly CultureWrapper _cultureWrapper;
+    readonly string dateString = "5/1/2008 8:30:52Z AM";
+
+    public EndOfTests()
+    {
+        // Ensure week calculations assume Sunday as first day (en-US)
+        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+    }
+
+    [Test]
+    public void EndOf_Minute_SetsSecondsTo59()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        date.EndOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:30:59");
+        date.EndOf(DateTimeAnchor.Minute).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void EndOf_Hour_SetsMinutesAndSecondsTo59()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        date.EndOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:59:59");
+        date.EndOf(DateTimeAnchor.Hour).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void EndOf_Day_ReturnsFinalSecondOfDay()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        date.EndOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 23:59:59");
+        date.EndOf(DateTimeAnchor.Day).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void EndOf_Week_ReturnsSaturdayAtEndOfDay()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        date.EndOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 23:59:59");
+        date.EndOf(DateTimeAnchor.Week).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void EndOf_Month_ReturnsLastDayAtEndOfDay()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        date.EndOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/05/2008 23:59:59");
+        date.EndOf(DateTimeAnchor.Month).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void EndOf_Year_ReturnsDecember31AtEndOfDay()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/12/2008 23:59:59");
+        date.EndOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    public void Dispose()
+    {
+        _cultureWrapper.Dispose();
+    }
+}

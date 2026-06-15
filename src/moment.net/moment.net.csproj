@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <PackageVersion>1.4.0</PackageVersion>
@@ -30,7 +30,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Update="Strings.Designer.cs">
+      <Compile Update="I18n\Strings.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Strings.resx</DependentUpon>
@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Strings.resx">
+      <EmbeddedResource Update="I18n\Strings.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       </EmbeddedResource>
