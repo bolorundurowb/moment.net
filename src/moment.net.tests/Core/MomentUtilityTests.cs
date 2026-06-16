@@ -27,6 +27,12 @@ public class MomentUtilityTests
     }
 
     [Test]
+    public void Min_WithNoDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateTime>()));
+    }
+
+    [Test]
     public void Max_WithNoDates_ThrowsArgumentException()
     {
         Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateTime>()));

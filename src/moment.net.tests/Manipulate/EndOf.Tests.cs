@@ -6,6 +6,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
+[TestFixture]
 public class EndOfTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
@@ -63,6 +64,13 @@ public class EndOfTests : IDisposable
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/12/2008 23:59:59");
         date.EndOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void EndOf_InvalidAnchor_ThrowsArgumentException()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        Should.Throw<ArgumentException>(() => date.EndOf((DateTimeAnchor)999));
     }
 
     public void Dispose()

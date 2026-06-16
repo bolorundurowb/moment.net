@@ -31,7 +31,7 @@ public class DateTimeDiffDateTimeOffsetTests
     [TestCase("2023-10-23", "2023-11-23", -1.0)]
     [TestCase("2023-11-23", "2023-10-23",  1.0)]
     [TestCase("2023-10-23", "2023-10-23",  0.0)]
-    [TestCase("2024-02-29", "2023-02-28", 12.035714285714286)]
+    [TestCase("2024-02-29", "2023-02-28", 12.034482758620689)]
     public void DiffInMonths_VariousDates_ReturnsExpectedDifference(
         string dateString, string otherDateString, double expected)
     {

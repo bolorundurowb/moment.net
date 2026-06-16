@@ -5,6 +5,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
+[TestFixture]
 public class RelativeTimeWithoutSuffixTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;

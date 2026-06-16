@@ -16,7 +16,7 @@ namespace MomentNet.I18n
             _rm = new ResourceManager(Globals.STRINGS, Assembly.GetExecutingAssembly());
         }
 
-        public string GetString(string key) => _rm.GetString(key);
+        public string GetString(string key) => _rm.GetString(key) ?? $"[missing:{key}]";
 
         public void Dispose()
         {

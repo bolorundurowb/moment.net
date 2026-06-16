@@ -185,8 +185,8 @@ public static class StartEndOfExtensions
     {
         var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
         var firstDateInWeek = dayInWeek.Date;
-        var diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
-        return firstDateInWeek.AddDays(-(Math.Abs(diff)));
+        var diff = ((int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek + 7) % 7;
+        return firstDateInWeek.AddDays(-diff);
     }
 
     private static DateTime LastDateInWeek(DateTime dayInWeek, CultureInfo cultureInfo) =>
@@ -196,8 +196,8 @@ public static class StartEndOfExtensions
     {
         var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
         var localDate = dayInWeek.Date;
-        var diff = (int)localDate.DayOfWeek - (int)firstDayOfWeek;
-        var firstDay = localDate.AddDays(-(Math.Abs(diff)));
+        var diff = ((int)localDate.DayOfWeek - (int)firstDayOfWeek + 7) % 7;
+        var firstDay = localDate.AddDays(-diff);
         return new DateTimeOffset(firstDay.Year, firstDay.Month, firstDay.Day, 0, 0, 0, 0, dayInWeek.Offset);
     }
 

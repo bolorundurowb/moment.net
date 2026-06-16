@@ -2,10 +2,10 @@ using System;
 using System.Globalization;
 using NUnit.Framework;
 using Shouldly;
-using TimeZoneConverter;
 
 namespace MomentNet.Tests.Display;
 
+[TestFixture]
 public class UnixTimeTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;

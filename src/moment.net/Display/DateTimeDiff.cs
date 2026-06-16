@@ -17,6 +17,8 @@ public static class DateTimeDiff
 
     /// <summary>
     /// Returns the difference in months between two dates.
+    /// The fractional component is computed by dividing the day-of-month difference
+    /// by the actual number of days in the source month (<paramref name="dateTime"/>).
     /// </summary>
     /// <param name="dateTime">The date to compare from.</param>
     /// <param name="comparisonDateTime">The date to compare against.</param>
@@ -24,7 +26,7 @@ public static class DateTimeDiff
     public static double DiffInMonths(this DateTime dateTime, DateTime comparisonDateTime)
     {
         var months = (dateTime.Year - comparisonDateTime.Year) * 12 + dateTime.Month - comparisonDateTime.Month;
-        var daysInMonth = DateTime.DaysInMonth(comparisonDateTime.Year, comparisonDateTime.Month);
+        var daysInMonth = DateTime.DaysInMonth(dateTime.Year, dateTime.Month);
         var dayDiff = (double)(dateTime.Day - comparisonDateTime.Day) / daysInMonth;
         return months + dayDiff;
     }
@@ -62,6 +64,8 @@ public static class DateTimeDiff
 
     /// <summary>
     /// Returns the difference in months between two offset-aware dates.
+    /// The fractional component is computed by dividing the day-of-month difference
+    /// by the actual number of days in the source month (<paramref name="dateTimeOffset"/>).
     /// </summary>
     /// <param name="dateTimeOffset">The date to compare from.</param>
     /// <param name="comparisonDateTimeOffset">The date to compare against.</param>
@@ -69,7 +73,7 @@ public static class DateTimeDiff
     public static double DiffInMonths(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset)
     {
         var months = (dateTimeOffset.Year - comparisonDateTimeOffset.Year) * 12 + dateTimeOffset.Month - comparisonDateTimeOffset.Month;
-        var daysInMonth = DateTime.DaysInMonth(comparisonDateTimeOffset.Year, comparisonDateTimeOffset.Month);
+        var daysInMonth = DateTime.DaysInMonth(dateTimeOffset.Year, dateTimeOffset.Month);
         var dayDiff = (double)(dateTimeOffset.Day - comparisonDateTimeOffset.Day) / daysInMonth;
         return months + dayDiff;
     }

@@ -6,6 +6,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
+[TestFixture]
 public class EndOfDateTimeOffsetTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;

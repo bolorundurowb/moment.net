@@ -6,6 +6,7 @@ using System.Globalization;
 
 namespace MomentNet.Tests.Display;
 
+[TestFixture]
 public class CalendarTimeTests_RU : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
@@ -21,33 +22,35 @@ public class CalendarTimeTests_RU : IDisposable
     }
 
     [Test]
-    public void CalendarTime_CalledOnYesterday_ReturnsTomorrow()
+    public void CalendarTime_CalledOnYesterday_ReturnsYesterday()
     {
         var yesterday = DateTime.Now.AddDays(-1);
-        yesterday.CalendarTime().ShouldStartWith("Завтра в ");
+        yesterday.CalendarTime().ShouldStartWith("Вчера в ");
     }
 
     [Test]
-    public void CalendarTime_CalledOnTomorrow_ReturnsYesterday()
+    public void CalendarTime_CalledOnTomorrow_ReturnsTomorrow()
     {
         var tomorrow = DateTime.Now.AddDays(1);
-        tomorrow.CalendarTime().ShouldStartWith("Вчера в ");
-    }
-
-    [Test]
-    public void CalendarTime_FutureDateWithinAWeek_ReturnsDayName()
-    {
-        var initialDate = new DateTime(2012, 12, 12);
-        var nextDate = new DateTime(2012, 12, 18);
-        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'в' ", CultureInfo.GetCultureInfo("ru")));
+        tomorrow.CalendarTime().ShouldStartWith("Завтра в ");
     }
 
     [Test]
     public void CalendarTime_PastDateWithinAWeek_ReturnsLastDayName()
     {
+        var initialDate = new DateTime(2012, 12, 12);
+        var nextDate = new DateTime(2012, 12, 18);
+        var ruCI = CultureInfo.GetCultureInfo("ru");
+        initialDate.CalendarTime(nextDate).ShouldStartWith(initialDate.ToLocalTime().ToString("'Последний' dddd 'в' ", ruCI));
+    }
+
+    [Test]
+    public void CalendarTime_FutureDateWithinAWeek_ReturnsDayName()
+    {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
-        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'Последний' dddd 'в' ", CultureInfo.GetCultureInfo("ru")));
+        var ruCI = CultureInfo.GetCultureInfo("ru");
+        laterDate.CalendarTime(earlierDate).ShouldStartWith(laterDate.ToLocalTime().ToString("dddd 'в' ", ruCI));
     }
 
     [Test]
@@ -55,7 +58,7 @@ public class CalendarTimeTests_RU : IDisposable
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2018, 12, 12);
-        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(nextDate.ToLocalTime().ToString("dd/MM/yyyy"));
+        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(initialDate.ToLocalTime().ToString("dd/MM/yyyy"));
     }
 
     public void Dispose()

@@ -5,6 +5,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.GetSet;
 
+[TestFixture]
 public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;

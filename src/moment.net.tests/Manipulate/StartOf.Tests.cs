@@ -6,6 +6,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
+[TestFixture]
 public class StartOfTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
@@ -63,6 +64,13 @@ public class StartOfTests : IDisposable
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
         date.StartOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/01/2008 00:00:00");
         date.StartOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
+    }
+
+    [Test]
+    public void StartOf_InvalidAnchor_ThrowsArgumentException()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        Should.Throw<ArgumentException>(() => date.StartOf((DateTimeAnchor)999));
     }
 
     public void Dispose()

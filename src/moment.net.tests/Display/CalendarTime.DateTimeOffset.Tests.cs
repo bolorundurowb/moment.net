@@ -6,6 +6,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
+[TestFixture]
 public class CalendarTimeDateTimeOffsetTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
@@ -23,35 +24,35 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     }
 
     [Test]
-    public void CalendarTime_NextDay_ReturnsTomorrowFormat()
-    {
-        var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
-        var end   = new DateTimeOffset(2012, 12, 13, 12, 0, 0, Utc);
-        start.CalendarTime(end).ShouldContain("Tomorrow");
-    }
-
-    [Test]
     public void CalendarTime_LastDay_ReturnsYesterdayFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
-        var end   = new DateTimeOffset(2012, 12, 11, 12, 0, 0, Utc);
+        var end   = new DateTimeOffset(2012, 12, 13, 12, 0, 0, Utc);
         start.CalendarTime(end).ShouldContain("Yesterday");
     }
 
     [Test]
-    public void CalendarTime_NextWeek_ReturnsDayNameFormat()
+    public void CalendarTime_NextDay_ReturnsTomorrowFormat()
     {
-        var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
-        var end   = new DateTimeOffset(2012, 12, 17, 12, 0, 0, Utc); // Monday (5 days ahead)
-        start.CalendarTime(end).ShouldContain("Monday");
+        var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
+        var end   = new DateTimeOffset(2012, 12, 11, 12, 0, 0, Utc);
+        start.CalendarTime(end).ShouldContain("Tomorrow");
     }
 
     [Test]
     public void CalendarTime_LastWeek_ReturnsLastDayNameFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
+        var end   = new DateTimeOffset(2012, 12, 17, 12, 0, 0, Utc); // Monday (5 days ahead)
+        start.CalendarTime(end).ShouldContain("Wednesday");
+    }
+
+    [Test]
+    public void CalendarTime_NextWeek_ReturnsDayNameFormat()
+    {
+        var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
         var end   = new DateTimeOffset(2012, 12, 7, 12, 0, 0, Utc);  // Friday (5 days before)
-        start.CalendarTime(end).ShouldContain("Friday");
+        start.CalendarTime(end).ShouldContain("Wednesday");
     }
 
     [Test]
@@ -59,7 +60,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
         var end   = new DateTimeOffset(2012, 11, 1, 12, 0, 0, Utc);
-        start.CalendarTime(end).ShouldBe("11/01/2012");
+        start.CalendarTime(end).ShouldBe("12/12/2012");
     }
 
     [Test]

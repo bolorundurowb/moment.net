@@ -4,6 +4,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
+[TestFixture]
 public class FinalDateTimeOffsetTests
 {
     private static readonly TimeSpan PlusFive = TimeSpan.FromHours(5);

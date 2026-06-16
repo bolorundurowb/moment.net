@@ -5,9 +5,9 @@
         <Title>Moment Dotnet</Title>
         <Authors>bolorundurowb yemikudaisi pengelbrecht2627 alegaio7</Authors>
         <Description>A library aimed at adding in some relevant functionality as seen in moment.js that is missing in the System.DateTime construct</Description>
-        <Copyright>(c) 2023-2026</Copyright>
+        <Copyright>(c) 2019-2026</Copyright>
         <PackageProjectUrl>https://github.com/bolorundurowb/moment.net</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/bolorundurowb/moment.net/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment momentjs datetime relative-time time date calendar</PackageTags>
@@ -17,7 +17,7 @@
 - Namespace has been updated to match .NET best practices
 - Classes have been moved to specific namespaces
 - DateTimeOffset comparisons are offset-aware (compare underlying UTC instants)</PackageReleaseNotes>
-        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <RootNamespace>MomentNet</RootNamespace>
         <AssemblyVersion>2.0.0</AssemblyVersion>

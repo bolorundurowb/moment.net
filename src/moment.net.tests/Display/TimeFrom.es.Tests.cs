@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace MomentNet.Tests.Display;
 
+[TestFixture]
 public class TimeFromTests_ES : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;

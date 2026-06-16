@@ -25,19 +25,18 @@ public class FinalSpanOffset
     {
         var month = _dateTimeOffset.Month;
         var offset = _dateTimeOffset.Offset;
-        // Only scan the last seven days of the month
-        _dateTimeOffset = new DateTimeOffset(
+        var current = new DateTimeOffset(
             _dateTimeOffset.Year,
             _dateTimeOffset.Month,
             DateTime.DaysInMonth(_dateTimeOffset.Year, _dateTimeOffset.Month) - 6,
             0, 0, 0, offset);
 
-        while (_dateTimeOffset.Month == month)
+        while (current.Month == month)
         {
-            if (_dateTimeOffset.DayOfWeek == _dayOfWeek)
-                return _dateTimeOffset;
+            if (current.DayOfWeek == _dayOfWeek)
+                return current;
 
-            _dateTimeOffset = _dateTimeOffset.AddDays(1);
+            current = current.AddDays(1);
         }
 
         return DateTimeOffset.MaxValue;
@@ -51,7 +50,7 @@ public class FinalSpanOffset
         var offset = _dateTimeOffset.Offset;
         var dateTimeOffset = new DateTimeOffset(
             _dateTimeOffset.Year, 12,
-            DateTime.DaysInMonth(_dateTimeOffset.Year, 12) - 7,
+            DateTime.DaysInMonth(_dateTimeOffset.Year, 12) - 6,
             0, 0, 0, offset);
         return new FinalSpanOffset(dateTimeOffset, _dayOfWeek).InMonth();
     }

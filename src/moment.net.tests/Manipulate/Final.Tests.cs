@@ -4,6 +4,7 @@ using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
+[TestFixture]
 public class FinalTests
 {
     // May 2008: Sat=31, Fri=30, Thu=29, Wed=28, Tue=27, Mon=26, Sun=25

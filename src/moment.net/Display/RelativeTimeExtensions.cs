@@ -126,24 +126,23 @@ public static class RelativeTimeExtensions
         formats ??= new CalendarTimeFormats(ci);
         var startDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
         var endDate = comparisonDateTime.Kind == DateTimeKind.Local ? comparisonDateTime : comparisonDateTime.ToLocalTime();
-        var timeDiff = endDate - startDate;
 
         if (startDate.Date == endDate.Date)
-            return endDate.ToString(formats.SameDay);
+            return startDate.ToString(formats.SameDay);
 
-        if (startDate.AddDays(1).Date == endDate.Date)
-            return endDate.ToString(formats.NextDay);
+        if (startDate.Date == endDate.AddDays(1).Date)
+            return startDate.ToString(formats.NextDay);
 
-        if (startDate.AddDays(-1).Date == endDate.Date)
-            return endDate.ToString(formats.LastDay);
+        if (startDate.Date == endDate.AddDays(-1).Date)
+            return startDate.ToString(formats.LastDay);
 
-        if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
-            return endDate.ToString(formats.NextWeek);
+        if (startDate.Date >= endDate.AddDays(2).Date && startDate.Date <= endDate.AddDays(7).Date)
+            return startDate.ToString(formats.NextWeek);
 
-        if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
-            return endDate.ToString(formats.LastWeek);
+        if (startDate.Date <= endDate.AddDays(-2).Date && startDate.Date >= endDate.AddDays(-7).Date)
+            return startDate.ToString(formats.LastWeek);
 
-        return endDate.ToString(formats.EverythingElse);
+        return startDate.ToString(formats.EverythingElse);
     }
 
     /// <summary>
@@ -286,24 +285,23 @@ public static class RelativeTimeExtensions
         formats ??= new CalendarTimeFormats(ci);
         var startDate = dateTimeOffset.ToLocalTime();
         var endDate = comparisonDateTimeOffset.ToLocalTime();
-        var timeDiff = endDate - startDate;
 
         if (startDate.Date == endDate.Date)
-            return endDate.ToString(formats.SameDay);
+            return startDate.ToString(formats.SameDay);
 
-        if (startDate.AddDays(1).Date == endDate.Date)
-            return endDate.ToString(formats.NextDay);
+        if (startDate.Date == endDate.AddDays(1).Date)
+            return startDate.ToString(formats.NextDay);
 
-        if (startDate.AddDays(-1).Date == endDate.Date)
-            return endDate.ToString(formats.LastDay);
+        if (startDate.Date == endDate.AddDays(-1).Date)
+            return startDate.ToString(formats.LastDay);
 
-        if (timeDiff.TotalDays > 1 && timeDiff.TotalDays < 7)
-            return endDate.ToString(formats.NextWeek);
+        if (startDate.Date >= endDate.AddDays(2).Date && startDate.Date <= endDate.AddDays(7).Date)
+            return startDate.ToString(formats.NextWeek);
 
-        if (timeDiff.TotalDays >= -6 && timeDiff.TotalDays < -1)
-            return endDate.ToString(formats.LastWeek);
+        if (startDate.Date <= endDate.AddDays(-2).Date && startDate.Date >= endDate.AddDays(-7).Date)
+            return startDate.ToString(formats.LastWeek);
 
-        return endDate.ToString(formats.EverythingElse);
+        return startDate.ToString(formats.EverythingElse);
     }
 
     /// <summary>

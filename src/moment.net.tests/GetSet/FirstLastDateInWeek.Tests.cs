@@ -5,12 +5,13 @@ using Shouldly;
 
 namespace MomentNet.Tests.GetSet;
 
-public class FirstLastDateInWeek : IDisposable
+[TestFixture]
+public class FirstLastDateInWeekTests : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
     readonly string dateString = "5/1/2008 8:30:52Z AM";
 
-    public FirstLastDateInWeek()
+    public FirstLastDateInWeekTests()
     {
         // Ensure week calculations assume Sunday as first day (en-US)
         _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));

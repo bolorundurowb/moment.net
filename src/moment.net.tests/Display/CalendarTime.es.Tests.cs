@@ -6,6 +6,7 @@ using System.Globalization;
 
 namespace MomentNet.Tests.Display;
 
+[TestFixture]
 public class CalendarTimeTests_ES : IDisposable
 {
     private readonly CultureWrapper _cultureWrapper;
@@ -20,33 +21,35 @@ public class CalendarTimeTests_ES : IDisposable
     }
 
     [Test]
-    public void CalendarTime_CalledOnYesterday_ReturnsTomorrow()
+    public void CalendarTime_CalledOnYesterday_ReturnsYesterday()
     {
         var yesterday = DateTime.Now.AddDays(-1);
-        yesterday.CalendarTime().ShouldStartWith("Mañana a las ");
+        yesterday.CalendarTime().ShouldStartWith("Ayer a las ");
     }
 
     [Test]
-    public void CalendarTime_CalledOnTomorrow_ReturnsYesterday()
+    public void CalendarTime_CalledOnTomorrow_ReturnsTomorrow()
     {
         var tomorrow = DateTime.Now.AddDays(1);
-        tomorrow.CalendarTime().ShouldStartWith("Ayer a las ");
-    }
-
-    [Test]
-    public void CalendarTime_FutureDateWithinAWeek_ReturnsDayName()
-    {
-        var initialDate = new DateTime(2012, 12, 12);
-        var nextDate = new DateTime(2012, 12, 18);
-        initialDate.CalendarTime(nextDate).ShouldStartWith(nextDate.ToLocalTime().ToString("dddd 'a las' ", CultureInfo.GetCultureInfo("es-AR")));
+        tomorrow.CalendarTime().ShouldStartWith("Mañana a las ");
     }
 
     [Test]
     public void CalendarTime_PastDateWithinAWeek_ReturnsLastDayName()
     {
+        var initialDate = new DateTime(2012, 12, 12);
+        var nextDate = new DateTime(2012, 12, 18);
+        var esCI = CultureInfo.GetCultureInfo("es-AR");
+        initialDate.CalendarTime(nextDate).ShouldStartWith(initialDate.ToLocalTime().ToString("'el pasado' dddd 'a las' ", esCI));
+    }
+
+    [Test]
+    public void CalendarTime_FutureDateWithinAWeek_ReturnsDayName()
+    {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
-        laterDate.CalendarTime(earlierDate).ShouldStartWith(earlierDate.ToLocalTime().ToString("'el pasado' dddd 'a las' ", CultureInfo.GetCultureInfo("es-AR")));
+        var esCI = CultureInfo.GetCultureInfo("es-AR");
+        laterDate.CalendarTime(earlierDate).ShouldStartWith(laterDate.ToLocalTime().ToString("dddd 'a las' ", esCI));
     }
 
     [Test]
@@ -54,7 +57,7 @@ public class CalendarTimeTests_ES : IDisposable
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2018, 12, 12);
-        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(nextDate.ToLocalTime().ToString("dd/MM/yyyy"));
+        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(initialDate.ToLocalTime().ToString("dd/MM/yyyy"));
     }
 
     public void Dispose()

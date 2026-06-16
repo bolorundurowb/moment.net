@@ -16,16 +16,15 @@ public class FinalSpan
     public DateTime InMonth()
     {
         var month = _dateTime.Month;
-        // only loop through the last seven days of the month
-        _dateTime = new DateTime(_dateTime.Year, _dateTime.Month, (DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month) - 6), 0, 0, 0, _dateTime.Kind);
-        while (_dateTime.Month == month)
+        var current = new DateTime(_dateTime.Year, _dateTime.Month, (DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month) - 6), 0, 0, 0, _dateTime.Kind);
+        while (current.Month == month)
         {
-            if (_dateTime.DayOfWeek == _dayOfWeek)
+            if (current.DayOfWeek == _dayOfWeek)
             {
-                return _dateTime;
+                return current;
             }
 
-            _dateTime = _dateTime.AddDays(1);
+            current = current.AddDays(1);
         }
 
         return DateTime.MaxValue;
@@ -33,7 +32,7 @@ public class FinalSpan
 
     public DateTime InYear()
     {
-        var dateTime = new DateTime(_dateTime.Year, 12, (DateTime.DaysInMonth(_dateTime.Year, 12) - 7), 0, 0, 0, _dateTime.Kind);
+        var dateTime = new DateTime(_dateTime.Year, 12, (DateTime.DaysInMonth(_dateTime.Year, 12) - 6), 0, 0, 0, _dateTime.Kind);
         return new FinalSpan(dateTime, _dayOfWeek).InMonth();
     }
 }

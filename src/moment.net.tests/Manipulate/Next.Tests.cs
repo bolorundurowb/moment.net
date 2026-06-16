@@ -4,7 +4,8 @@ using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
-public class Next
+[TestFixture]
+public class NextTests
 {
     readonly string dateString = "5/1/2008 8:30:52Z AM";
 

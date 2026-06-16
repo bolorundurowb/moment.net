@@ -30,6 +30,8 @@ public static class DatePositioningExtensions
     /// <returns>The nth next date that falls on <paramref name="dayOfWeek"/>.</returns>
     public static DateTime Next(this DateTime dateTime, DayOfWeek dayOfWeek, int count)
     {
+        if (count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be greater than zero.");
         for (var i = 0; i < count; i++)
             dateTime = dateTime.Next(dayOfWeek);
 
@@ -62,6 +64,8 @@ public static class DatePositioningExtensions
     /// <returns>The nth previous date that falls on <paramref name="dayOfWeek"/>.</returns>
     public static DateTime Last(this DateTime dateTime, DayOfWeek dayOfWeek, int count)
     {
+        if (count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be greater than zero.");
         for (var i = 0; i < count; i++)
             dateTime = dateTime.Last(dayOfWeek);
 
@@ -101,6 +105,8 @@ public static class DatePositioningExtensions
     /// <returns>The nth next date that falls on <paramref name="dayOfWeek"/>, preserving the original offset.</returns>
     public static DateTimeOffset Next(this DateTimeOffset dateTimeOffset, DayOfWeek dayOfWeek, int count)
     {
+        if (count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be greater than zero.");
         for (var i = 0; i < count; i++)
             dateTimeOffset = dateTimeOffset.Next(dayOfWeek);
 
@@ -133,6 +139,8 @@ public static class DatePositioningExtensions
     /// <returns>The nth previous date that falls on <paramref name="dayOfWeek"/>, preserving the original offset.</returns>
     public static DateTimeOffset Last(this DateTimeOffset dateTimeOffset, DayOfWeek dayOfWeek, int count)
     {
+        if (count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be greater than zero.");
         for (var i = 0; i < count; i++)
             dateTimeOffset = dateTimeOffset.Last(dayOfWeek);
 
