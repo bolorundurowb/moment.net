@@ -71,6 +71,93 @@ public class DateRangeTests
     }
 
     [Test]
+    public void ConstructorOffset_WhenStartIsAfterEnd_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => new MomentRangeOffset(
+            new DateTimeOffset(2024, 2, 1, 0, 0, 0, TimeSpan.Zero),
+            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)));
+    }
+
+    [Test]
+    public void Duration_ReturnsCorrectTimeSpan()
+    {
+        var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 2));
+        range.Duration.ShouldBe(TimeSpan.FromDays(1));
+    }
+
+    [Test]
+    public void DurationOffset_ReturnsCorrectTimeSpan()
+    {
+        var range = new MomentRangeOffset(
+            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
+            new DateTimeOffset(2024, 1, 1, 12, 0, 0, TimeSpan.Zero));
+        range.Duration.ShouldBe(TimeSpan.FromHours(12));
+    }
+
+    [Test]
+    public void Contains_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+        Should.Throw<ArgumentNullException>(() => range.Contains((MomentRange)null!));
+    }
+
+    [Test]
+    public void ContainsOffset_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentRangeOffset(
+            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
+            new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
+        Should.Throw<ArgumentNullException>(() => range.Contains((MomentRangeOffset)null!));
+    }
+
+    [Test]
+    public void Overlaps_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+        Should.Throw<ArgumentNullException>(() => range.Overlaps(null!));
+    }
+
+    [Test]
+    public void OverlapsOffset_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentRangeOffset(
+            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
+            new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
+        Should.Throw<ArgumentNullException>(() => range.Overlaps(null!));
+    }
+
+    [Test]
+    public void Intersect_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+        Should.Throw<ArgumentNullException>(() => range.Intersect(null!));
+    }
+
+    [Test]
+    public void IntersectOffset_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentRangeOffset(
+            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
+            new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
+        Should.Throw<ArgumentNullException>(() => range.Intersect(null!));
+    }
+
+    [Test]
+    public void Contains_Exclusive_ReturnsFalseForEndBoundary()
+    {
+        var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+        range.Contains(new DateTime(2024, 1, 31), inclusive: false).ShouldBeFalse();
+    }
+
+    [Test]
+    public void Overlaps_Exclusive_ReturnsFalseForTouchingRanges()
+    {
+        var first = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 15));
+        var second = new MomentRange(new DateTime(2024, 1, 15), new DateTime(2024, 1, 31));
+        first.Overlaps(second, inclusive: false).ShouldBeFalse();
+    }
+
+    [Test]
     public void DateTimeOffsetRange_IntersectsByInstant()
     {
         var first = Moment.Range(

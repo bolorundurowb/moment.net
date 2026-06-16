@@ -61,5 +61,34 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
         result.ToString("dd/MM/yyyy").ShouldBe("04/05/2008");
     }
 
+    [Test]
+    public void FirstDateInWeek_NoArgs_UsesCurrentCulture()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTimeOffset(2024, 6, 12, 10, 0, 0, TimeSpan.FromHours(2));
+        var result = date.FirstDateInWeek();
+        result.Date.ShouldBe(new DateTime(2024, 6, 9));
+        result.Offset.ShouldBe(TimeSpan.FromHours(2));
+    }
+
+    [Test]
+    public void LastDateInWeek_NoArgs_UsesCurrentCulture()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTimeOffset(2024, 6, 12, 10, 0, 0, TimeSpan.FromHours(2));
+        var result = date.LastDateInWeek();
+        result.Date.ShouldBe(new DateTime(2024, 6, 15));
+        result.Offset.ShouldBe(TimeSpan.FromHours(2));
+    }
+
+    [Test]
+    public void FirstDateInWeek_SundayInFrenchCulture_ShouldBeMonday()
+    {
+        var sunday = new DateTimeOffset(2024, 6, 16, 10, 0, 0, TimeSpan.Zero);
+        var frenchCulture = CultureInfo.GetCultureInfo("fr-FR");
+        var firstDate = sunday.FirstDateInWeek(frenchCulture);
+        firstDate.Date.ShouldBe(new DateTime(2024, 6, 10));
+    }
+
     public void Dispose() => _cultureWrapper.Dispose();
 }

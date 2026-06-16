@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Shouldly;
 
@@ -26,6 +27,24 @@ public class MomentUtilityTests
     }
 
     [Test]
+    public void Max_WithNoDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateTime>()));
+    }
+
+    [Test]
+    public void Min_NullDates_ThrowsArgumentNullException()
+    {
+        Should.Throw<ArgumentNullException>(() => Moment.Min((IEnumerable<DateTime>)null!));
+    }
+
+    [Test]
+    public void Max_NullDates_ThrowsArgumentNullException()
+    {
+        Should.Throw<ArgumentNullException>(() => Moment.Max((IEnumerable<DateTime>)null!));
+    }
+
+    [Test]
     public void DateTimeOffsetMinMax_CompareInstants()
     {
         var earlierInstant = new DateTimeOffset(2024, 1, 1, 10, 0, 0, TimeSpan.Zero);
@@ -36,8 +55,46 @@ public class MomentUtilityTests
     }
 
     [Test]
-    public void Min_WithNoDates_ThrowsArgumentException()
+    public void DateTimeOffsetMin_NullDates_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateTime>()));
+        Should.Throw<ArgumentNullException>(() => Moment.Min((IEnumerable<DateTimeOffset>)null!));
+    }
+
+    [Test]
+    public void DateTimeOffsetMax_NullDates_ThrowsArgumentNullException()
+    {
+        Should.Throw<ArgumentNullException>(() => Moment.Max((IEnumerable<DateTimeOffset>)null!));
+    }
+
+    [Test]
+    public void DateTimeOffsetMin_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateTimeOffset>()));
+    }
+
+    [Test]
+    public void DateTimeOffsetMax_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateTimeOffset>()));
+    }
+
+    [Test]
+    public void Range_CreatesDateTimeRange()
+    {
+        var start = new DateTime(2024, 1, 1);
+        var end = new DateTime(2024, 1, 31);
+        var range = Moment.Range(start, end);
+        range.Start.ShouldBe(start);
+        range.End.ShouldBe(end);
+    }
+
+    [Test]
+    public void Range_CreatesDateTimeOffsetRange()
+    {
+        var start = new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        var end = new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero);
+        var range = Moment.Range(start, end);
+        range.Start.ShouldBe(start);
+        range.End.ShouldBe(end);
     }
 }

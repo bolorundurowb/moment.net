@@ -47,4 +47,13 @@ public class DateTimeDiffDateTimeOffsetTests
     {
         MakeUtc(dateString).DiffInYears(MakeUtc(otherDateString)).ShouldBe(expected, 1e-10);
     }
+
+    [TestCase("2024-01-01", "2024-07-01", -2.0)]
+    [TestCase("2024-07-01", "2024-01-01", 2.0)]
+    [TestCase("2024-01-01", "2024-01-01", 0.0)]
+    public void DiffInQuarters_VariousDates_ReturnsExpectedDifference(
+        string dateString, string otherDateString, double expected)
+    {
+        MakeUtc(dateString).DiffInQuarters(MakeUtc(otherDateString)).ShouldBe(expected, 1e-10);
+    }
 }

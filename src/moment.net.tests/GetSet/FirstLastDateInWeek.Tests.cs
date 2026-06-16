@@ -32,6 +32,31 @@ public class FirstLastDateInWeek : IDisposable
         date.LastDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
     }
 
+    [Test]
+    public void FirstDateInWeek_NoArgs_UsesCurrentCulture()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTime(2024, 6, 12); // Wednesday
+        date.FirstDateInWeek().ShouldBe(new DateTime(2024, 6, 9)); // Sunday
+    }
+
+    [Test]
+    public void LastDateInWeek_NoArgs_UsesCurrentCulture()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTime(2024, 6, 12); // Wednesday
+        date.LastDateInWeek().ShouldBe(new DateTime(2024, 6, 15)); // Saturday
+    }
+
+    [Test]
+    public void FirstDateInWeek_SundayInFrenchCulture_ShouldBeMonday()
+    {
+        var sunday = new DateTime(2024, 6, 16);
+        var frenchCulture = CultureInfo.GetCultureInfo("fr-FR");
+        var firstDate = sunday.FirstDateInWeek(frenchCulture);
+        firstDate.ShouldBe(new DateTime(2024, 6, 10));
+    }
+
     public void Dispose()
     {
         _cultureWrapper.Dispose();

@@ -92,4 +92,42 @@ public class QuarterAndWeekTests
         date.StartOf(DateTimeAnchor.Quarter)
             .ShouldBe(new DateTimeOffset(2024, 4, 1, 0, 0, 0, TimeSpan.FromHours(2)));
     }
+
+    [Test]
+    public void DateTime_Week_CurrentCulture_ReturnsCorrectWeek()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTime(2024, 1, 7); // Sunday
+        date.Week().ShouldBe(2);
+    }
+
+    [Test]
+    public void DateTime_Week_FrenchCulture_ReturnsCorrectWeek()
+    {
+        var date = new DateTime(2024, 1, 7); // Sunday
+        // In fr-FR, Jan 1 2024 is Monday. Week 1 is Jan 1-7.
+        date.Week(CultureInfo.GetCultureInfo("fr-FR")).ShouldBe(1);
+    }
+
+    [Test]
+    public void DateTimeOffset_Week_CurrentCulture_ReturnsCorrectWeek()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTimeOffset(2024, 1, 7, 0, 0, 0, TimeSpan.Zero);
+        date.Week().ShouldBe(2);
+    }
+
+    [Test]
+    public void DateTimeOffset_Week_FrenchCulture_ReturnsCorrectWeek()
+    {
+        var date = new DateTimeOffset(2024, 1, 7, 0, 0, 0, TimeSpan.Zero);
+        date.Week(CultureInfo.GetCultureInfo("fr-FR")).ShouldBe(1);
+    }
+
+    [Test]
+    public void DateTimeOffset_IsoWeekYear_ReturnsCorrectYear()
+    {
+        var date = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        date.IsoWeekYear().ShouldBe(2020);
+    }
 }
