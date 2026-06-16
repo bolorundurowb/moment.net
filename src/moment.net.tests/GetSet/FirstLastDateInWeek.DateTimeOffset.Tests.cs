@@ -90,5 +90,56 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
         firstDate.Date.ShouldBe(new DateTime(2024, 6, 10));
     }
 
+    [Test]
+    public void FirstDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTimeOffset.MinValue.FirstDateInWeek());
+    }
+
+    [Test]
+    public void FirstDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTimeOffset.MaxValue.FirstDateInWeek());
+    }
+
+    [Test]
+    public void LastDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTimeOffset.MinValue.LastDateInWeek());
+    }
+
+    [Test]
+    public void LastDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTimeOffset.MaxValue.LastDateInWeek());
+    }
+
+    [Test]
+    public void FirstDateInWeek_December31_ReturnsCorrectStartOfWeek()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTimeOffset(2023, 12, 31, 10, 0, 0, TimeSpan.Zero); // Sunday
+        var result = date.FirstDateInWeek();
+        result.Date.ShouldBe(new DateTime(2023, 12, 31)); // Sunday
+    }
+
+    [Test]
+    public void LastDateInWeek_January1_ReturnsCorrectEndOfWeek()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTimeOffset(2024, 1, 1, 10, 0, 0, TimeSpan.Zero); // Monday
+        var result = date.LastDateInWeek();
+        result.Date.ShouldBe(new DateTime(2024, 1, 6)); // Saturday
+    }
+
+    [Test]
+    public void FirstDateInWeek_IsoWeekStartsOnMonday_WorksAtYearBoundary()
+    {
+        var culture = CultureInfo.GetCultureInfo("fr-FR");
+        var date = new DateTimeOffset(2024, 1, 1, 10, 0, 0, TimeSpan.Zero); // Monday
+        var result = date.FirstDateInWeek(culture);
+        result.Date.ShouldBe(new DateTime(2024, 1, 1)); // Monday
+    }
+
     public void Dispose() => _cultureWrapper.Dispose();
 }

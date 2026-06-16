@@ -63,10 +63,11 @@ public static class WeekAndQuarterExtensions
     /// <returns>The first date in the week.</returns>
     public static DateTime FirstDateInWeek(this DateTime dateTime, CultureInfo cultureInfo)
     {
+        ValidateDateTime(dateTime, nameof(dateTime));
         var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
         var firstDateInWeek = dateTime.Date;
-        var diff = (int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek;
-        return firstDateInWeek.AddDays(-(Math.Abs(diff)));
+        var daysSinceFirstDayOfWeek = GetDaysSinceFirstDayOfWeek(firstDateInWeek.DayOfWeek, firstDayOfWeek);
+        return AddDaysChecked(firstDateInWeek, -daysSinceFirstDayOfWeek, nameof(dateTime));
     }
 
     /// <summary>
@@ -84,8 +85,11 @@ public static class WeekAndQuarterExtensions
     /// <returns>The last date in the week.</returns>
     public static DateTime LastDateInWeek(this DateTime dateTime, CultureInfo cultureInfo)
     {
-        var firstDayInWeek = FirstDateInWeek(dateTime, cultureInfo);
-        return firstDayInWeek.AddDays(6);
+        ValidateDateTime(dateTime, nameof(dateTime));
+        var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+        var date = dateTime.Date;
+        var daysSinceFirstDayOfWeek = GetDaysSinceFirstDayOfWeek(date.DayOfWeek, firstDayOfWeek);
+        return AddDaysChecked(date, 6 - daysSinceFirstDayOfWeek, nameof(dateTime));
     }
 
     /// <summary>
@@ -142,10 +146,11 @@ public static class WeekAndQuarterExtensions
     /// <returns>The first date in the week, preserving the original offset.</returns>
     public static DateTimeOffset FirstDateInWeek(this DateTimeOffset dateTimeOffset, CultureInfo cultureInfo)
     {
+        ValidateDateTimeOffset(dateTimeOffset, nameof(dateTimeOffset));
         var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
         var localDate = dateTimeOffset.Date;
-        var diff = (int)localDate.DayOfWeek - (int)firstDayOfWeek;
-        var firstDay = localDate.AddDays(-(Math.Abs(diff)));
+        var daysSinceFirstDayOfWeek = GetDaysSinceFirstDayOfWeek(localDate.DayOfWeek, firstDayOfWeek);
+        var firstDay = AddDaysChecked(localDate, -daysSinceFirstDayOfWeek, nameof(dateTimeOffset));
         return new DateTimeOffset(firstDay.Year, firstDay.Month, firstDay.Day,
             0, 0, 0, 0, dateTimeOffset.Offset);
     }
@@ -166,11 +171,66 @@ public static class WeekAndQuarterExtensions
     /// <returns>The last date in the week, preserving the original offset.</returns>
     public static DateTimeOffset LastDateInWeek(this DateTimeOffset dateTimeOffset, CultureInfo cultureInfo)
     {
-        var firstDayInWeek = FirstDateInWeek(dateTimeOffset, cultureInfo);
-        return firstDayInWeek.AddDays(6);
+        ValidateDateTimeOffset(dateTimeOffset, nameof(dateTimeOffset));
+        var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+        var localDate = dateTimeOffset.Date;
+        var daysSinceFirstDayOfWeek = GetDaysSinceFirstDayOfWeek(localDate.DayOfWeek, firstDayOfWeek);
+        var lastDay = AddDaysChecked(localDate, 6 - daysSinceFirstDayOfWeek, nameof(dateTimeOffset));
+        return new DateTimeOffset(lastDay.Year, lastDay.Month, lastDay.Day,
+            0, 0, 0, 0, dateTimeOffset.Offset);
     }
 
     private static int GetQuarter(int month) => ((month - 1) / 3) + 1;
+
+    private static int GetDaysSinceFirstDayOfWeek(DayOfWeek dayOfWeek, DayOfWeek firstDayOfWeek) =>
+        ((int)dayOfWeek - (int)firstDayOfWeek + 7) % 7;
+
+    private static void ValidateDateTime(DateTime dateTime, string parameterName)
+    {
+        if (dateTime == DateTime.MinValue || dateTime == DateTime.MaxValue)
+        {
+            throw new ArgumentOutOfRangeException(parameterName, "DateTime value is out of range.");
+        }
+    }
+
+    private static void ValidateDateTimeOffset(DateTimeOffset dateTimeOffset, string parameterName)
+    {
+        if (dateTimeOffset == DateTimeOffset.MinValue || dateTimeOffset == DateTimeOffset.MaxValue)
+        {
+            throw new ArgumentOutOfRangeException(parameterName, "DateTimeOffset value is out of range.");
+        }
+    }
+
+    private static DateTime AddDaysChecked(DateTime dateTime, int days, string parameterName)
+    {
+        if (days < 0)
+        {
+            var minDate = GetMinDate(dateTime.Kind);
+
+            if (dateTime < minDate.AddDays(-days))
+            {
+                throw new ArgumentOutOfRangeException(parameterName, "The first date in the week is outside the supported range.");
+            }
+        }
+
+        if (days > 0)
+        {
+            var maxDate = GetMaxDate(dateTime.Kind);
+
+            if (dateTime > maxDate.AddDays(-days))
+            {
+                throw new ArgumentOutOfRangeException(parameterName, "The last date in the week is outside the supported range.");
+            }
+        }
+
+        return dateTime.AddDays(days);
+    }
+
+    private static DateTime GetMinDate(DateTimeKind kind) =>
+        new(DateTime.MinValue.Year, DateTime.MinValue.Month, DateTime.MinValue.Day, 0, 0, 0, 0, kind);
+
+    private static DateTime GetMaxDate(DateTimeKind kind) =>
+        new(DateTime.MaxValue.Year, DateTime.MaxValue.Month, DateTime.MaxValue.Day, 0, 0, 0, 0, kind);
 
     private static int GetIsoDayOfWeek(DateTime dateTime) =>
         dateTime.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)dateTime.DayOfWeek;

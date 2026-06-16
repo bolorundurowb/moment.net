@@ -57,6 +57,57 @@ public class FirstLastDateInWeek : IDisposable
         firstDate.ShouldBe(new DateTime(2024, 6, 10));
     }
 
+    [Test]
+    public void FirstDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MinValue.FirstDateInWeek());
+    }
+
+    [Test]
+    public void FirstDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MaxValue.FirstDateInWeek());
+    }
+
+    [Test]
+    public void LastDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MinValue.LastDateInWeek());
+    }
+
+    [Test]
+    public void LastDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MaxValue.LastDateInWeek());
+    }
+
+    [Test]
+    public void FirstDateInWeek_December31_ReturnsCorrectStartOfWeek()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTime(2023, 12, 31); // Sunday
+        var result = date.FirstDateInWeek();
+        result.ShouldBe(new DateTime(2023, 12, 31)); // Sunday
+    }
+
+    [Test]
+    public void LastDateInWeek_January1_ReturnsCorrectEndOfWeek()
+    {
+        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateTime(2024, 1, 1); // Monday
+        var result = date.LastDateInWeek();
+        result.ShouldBe(new DateTime(2024, 1, 6)); // Saturday
+    }
+
+    [Test]
+    public void FirstDateInWeek_IsoWeekStartsOnMonday_WorksAtYearBoundary()
+    {
+        var culture = CultureInfo.GetCultureInfo("fr-FR");
+        var date = new DateTime(2024, 1, 1); // Monday
+        var result = date.FirstDateInWeek(culture);
+        result.ShouldBe(new DateTime(2024, 1, 1)); // Monday
+    }
+
     public void Dispose()
     {
         _cultureWrapper.Dispose();
