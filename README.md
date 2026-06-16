@@ -44,7 +44,7 @@ Install-Package moment.net
 
 ### PackageReference
 ```xml
-<PackageReference Include="moment.net" Version="1.4.0" />
+<PackageReference Include="moment.net" Version="2.0.0" />
 ```
 
 ## Quick Start
@@ -223,19 +223,19 @@ date.Final().Friday().InMonth();       // Last Friday of March 2024
 
 Boolean checks for date properties and relationships.
 
-| Method                  | Description                     | Example                                          |
-|-------------------------|---------------------------------|--------------------------------------------------|
-| `IsLeapYear()`          | Check if year is a leap year    | `new DateTime(2024, 1, 1).IsLeapYear()` → `true` |
-| `IsWeekend()`           | Check if Saturday or Sunday     | `date.IsWeekend()`                               |
-| `IsWeekday()`           | Check if Monday to Friday       | `date.IsWeekday()`                               |
-| `IsBusinessDay()`       | Alias for IsWeekday             | `date.IsBusinessDay()`                           |
+| Method                   | Description                     | Example                                          |
+|--------------------------|---------------------------------|--------------------------------------------------|
+| `IsLeapYear()`           | Check if year is a leap year    | `new DateTime(2024, 1, 1).IsLeapYear()` → `true` |
+| `IsWeekend()`            | Check if Saturday or Sunday     | `date.IsWeekend()`                               |
+| `IsWeekday()`            | Check if Monday to Friday       | `date.IsWeekday()`                               |
+| `IsBusinessDay()`        | Alias for IsWeekday             | `date.IsBusinessDay()`                           |
 | `IsDaylightSavingTime()` | Check daylight saving time      | `date.IsDaylightSavingTime()`                    |
-| `IsSame(other)`         | Exact equality (UTC normalized) | `date.IsSame(other)`                             |
-| `IsBefore(other)`       | Comes before another date       | `date.IsBefore(other)`                           |
-| `IsSameOrBefore(other)` | Same or before                  | `date.IsSameOrBefore(other)`                     |
-| `IsAfter(other)`        | Comes after another date        | `date.IsAfter(other)`                            |
-| `IsSameOrAfter(other)`  | Same or after                   | `date.IsSameOrAfter(other)`                      |
-| `IsBetween(start, end)` | Within a date range (inclusive) | `date.IsBetween(start, end)`                     |
+| `IsSame(other)`          | Exact equality (UTC normalized) | `date.IsSame(other)`                             |
+| `IsBefore(other)`        | Comes before another date       | `date.IsBefore(other)`                           |
+| `IsSameOrBefore(other)`  | Same or before                  | `date.IsSameOrBefore(other)`                     |
+| `IsAfter(other)`         | Comes after another date        | `date.IsAfter(other)`                            |
+| `IsSameOrAfter(other)`   | Same or after                   | `date.IsSameOrAfter(other)`                      |
+| `IsBetween(start, end)`  | Within a date range (inclusive) | `date.IsBetween(start, end)`                     |
 
 ```csharp
 var date = new DateTime(2024, 3, 15);
@@ -252,12 +252,12 @@ date.IsBetween(start, end);    // true
 
 Calculate the difference between two dates.
 
-| Method                | Description          | Returns  |
-|-----------------------|----------------------|----------|
-| `DiffInDays(other)`   | Difference in days   | `double` |
-| `DiffInMonths(other)` | Difference in months | `double` |
+| Method                  | Description            | Returns  |
+|-------------------------|------------------------|----------|
+| `DiffInDays(other)`     | Difference in days     | `double` |
+| `DiffInMonths(other)`   | Difference in months   | `double` |
 | `DiffInQuarters(other)` | Difference in quarters | `double` |
-| `DiffInYears(other)`  | Difference in years  | `double` |
+| `DiffInYears(other)`    | Difference in years    | `double` |
 
 ```csharp
 var start = new DateTime(2020, 1, 1);
@@ -459,4 +459,4 @@ See [CHANGELOG.md](CHANGELOG.md) for the full release history.
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT Licence — see the [LICENCE](LICENSE) file for details.
