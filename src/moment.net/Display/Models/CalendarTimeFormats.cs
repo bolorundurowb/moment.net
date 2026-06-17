@@ -22,16 +22,14 @@ public class CalendarTimeFormats
     /// </summary>
     public CalendarTimeFormats(CultureInfo? ci = null)
     {
-        if (ci is null)
-            ci = CultureWrapper.GetDefaultCulture();
-
-        using var lm = new LocalizationManager(ci);
-        string baseSuffix = $" '{lm.GetString("TIME_AT")}' hh:mm tt";
-        SameDay = $"'{lm.GetString("TIME_TODAY")}'" + baseSuffix;
-        NextDay = $"'{lm.GetString("TIME_TOMORROW")}'" + baseSuffix;
+        ci ??= CultureInfo.CurrentCulture;
+        var rm = Strings.ResourceManager;
+        string baseSuffix = $" '{rm.GetString("TIME_AT", ci)}' hh:mm tt";
+        SameDay = $"'{rm.GetString("TIME_TODAY", ci)}'" + baseSuffix;
+        NextDay = $"'{rm.GetString("TIME_TOMORROW", ci)}'" + baseSuffix;
         NextWeek = "dddd" + baseSuffix;
-        LastDay = $"'{lm.GetString("TIME_YESTERDAY")}'" + baseSuffix;
-        LastWeek = $"'{lm.GetString("TIME_LAST")}' dddd" + baseSuffix;
+        LastDay = $"'{rm.GetString("TIME_YESTERDAY", ci)}'" + baseSuffix;
+        LastWeek = $"'{rm.GetString("TIME_LAST", ci)}' dddd" + baseSuffix;
         EverythingElse = "MM/dd/yyyy";
     }
 
