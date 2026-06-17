@@ -7,12 +7,8 @@ using Shouldly;
 namespace MomentNet.Tests.Display;
 
 [TestFixture]
-public class CalendarTimeDateTimeOffsetTests : IDisposable
+public class CalendarTimeDateTimeOffsetTests
 {
-    private readonly CultureWrapper _cultureWrapper;
-
-    public CalendarTimeDateTimeOffsetTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-
     private static readonly TimeSpan Utc = TimeSpan.Zero;
 
     [Test]
@@ -20,7 +16,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
         var end   = new DateTimeOffset(2012, 12, 12, 12, 0, 0, Utc);
-        start.CalendarTime(end).ShouldContain("Today");
+        start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Today");
     }
 
     [Test]
@@ -28,7 +24,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
         var end   = new DateTimeOffset(2012, 12, 13, 12, 0, 0, Utc);
-        start.CalendarTime(end).ShouldContain("Yesterday");
+        start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Yesterday");
     }
 
     [Test]
@@ -36,7 +32,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
         var end   = new DateTimeOffset(2012, 12, 11, 12, 0, 0, Utc);
-        start.CalendarTime(end).ShouldContain("Tomorrow");
+        start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Tomorrow");
     }
 
     [Test]
@@ -44,7 +40,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
         var end   = new DateTimeOffset(2012, 12, 17, 12, 0, 0, Utc); // Monday (5 days ahead)
-        start.CalendarTime(end).ShouldContain("Wednesday");
+        start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Wednesday");
     }
 
     [Test]
@@ -52,7 +48,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
         var end   = new DateTimeOffset(2012, 12, 7, 12, 0, 0, Utc);  // Friday (5 days before)
-        start.CalendarTime(end).ShouldContain("Wednesday");
+        start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Wednesday");
     }
 
     [Test]
@@ -60,7 +56,7 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
         var end   = new DateTimeOffset(2012, 11, 1, 12, 0, 0, Utc);
-        start.CalendarTime(end).ShouldBe("12/12/2012");
+        start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldBe("12/12/2012");
     }
 
     [Test]
@@ -78,6 +74,4 @@ public class CalendarTimeDateTimeOffsetTests : IDisposable
         var sameDay = new DateTimeOffset(2012, 12, 12, 12, 0, 0, Utc);
         start.CalendarTime(sameDay, formats).ShouldBe("Same");
     }
-
-    public void Dispose() => _cultureWrapper.Dispose();
 }

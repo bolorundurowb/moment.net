@@ -47,14 +47,34 @@ public static class BusinessDay
     }
 
     /// <summary>
-    /// Adds business days to the current date time instance
+    /// Adds business days to the current date time instance.
+    /// Uses week-batching for efficiency on large day counts.
     /// </summary>
     /// <param name="dateTime">The given date</param>
     /// <param name="days">The number of business days to add</param>
     /// <returns>A new date time instance with the added business days</returns>
     public static DateTime AddBusinessDays(this DateTime dateTime, int days)
     {
-        return dateTime.AddBusinessDays(days, Array.Empty<DateTime>());
+        if (days == 0)
+            return dateTime;
+
+        var direction = days > 0 ? 1 : -1;
+        var absDays = Math.Abs(days);
+
+        // Batch by full weeks (5 business days = 7 calendar days)
+        var weeks = absDays / 5;
+        var result = dateTime.AddDays(weeks * 7 * direction);
+
+        // Handle remaining 0-4 business days
+        var remaining = absDays % 5;
+        while (remaining > 0)
+        {
+            result = result.AddDays(direction);
+            if (result.IsBusinessDay())
+                remaining--;
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -117,13 +137,33 @@ public static class BusinessDay
 
     /// <summary>
     /// Adds business days to the given <see cref="DateTimeOffset"/>, skipping weekends.
+    /// Uses week-batching for efficiency on large day counts.
     /// The UTC offset is preserved in the returned value.
     /// </summary>
     /// <param name="dateTimeOffset">The starting date.</param>
     /// <param name="days">The number of business days to add (may be negative)</param>
     public static DateTimeOffset AddBusinessDays(this DateTimeOffset dateTimeOffset, int days)
     {
-        return dateTimeOffset.AddBusinessDays(days, Array.Empty<DateTimeOffset>());
+        if (days == 0)
+            return dateTimeOffset;
+
+        var direction = days > 0 ? 1 : -1;
+        var absDays = Math.Abs(days);
+
+        // Batch by full weeks (5 business days = 7 calendar days)
+        var weeks = absDays / 5;
+        var result = dateTimeOffset.AddDays(weeks * 7 * direction);
+
+        // Handle remaining 0-4 business days
+        var remaining = absDays % 5;
+        while (remaining > 0)
+        {
+            result = result.AddDays(direction);
+            if (result.IsBusinessDay())
+                remaining--;
+        }
+
+        return result;
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using Shouldly;
 
@@ -8,13 +9,13 @@ namespace MomentNet.Tests.GetSet;
 [TestFixture]
 public class FirstLastDateInWeekTests : IDisposable
 {
-    private readonly CultureWrapper _cultureWrapper;
+    private readonly CultureInfo _originalCulture;
     readonly string dateString = "5/1/2008 8:30:52Z AM";
 
     public FirstLastDateInWeekTests()
     {
-        // Ensure week calculations assume Sunday as first day (en-US)
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        _originalCulture = Thread.CurrentThread.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
     }
 
     [Test]
@@ -36,7 +37,6 @@ public class FirstLastDateInWeekTests : IDisposable
     [Test]
     public void FirstDateInWeek_NoArgs_UsesCurrentCulture()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTime(2024, 6, 12); // Wednesday
         date.FirstDateInWeek().ShouldBe(new DateTime(2024, 6, 9)); // Sunday
     }
@@ -44,7 +44,6 @@ public class FirstLastDateInWeekTests : IDisposable
     [Test]
     public void LastDateInWeek_NoArgs_UsesCurrentCulture()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTime(2024, 6, 12); // Wednesday
         date.LastDateInWeek().ShouldBe(new DateTime(2024, 6, 15)); // Saturday
     }
@@ -85,7 +84,6 @@ public class FirstLastDateInWeekTests : IDisposable
     [Test]
     public void FirstDateInWeek_December31_ReturnsCorrectStartOfWeek()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTime(2023, 12, 31); // Sunday
         var result = date.FirstDateInWeek();
         result.ShouldBe(new DateTime(2023, 12, 31)); // Sunday
@@ -94,7 +92,6 @@ public class FirstLastDateInWeekTests : IDisposable
     [Test]
     public void LastDateInWeek_January1_ReturnsCorrectEndOfWeek()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTime(2024, 1, 1); // Monday
         var result = date.LastDateInWeek();
         result.ShouldBe(new DateTime(2024, 1, 6)); // Saturday
@@ -111,6 +108,6 @@ public class FirstLastDateInWeekTests : IDisposable
 
     public void Dispose()
     {
-        _cultureWrapper.Dispose();
+        Thread.CurrentThread.CurrentCulture = _originalCulture;
     }
 }

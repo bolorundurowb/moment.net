@@ -2,6 +2,10 @@ using System;
 
 namespace MomentNet.Plugins.Range;
 
+/// <summary>
+/// DateTimeOffset equivalent of <see cref="MomentRange"/>. Duplication is due to the lack of a
+/// common comparison interface for DateTime/DateTimeOffset in netstandard2.0.
+/// </summary>
 public sealed class MomentRangeOffset
 {
     public MomentRangeOffset(DateTimeOffset start, DateTimeOffset end)

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using Shouldly;
 
@@ -8,15 +9,15 @@ namespace MomentNet.Tests.GetSet;
 [TestFixture]
 public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
 {
-    private readonly CultureWrapper _cultureWrapper;
+    private readonly CultureInfo _originalCulture;
 
-    // Thursday 2008-05-01 at UTC+03:00
     private static readonly DateTimeOffset Thursday =
         new DateTimeOffset(2008, 5, 1, 8, 30, 52, TimeSpan.FromHours(3));
 
     public FirstLastDateInWeekDateTimeOffsetTests()
     {
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        _originalCulture = Thread.CurrentThread.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
     }
 
     [Test]
@@ -36,7 +37,6 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
     [Test]
     public void FirstDateInWeek_Iso_ReturnsPrecedingMonday()
     {
-        // ISO-8601 week starts on Monday (e.g. fr-FR)
         var result = Thursday.FirstDateInWeek(CultureInfo.GetCultureInfo("fr-FR"));
         result.ToString("dd/MM/yyyy").ShouldBe("28/04/2008");
     }
@@ -65,7 +65,6 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
     [Test]
     public void FirstDateInWeek_NoArgs_UsesCurrentCulture()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTimeOffset(2024, 6, 12, 10, 0, 0, TimeSpan.FromHours(2));
         var result = date.FirstDateInWeek();
         result.Date.ShouldBe(new DateTime(2024, 6, 9));
@@ -75,7 +74,6 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
     [Test]
     public void LastDateInWeek_NoArgs_UsesCurrentCulture()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTimeOffset(2024, 6, 12, 10, 0, 0, TimeSpan.FromHours(2));
         var result = date.LastDateInWeek();
         result.Date.ShouldBe(new DateTime(2024, 6, 15));
@@ -118,7 +116,6 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
     [Test]
     public void FirstDateInWeek_December31_ReturnsCorrectStartOfWeek()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTimeOffset(2023, 12, 31, 10, 0, 0, TimeSpan.Zero); // Sunday
         var result = date.FirstDateInWeek();
         result.Date.ShouldBe(new DateTime(2023, 12, 31)); // Sunday
@@ -127,7 +124,6 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
     [Test]
     public void LastDateInWeek_January1_ReturnsCorrectEndOfWeek()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
         var date = new DateTimeOffset(2024, 1, 1, 10, 0, 0, TimeSpan.Zero); // Monday
         var result = date.LastDateInWeek();
         result.Date.ShouldBe(new DateTime(2024, 1, 6)); // Saturday
@@ -142,5 +138,8 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
         result.Date.ShouldBe(new DateTime(2024, 1, 1)); // Monday
     }
 
-    public void Dispose() => _cultureWrapper.Dispose();
+    public void Dispose()
+    {
+        Thread.CurrentThread.CurrentCulture = _originalCulture;
+    }
 }

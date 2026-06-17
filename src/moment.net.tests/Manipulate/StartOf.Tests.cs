@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using MomentNet.Manipulate;
 using NUnit.Framework;
 using Shouldly;
@@ -9,13 +10,13 @@ namespace MomentNet.Tests.Manipulate;
 [TestFixture]
 public class StartOfTests : IDisposable
 {
-    private readonly CultureWrapper _cultureWrapper;
+    private readonly CultureInfo _originalCulture;
     readonly string dateString = "5/1/2008 8:30:52Z AM";
 
     public StartOfTests()
     {
-        // Ensure week calculations assume Sunday as first day (en-US)
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        _originalCulture = Thread.CurrentThread.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
     }
 
     [Test]
@@ -75,6 +76,6 @@ public class StartOfTests : IDisposable
 
     public void Dispose()
     {
-        _cultureWrapper.Dispose();
+        Thread.CurrentThread.CurrentCulture = _originalCulture;
     }
 }

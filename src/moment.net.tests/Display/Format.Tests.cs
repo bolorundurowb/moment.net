@@ -6,11 +6,8 @@ using Shouldly;
 namespace MomentNet.Tests.Display;
 
 [TestFixture]
-public class FormatTests : IDisposable
+public class FormatTests
 {
-    private readonly CultureWrapper _cultureWrapper;
-    public FormatTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-
     [Test]
     public void Format_NoFormatString_ReturnsIso8601String()
     {
@@ -24,7 +21,7 @@ public class FormatTests : IDisposable
     public void Format_WithFormatString_ReturnsFormattedString()
     {
         var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
-        var formattedDate = date.ToUniversalTime().Format("yyy MMM hh");
+        var formattedDate = date.Format("yyy MMM hh", CultureInfo.InvariantCulture);
 
         formattedDate.ShouldBe("2020 Oct 12");
     }
@@ -37,10 +34,5 @@ public class FormatTests : IDisposable
         var formattedDate = date.Format("yyy MMM hh", culture);
 
         formattedDate.ShouldBe("2020 oct. 12", StringCompareShould.IgnoreCase);
-    }
-
-    public void Dispose()
-    {
-        _cultureWrapper.Dispose();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using MomentNet.Manipulate;
 using NUnit.Framework;
 using Shouldly;
@@ -96,25 +97,40 @@ public class QuarterAndWeekTests
     [Test]
     public void DateTime_Week_CurrentCulture_ReturnsCorrectWeek()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
-        var date = new DateTime(2024, 1, 7); // Sunday
-        date.Week().ShouldBe(2);
+        var originalCulture = Thread.CurrentThread.CurrentCulture;
+        try
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            var date = new DateTime(2024, 1, 7); // Sunday
+            date.Week().ShouldBe(2);
+        }
+        finally
+        {
+            Thread.CurrentThread.CurrentCulture = originalCulture;
+        }
     }
 
     [Test]
     public void DateTime_Week_FrenchCulture_ReturnsCorrectWeek()
     {
         var date = new DateTime(2024, 1, 7); // Sunday
-        // In fr-FR, Jan 1 2024 is Monday. Week 1 is Jan 1-7.
         date.Week(CultureInfo.GetCultureInfo("fr-FR")).ShouldBe(1);
     }
 
     [Test]
     public void DateTimeOffset_Week_CurrentCulture_ReturnsCorrectWeek()
     {
-        using var wrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
-        var date = new DateTimeOffset(2024, 1, 7, 0, 0, 0, TimeSpan.Zero);
-        date.Week().ShouldBe(2);
+        var originalCulture = Thread.CurrentThread.CurrentCulture;
+        try
+        {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            var date = new DateTimeOffset(2024, 1, 7, 0, 0, 0, TimeSpan.Zero);
+            date.Week().ShouldBe(2);
+        }
+        finally
+        {
+            Thread.CurrentThread.CurrentCulture = originalCulture;
+        }
     }
 
     [Test]

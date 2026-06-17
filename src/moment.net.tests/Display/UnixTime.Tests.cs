@@ -6,12 +6,8 @@ using Shouldly;
 namespace MomentNet.Tests.Display;
 
 [TestFixture]
-public class UnixTimeTests : IDisposable
+public class UnixTimeTests
 {
-    private readonly CultureWrapper _cultureWrapper;
-
-    public UnixTimeTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-
     [Test]
     public void UnixTimestampInMilliseconds_UtcDateTime_ReturnsCorrectTimestamp()
     {
@@ -23,7 +19,6 @@ public class UnixTimeTests : IDisposable
     [Test]
     public void UnixTimestampInMilliseconds_LocalDateTime_ReturnsCorrectTimestamp()
     {
-        // Create the exact instant one year after the epoch (UTC) and convert to local time
         var oneYearAfterEpochUtc = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
         var localEquivalent = oneYearAfterEpochUtc.ToLocalTime();
         var millisecondsElapsed = localEquivalent.UnixTimestampInMilliseconds();
@@ -41,15 +36,9 @@ public class UnixTimeTests : IDisposable
     [Test]
     public void UnixTimestampInSeconds_LocalDateTime_ReturnsCorrectTimestamp()
     {
-        // Create the exact instant one year after the epoch (UTC) and convert to local time
         var oneYearAfterEpochUtc = new DateTime(1971, 01, 01, 0, 0, 0, DateTimeKind.Utc);
         var localEquivalent = oneYearAfterEpochUtc.ToLocalTime();
         var secondsElapsed = localEquivalent.UnixTimestampInSeconds();
         secondsElapsed.ShouldBe(365.0 * 24 * 60 * 60);
-    }
-
-    public void Dispose()
-    {
-        _cultureWrapper.Dispose();
     }
 }

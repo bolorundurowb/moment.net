@@ -26,26 +26,27 @@ public static class CalendarTimeExtensions
     public static string CalendarTime(this DateTime dateTime, DateTime comparisonDateTime,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
+        ci ??= CultureInfo.CurrentCulture;
         formats ??= new CalendarTimeFormats(ci);
         var startDate = dateTime.Kind == DateTimeKind.Local ? dateTime : dateTime.ToLocalTime();
         var endDate = comparisonDateTime.Kind == DateTimeKind.Local ? comparisonDateTime : comparisonDateTime.ToLocalTime();
 
         if (startDate.Date == endDate.Date)
-            return startDate.ToString(formats.SameDay);
+            return startDate.ToString(formats.SameDay, ci);
 
         if (startDate.Date == endDate.AddDays(1).Date)
-            return startDate.ToString(formats.NextDay);
+            return startDate.ToString(formats.NextDay, ci);
 
         if (startDate.Date == endDate.AddDays(-1).Date)
-            return startDate.ToString(formats.LastDay);
+            return startDate.ToString(formats.LastDay, ci);
 
         if (startDate.Date >= endDate.AddDays(2).Date && startDate.Date <= endDate.AddDays(7).Date)
-            return startDate.ToString(formats.NextWeek);
+            return startDate.ToString(formats.NextWeek, ci);
 
         if (startDate.Date <= endDate.AddDays(-2).Date && startDate.Date >= endDate.AddDays(-7).Date)
-            return startDate.ToString(formats.LastWeek);
+            return startDate.ToString(formats.LastWeek, ci);
 
-        return startDate.ToString(formats.EverythingElse);
+        return startDate.ToString(formats.EverythingElse, ci);
     }
 
     /// <summary>
@@ -68,25 +69,26 @@ public static class CalendarTimeExtensions
     public static string CalendarTime(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
+        ci ??= CultureInfo.CurrentCulture;
         formats ??= new CalendarTimeFormats(ci);
         var startDate = dateTimeOffset.ToLocalTime();
         var endDate = comparisonDateTimeOffset.ToLocalTime();
 
         if (startDate.Date == endDate.Date)
-            return startDate.ToString(formats.SameDay);
+            return startDate.ToString(formats.SameDay, ci);
 
         if (startDate.Date == endDate.AddDays(1).Date)
-            return startDate.ToString(formats.NextDay);
+            return startDate.ToString(formats.NextDay, ci);
 
         if (startDate.Date == endDate.AddDays(-1).Date)
-            return startDate.ToString(formats.LastDay);
+            return startDate.ToString(formats.LastDay, ci);
 
         if (startDate.Date >= endDate.AddDays(2).Date && startDate.Date <= endDate.AddDays(7).Date)
-            return startDate.ToString(formats.NextWeek);
+            return startDate.ToString(formats.NextWeek, ci);
 
         if (startDate.Date <= endDate.AddDays(-2).Date && startDate.Date >= endDate.AddDays(-7).Date)
-            return startDate.ToString(formats.LastWeek);
+            return startDate.ToString(formats.LastWeek, ci);
 
-        return startDate.ToString(formats.EverythingElse);
+        return startDate.ToString(formats.EverythingElse, ci);
     }
 }

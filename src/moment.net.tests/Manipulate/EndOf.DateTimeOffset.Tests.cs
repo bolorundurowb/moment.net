@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Threading;
 using MomentNet.Manipulate;
 using NUnit.Framework;
 using Shouldly;
@@ -9,15 +10,15 @@ namespace MomentNet.Tests.Manipulate;
 [TestFixture]
 public class EndOfDateTimeOffsetTests : IDisposable
 {
-    private readonly CultureWrapper _cultureWrapper;
+    private readonly CultureInfo _originalCulture;
 
-    // 2008-05-01 08:30:52 at UTC+02:00
     private static readonly DateTimeOffset May2008PlusTwoHours =
         new DateTimeOffset(2008, 5, 1, 8, 30, 52, TimeSpan.FromHours(2));
 
     public EndOfDateTimeOffsetTests()
     {
-        _cultureWrapper = new CultureWrapper(CultureInfo.GetCultureInfo("en-US"));
+        _originalCulture = Thread.CurrentThread.CurrentCulture;
+        Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
     }
 
     [Test]
@@ -113,5 +114,8 @@ public class EndOfDateTimeOffsetTests : IDisposable
         Should.Throw<ArgumentException>(() => May2008PlusTwoHours.EndOf((DateTimeAnchor)99));
     }
 
-    public void Dispose() => _cultureWrapper.Dispose();
+    public void Dispose()
+    {
+        Thread.CurrentThread.CurrentCulture = _originalCulture;
+    }
 }

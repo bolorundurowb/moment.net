@@ -6,12 +6,8 @@ using Shouldly;
 namespace MomentNet.Tests.Display;
 
 [TestFixture]
-public class FormatDateTimeOffsetTests : IDisposable
+public class FormatDateTimeOffsetTests
 {
-    private readonly CultureWrapper _cultureWrapper;
-
-    public FormatDateTimeOffsetTests() => _cultureWrapper = new CultureWrapper(CultureInfo.InvariantCulture);
-
     [Test]
     public void Format_NoFormatString_ReturnsIso8601StringWithOffset()
     {
@@ -30,7 +26,7 @@ public class FormatDateTimeOffsetTests : IDisposable
     public void Format_WithFormatString_ReturnsFormattedString()
     {
         var date = new DateTimeOffset(2020, 10, 4, 0, 0, 0, TimeSpan.Zero);
-        date.Format("yyyy MMM dd").ShouldBe("2020 Oct 04");
+        date.Format("yyyy MMM dd", CultureInfo.InvariantCulture).ShouldBe("2020 Oct 04");
     }
 
     [Test]
@@ -40,6 +36,4 @@ public class FormatDateTimeOffsetTests : IDisposable
         var culture = new CultureInfo("fr-CA", false);
         date.Format("yyyy MMM dd", culture).ShouldBe("2020 oct. 04", StringCompareShould.IgnoreCase);
     }
-
-    public void Dispose() => _cultureWrapper.Dispose();
 }
