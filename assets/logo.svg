@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <circle cx="250" cy="250" r="220" fill="none" stroke="#68217a" stroke-width="16"/>
+  <circle cx="250" cy="250" r="205" fill="none" stroke="#68217a" stroke-width="6" stroke-dasharray="4 17.467"/>
+  <circle cx="250" cy="250" r="190" fill="none" stroke="#68217a" stroke-width="14" stroke-dasharray="14 85.483"/>
+  <text x="250" y="250" font-family="'Segoe UI', Arial, sans-serif" font-weight="900" font-size="96" text-anchor="middle" dy=".35em" fill="#68217a">
+    .NET
+  </text>
+</svg>
