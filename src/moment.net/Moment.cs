@@ -1,0 +1,126 @@
+using System;
+using System.Collections.Generic;
+using MomentNet.Plugins.Range;
+
+namespace MomentNet;
+
+public static class Moment
+{
+    /// <summary>
+    /// Returns the earliest date from the supplied dates.
+    /// </summary>
+    public static DateTime Min(params DateTime[] dates) => Min((IEnumerable<DateTime>)dates);
+
+    /// <summary>
+    /// Returns the earliest date from the supplied dates.
+    /// </summary>
+    public static DateTime Min(IEnumerable<DateTime> dates)
+    {
+        if (dates is null)
+            throw new ArgumentNullException(nameof(dates));
+
+        using var enumerator = dates.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var min = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current < min)
+                min = enumerator.Current;
+        }
+
+        return min;
+    }
+
+    /// <summary>
+    /// Returns the latest date from the supplied dates.
+    /// </summary>
+    public static DateTime Max(params DateTime[] dates) => Max((IEnumerable<DateTime>)dates);
+
+    /// <summary>
+    /// Returns the latest date from the supplied dates.
+    /// </summary>
+    public static DateTime Max(IEnumerable<DateTime> dates)
+    {
+        if (dates is null)
+            throw new ArgumentNullException(nameof(dates));
+
+        using var enumerator = dates.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var max = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current > max)
+                max = enumerator.Current;
+        }
+
+        return max;
+    }
+
+    /// <summary>
+    /// Returns the earliest instant from the supplied dates.
+    /// </summary>
+    public static DateTimeOffset Min(params DateTimeOffset[] dates) => Min((IEnumerable<DateTimeOffset>)dates);
+
+    /// <summary>
+    /// Returns the earliest instant from the supplied dates.
+    /// </summary>
+    public static DateTimeOffset Min(IEnumerable<DateTimeOffset> dates)
+    {
+        if (dates is null)
+            throw new ArgumentNullException(nameof(dates));
+
+        using var enumerator = dates.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var min = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current < min)
+                min = enumerator.Current;
+        }
+
+        return min;
+    }
+
+    /// <summary>
+    /// Returns the latest instant from the supplied dates.
+    /// </summary>
+    public static DateTimeOffset Max(params DateTimeOffset[] dates) => Max((IEnumerable<DateTimeOffset>)dates);
+
+    /// <summary>
+    /// Returns the latest instant from the supplied dates.
+    /// </summary>
+    public static DateTimeOffset Max(IEnumerable<DateTimeOffset> dates)
+    {
+        if (dates is null)
+            throw new ArgumentNullException(nameof(dates));
+
+        using var enumerator = dates.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var max = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current > max)
+                max = enumerator.Current;
+        }
+
+        return max;
+    }
+
+    /// <summary>
+    /// Creates a date range with inclusive boundaries.
+    /// </summary>
+    public static MomentRange Range(DateTime start, DateTime end) => new MomentRange(start, end);
+
+    /// <summary>
+    /// Creates a date range with inclusive boundaries.
+    /// </summary>
+    public static MomentRangeOffset Range(DateTimeOffset start, DateTimeOffset end) => new MomentRangeOffset(start, end);
+}
