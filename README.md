@@ -1,3 +1,11 @@
+<div align="center">
+  <img
+    height="175"
+    width="175"
+    src="https://raw.githubusercontent.com/bolorundurowb/moment.net/refs/heads/master/assets/logo.png"
+    alt="moment.net logo"  />
+</div>
+
 # moment.net
 
 [![.NET Build, Test and Coverage](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml)
