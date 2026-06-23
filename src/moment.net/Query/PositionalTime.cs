@@ -149,4 +149,89 @@ public static class PositionalTime
     /// </summary>
     public static bool IsBetween(this DateTimeOffset dateTimeOffset, DateTimeOffset start, DateTimeOffset end) =>
         dateTimeOffset.IsSameOrAfter(start) && dateTimeOffset.IsSameOrBefore(end);
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Check if the year of a <see cref="DateOnly"/> is a leap year
+    /// </summary>
+    public static bool IsLeapYear(this DateOnly dateOnly)
+    {
+        var year = dateOnly.Year;
+        if (year % 4 != 0)
+            return false;
+        return year % 100 != 0 || year % 400 == 0;
+    }
+
+    /// <summary>
+    /// Check if two <see cref="DateOnly"/> instances are the same date
+    /// </summary>
+    public static bool IsSame(this DateOnly dateOnly, DateOnly dateToCompare) =>
+        dateOnly == dateToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> comes before another
+    /// </summary>
+    public static bool IsBefore(this DateOnly dateOnly, DateOnly dateToCompare) =>
+        dateOnly < dateToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> is the same as or comes before another
+    /// </summary>
+    public static bool IsSameOrBefore(this DateOnly dateOnly, DateOnly dateToCompare) =>
+        dateOnly <= dateToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> comes after another
+    /// </summary>
+    public static bool IsAfter(this DateOnly dateOnly, DateOnly dateToCompare) =>
+        dateOnly > dateToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> is the same as or comes after another
+    /// </summary>
+    public static bool IsSameOrAfter(this DateOnly dateOnly, DateOnly dateToCompare) =>
+        dateOnly >= dateToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> falls within a range (inclusive on both ends)
+    /// </summary>
+    public static bool IsBetween(this DateOnly dateOnly, DateOnly start, DateOnly end) =>
+        dateOnly.IsSameOrAfter(start) && dateOnly.IsSameOrBefore(end);
+
+    /// <summary>
+    /// Check if two <see cref="TimeOnly"/> instances are the same time
+    /// </summary>
+    public static bool IsSame(this TimeOnly timeOnly, TimeOnly timeToCompare) =>
+        timeOnly == timeToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="TimeOnly"/> comes before another
+    /// </summary>
+    public static bool IsBefore(this TimeOnly timeOnly, TimeOnly timeToCompare) =>
+        timeOnly < timeToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="TimeOnly"/> is the same as or comes before another
+    /// </summary>
+    public static bool IsSameOrBefore(this TimeOnly timeOnly, TimeOnly timeToCompare) =>
+        timeOnly <= timeToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="TimeOnly"/> comes after another
+    /// </summary>
+    public static bool IsAfter(this TimeOnly timeOnly, TimeOnly timeToCompare) =>
+        timeOnly > timeToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="TimeOnly"/> is the same as or comes after another
+    /// </summary>
+    public static bool IsSameOrAfter(this TimeOnly timeOnly, TimeOnly timeToCompare) =>
+        timeOnly >= timeToCompare;
+
+    /// <summary>
+    /// Check if a <see cref="TimeOnly"/> falls within a range (inclusive on both ends)
+    /// </summary>
+    public static bool IsBetween(this TimeOnly timeOnly, TimeOnly start, TimeOnly end) =>
+        timeOnly.IsSameOrAfter(start) && timeOnly.IsSameOrBefore(end);
+#endif
 }

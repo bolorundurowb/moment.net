@@ -153,4 +153,65 @@ public static class DatePositioningExtensions
     /// <param name="dateTimeOffset">The date whose month or year should be searched.</param>
     /// <returns>A fluent builder for selecting a weekday and period.</returns>
     public static FinalDaysOffset Final(this DateTimeOffset dateTimeOffset) => new FinalDaysOffset(dateTimeOffset);
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns the next occurrence of the supplied day of week after the <see cref="DateOnly"/>.
+    /// </summary>
+    public static DateOnly Next(this DateOnly dateOnly, DayOfWeek dayOfWeek)
+    {
+        if (dateOnly.DayOfWeek == dayOfWeek)
+            dateOnly = dateOnly.AddDays(1);
+
+        while (dateOnly.DayOfWeek != dayOfWeek)
+            dateOnly = dateOnly.AddDays(1);
+
+        return dateOnly;
+    }
+
+    /// <summary>
+    /// Returns the nth next occurrence of the supplied day of week after the <see cref="DateOnly"/>.
+    /// </summary>
+    public static DateOnly Next(this DateOnly dateOnly, DayOfWeek dayOfWeek, int count)
+    {
+        if (count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be greater than zero.");
+        for (var i = 0; i < count; i++)
+            dateOnly = dateOnly.Next(dayOfWeek);
+
+        return dateOnly;
+    }
+
+    /// <summary>
+    /// Returns the previous occurrence of the supplied day of week before the <see cref="DateOnly"/>.
+    /// </summary>
+    public static DateOnly Last(this DateOnly dateOnly, DayOfWeek dayOfWeek)
+    {
+        if (dateOnly.DayOfWeek == dayOfWeek)
+            dateOnly = dateOnly.AddDays(-1);
+
+        while (dateOnly.DayOfWeek != dayOfWeek)
+            dateOnly = dateOnly.AddDays(-1);
+
+        return dateOnly;
+    }
+
+    /// <summary>
+    /// Returns the nth previous occurrence of the supplied day of week before the <see cref="DateOnly"/>.
+    /// </summary>
+    public static DateOnly Last(this DateOnly dateOnly, DayOfWeek dayOfWeek, int count)
+    {
+        if (count <= 0)
+            throw new ArgumentOutOfRangeException(nameof(count), count, "Count must be greater than zero.");
+        for (var i = 0; i < count; i++)
+            dateOnly = dateOnly.Last(dayOfWeek);
+
+        return dateOnly;
+    }
+
+    /// <summary>
+    /// Creates a builder for resolving the final occurrence of a weekday within a month or year for a <see cref="DateOnly"/>.
+    /// </summary>
+    public static FinalDaysDateOnly Final(this DateOnly dateOnly) => new FinalDaysDateOnly(dateOnly);
+#endif
 }

@@ -123,4 +123,65 @@ public static class Moment
     /// Creates a date range with inclusive boundaries.
     /// </summary>
     public static MomentRangeOffset Range(DateTimeOffset start, DateTimeOffset end) => new MomentRangeOffset(start, end);
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns the earliest date from the supplied <see cref="DateOnly"/> values.
+    /// </summary>
+    public static DateOnly Min(params DateOnly[] dates) => Min((IEnumerable<DateOnly>)dates);
+
+    /// <summary>
+    /// Returns the earliest date from the supplied <see cref="DateOnly"/> values.
+    /// </summary>
+    public static DateOnly Min(IEnumerable<DateOnly> dates)
+    {
+        if (dates is null)
+            throw new ArgumentNullException(nameof(dates));
+
+        using var enumerator = dates.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var min = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current < min)
+                min = enumerator.Current;
+        }
+
+        return min;
+    }
+
+    /// <summary>
+    /// Returns the latest date from the supplied <see cref="DateOnly"/> values.
+    /// </summary>
+    public static DateOnly Max(params DateOnly[] dates) => Max((IEnumerable<DateOnly>)dates);
+
+    /// <summary>
+    /// Returns the latest date from the supplied <see cref="DateOnly"/> values.
+    /// </summary>
+    public static DateOnly Max(IEnumerable<DateOnly> dates)
+    {
+        if (dates is null)
+            throw new ArgumentNullException(nameof(dates));
+
+        using var enumerator = dates.GetEnumerator();
+        if (!enumerator.MoveNext())
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var max = enumerator.Current;
+        while (enumerator.MoveNext())
+        {
+            if (enumerator.Current > max)
+                max = enumerator.Current;
+        }
+
+        return max;
+    }
+
+    /// <summary>
+    /// Creates a date range with inclusive boundaries for <see cref="DateOnly"/>.
+    /// </summary>
+    public static MomentDateOnlyRange Range(DateOnly start, DateOnly end) => new MomentDateOnlyRange(start, end);
+#endif
 }

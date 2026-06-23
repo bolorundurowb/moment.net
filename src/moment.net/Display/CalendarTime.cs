@@ -91,4 +91,19 @@ public static class CalendarTimeExtensions
 
         return startDate.ToString(formats.EverythingElse, ci);
     }
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns a calendar-style formatted string relative to now for a <see cref="DateOnly"/>.
+    /// </summary>
+    public static string CalendarTime(this DateOnly dateOnly, CalendarTimeFormats? formats = null) =>
+        dateOnly.ToDateTime(default).CalendarTime(formats);
+
+    /// <summary>
+    /// Returns a calendar-style formatted string relative to a reference date for a <see cref="DateOnly"/>.
+    /// </summary>
+    public static string CalendarTime(this DateOnly dateOnly, DateOnly comparisonDate,
+        CalendarTimeFormats? formats = null, CultureInfo? ci = null) =>
+        dateOnly.ToDateTime(default).CalendarTime(comparisonDate.ToDateTime(default), formats, ci);
+#endif
 }
