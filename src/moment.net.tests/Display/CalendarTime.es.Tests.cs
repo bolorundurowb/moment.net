@@ -1,13 +1,11 @@
-using MomentNet.Display.Models;
 using NUnit.Framework;
-using Shouldly;
 using System;
 using System.Globalization;
 
 namespace MomentNet.Tests.Display;
 
 [TestFixture]
-public class CalendarTimeTests_ES
+public class CalendarTimeEsTests
 {
     private static readonly CultureInfo EsCI = CultureInfo.GetCultureInfo("es-AR");
 
@@ -15,21 +13,21 @@ public class CalendarTimeTests_ES
     public void CalendarTime_Today_ReturnsToday()
     {
         var today = DateTime.Now.Date.AddHours(2);
-        today.CalendarTime(formats: new CalendarTimeFormats(EsCI)).ShouldStartWith("Hoy a las ");
+        today.CalendarTime(formats: new CalendarTimeFormats(EsCI)).Verify().ToStartWith("Hoy a las ");
     }
 
     [Test]
     public void CalendarTime_CalledOnYesterday_ReturnsYesterday()
     {
         var yesterday = DateTime.Now.AddDays(-1);
-        yesterday.CalendarTime(formats: new CalendarTimeFormats(EsCI)).ShouldStartWith("Ayer a las ");
+        yesterday.CalendarTime(formats: new CalendarTimeFormats(EsCI)).Verify().ToStartWith("Ayer a las ");
     }
 
     [Test]
     public void CalendarTime_CalledOnTomorrow_ReturnsTomorrow()
     {
         var tomorrow = DateTime.Now.AddDays(1);
-        tomorrow.CalendarTime(formats: new CalendarTimeFormats(EsCI)).ShouldStartWith("Mañana a las ");
+        tomorrow.CalendarTime(formats: new CalendarTimeFormats(EsCI)).Verify().ToStartWith("Mañana a las ");
     }
 
     [Test]
@@ -37,7 +35,7 @@ public class CalendarTimeTests_ES
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2012, 12, 18);
-        initialDate.CalendarTime(nextDate, ci: EsCI).ShouldStartWith(initialDate.ToLocalTime().ToString("'el pasado' dddd 'a las' ", EsCI));
+        initialDate.CalendarTime(nextDate, ci: EsCI).Verify().ToStartWith(initialDate.ToLocalTime().ToString("'el pasado' dddd 'a las' ", EsCI));
     }
 
     [Test]
@@ -45,7 +43,7 @@ public class CalendarTimeTests_ES
     {
         var earlierDate = new DateTime(2012, 12, 12);
         var laterDate = new DateTime(2012, 12, 18);
-        laterDate.CalendarTime(earlierDate, ci: EsCI).ShouldStartWith(laterDate.ToLocalTime().ToString("dddd 'a las' ", EsCI));
+        laterDate.CalendarTime(earlierDate, ci: EsCI).Verify().ToStartWith(laterDate.ToLocalTime().ToString("dddd 'a las' ", EsCI));
     }
 
     [Test]
@@ -53,6 +51,6 @@ public class CalendarTimeTests_ES
     {
         var initialDate = new DateTime(2012, 12, 12);
         var nextDate = new DateTime(2018, 12, 12);
-        initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")).ShouldBe(initialDate.ToLocalTime().ToString("dd/MM/yyyy"));
+        (initialDate.CalendarTime(nextDate, new CalendarTimeFormats("", "", "", "", "", "dd/MM/yyyy")) == initialDate.ToLocalTime().ToString("dd/MM/yyyy")).VerifyExpression();
     }
 }

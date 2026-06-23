@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
@@ -12,14 +11,14 @@ public class RelativeTimeWithoutSuffixTests
     public void FromNow_WhenWithoutSuffixIsTrue_OmitsAgoSuffix()
     {
         var fiveMinutesAgo = DateTime.UtcNow.AddMinutes(-5).AddSeconds(-10);
-        fiveMinutesAgo.FromNow(true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (fiveMinutesAgo.FromNow(true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 
     [Test]
     public void ToNow_WhenWithoutSuffixIsTrue_OmitsInPrefix()
     {
         var fiveMinutesFromNow = DateTime.UtcNow.AddMinutes(5).AddSeconds(10);
-        fiveMinutesFromNow.ToNow(true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (fiveMinutesFromNow.ToNow(true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 
     [Test]
@@ -27,7 +26,7 @@ public class RelativeTimeWithoutSuffixTests
     {
         var earlier = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var later = earlier.AddMinutes(5);
-        earlier.From(later, true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (earlier.From(later, true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 
     [Test]
@@ -35,14 +34,14 @@ public class RelativeTimeWithoutSuffixTests
     {
         var start = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var end = start.AddMinutes(5);
-        start.To(end, true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (start.To(end, true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 
     [Test]
     public void DateTimeOffset_FromNow_WhenWithoutSuffixIsTrue_OmitsAgoSuffix()
     {
         var fiveMinutesAgo = DateTimeOffset.UtcNow.AddMinutes(-5).AddSeconds(-10);
-        fiveMinutesAgo.FromNow(true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (fiveMinutesAgo.FromNow(true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 
     [TestCase("", "5 minutes")]
@@ -59,7 +58,7 @@ public class RelativeTimeWithoutSuffixTests
             ? CultureInfo.InvariantCulture
             : CultureInfo.GetCultureInfo(cultureName);
 
-        earlier.From(later, true, cultureInfo).ShouldBe(expected);
+        (earlier.From(later, true, cultureInfo) == expected).VerifyExpression();
     }
 
     [TestCase("", "5 minutes")]
@@ -76,6 +75,6 @@ public class RelativeTimeWithoutSuffixTests
             ? CultureInfo.InvariantCulture
             : CultureInfo.GetCultureInfo(cultureName);
 
-        start.To(end, true, cultureInfo).ShouldBe(expected);
+        (start.To(end, true, cultureInfo) == expected).VerifyExpression();
     }
 }

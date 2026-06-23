@@ -1,57 +1,56 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Plugins.BusinessDays;
 
 [TestFixture]
 public class BusinessDayTests
 {
-    [TestCase("2023-10-23", true)] // Monday
-    [TestCase("2023-10-24", true)] // Tuesday
-    [TestCase("2023-10-25", true)] // Wednesday
-    [TestCase("2023-10-26", true)] // Thursday
-    [TestCase("2023-10-27", true)] // Friday
-    [TestCase("2023-10-28", false)] // Saturday
-    [TestCase("2023-10-29", false)] // Sunday
+    [TestCase("2023-10-23", true)]
+    [TestCase("2023-10-24", true)]
+    [TestCase("2023-10-25", true)]
+    [TestCase("2023-10-26", true)]
+    [TestCase("2023-10-27", true)]
+    [TestCase("2023-10-28", false)]
+    [TestCase("2023-10-29", false)]
     public void IsBusinessDay_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
     {
         var date = DateTime.Parse(dateString);
-        date.IsBusinessDay().ShouldBe(expected);
+        (date.IsBusinessDay() == expected).VerifyExpression();
     }
 
-    [TestCase("2023-10-23", false)] // Monday
-    [TestCase("2023-10-27", false)] // Friday
-    [TestCase("2023-10-28", true)] // Saturday
-    [TestCase("2023-10-29", true)] // Sunday
+    [TestCase("2023-10-23", false)]
+    [TestCase("2023-10-27", false)]
+    [TestCase("2023-10-28", true)]
+    [TestCase("2023-10-29", true)]
     public void IsWeekend_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
     {
         var date = DateTime.Parse(dateString);
-        date.IsWeekend().ShouldBe(expected);
+        (date.IsWeekend() == expected).VerifyExpression();
     }
 
-    [TestCase("2023-10-23", true)] // Monday
-    [TestCase("2023-10-27", true)] // Friday
-    [TestCase("2023-10-28", false)] // Saturday
-    [TestCase("2023-10-29", false)] // Sunday
+    [TestCase("2023-10-23", true)]
+    [TestCase("2023-10-27", true)]
+    [TestCase("2023-10-28", false)]
+    [TestCase("2023-10-29", false)]
     public void IsWeekday_WeekdaysAndWeekends_ReturnsExpectedResult(string dateString, bool expected)
     {
         var date = DateTime.Parse(dateString);
-        date.IsWeekday().ShouldBe(expected);
+        (date.IsWeekday() == expected).VerifyExpression();
     }
 
-    [TestCase("2023-10-20", 1, "2023-10-23")] // Friday to Monday
-    [TestCase("2023-10-20", 2, "2023-10-24")] // Friday to Tuesday
-    [TestCase("2023-10-23", 1, "2023-10-24")] // Monday to Tuesday
-    [TestCase("2023-10-23", 5, "2023-10-30")] // Monday to Monday
-    [TestCase("2023-10-21", 1, "2023-10-23")] // Saturday to Monday
-    [TestCase("2023-10-22", 1, "2023-10-23")] // Sunday to Monday
-    [TestCase("2023-10-23", -1, "2023-10-20")] // Monday to Friday (backwards)
-    [TestCase("2023-10-23", 0, "2023-10-23")] // Zero days
+    [TestCase("2023-10-20", 1, "2023-10-23")]
+    [TestCase("2023-10-20", 2, "2023-10-24")]
+    [TestCase("2023-10-23", 1, "2023-10-24")]
+    [TestCase("2023-10-23", 5, "2023-10-30")]
+    [TestCase("2023-10-21", 1, "2023-10-23")]
+    [TestCase("2023-10-22", 1, "2023-10-23")]
+    [TestCase("2023-10-23", -1, "2023-10-20")]
+    [TestCase("2023-10-23", 0, "2023-10-23")]
     public void AddBusinessDays_VariousStartDatesAndDayCounts_ReturnsExpectedDate(string startDateString, int daysToAdd, string expectedDateString)
     {
         var startDate = DateTime.Parse(startDateString);
         var expectedDate = DateTime.Parse(expectedDateString);
-        startDate.AddBusinessDays(daysToAdd).Date.ShouldBe(expectedDate.Date);
+        (startDate.AddBusinessDays(daysToAdd).Date == expectedDate.Date).VerifyExpression();
     }
 }

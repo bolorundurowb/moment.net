@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Plugins.BusinessDays;
 
@@ -13,7 +12,7 @@ public class BusinessDayHolidayTests
         var holiday = new DateTime(2023, 12, 25);
         var holidays = new[] { holiday };
 
-        holiday.IsBusinessDay(holidays).ShouldBeFalse();
+        holiday.IsBusinessDay(holidays).Verify().ToBeFalse();
     }
 
     [Test]
@@ -22,7 +21,7 @@ public class BusinessDayHolidayTests
         var friday = new DateTime(2023, 12, 22);
         var holidays = new[] { new DateTime(2023, 12, 25) };
 
-        friday.AddBusinessDays(1, holidays).ShouldBe(new DateTime(2023, 12, 26));
+        (friday.AddBusinessDays(1, holidays) == new DateTime(2023, 12, 26)).VerifyExpression();
     }
 
     [Test]
@@ -31,16 +30,31 @@ public class BusinessDayHolidayTests
         var tuesday = new DateTime(2023, 12, 26);
         var holidays = new[] { new DateTime(2023, 12, 25) };
 
-        tuesday.AddBusinessDays(-1, holidays).ShouldBe(new DateTime(2023, 12, 22));
+        (tuesday.AddBusinessDays(-1, holidays) == new DateTime(2023, 12, 22)).VerifyExpression();
     }
 
     [Test]
-    public void DateTimeOffset_AddBusinessDays_WithHoliday_PreservesOffset()
+    public void AddBusinessDays_WithZeroDays_ReturnsSameDate()
+    {
+        var date = new DateTime(2023, 10, 23);
+        var holidays = new[] { new DateTime(2023, 12, 25) };
+
+        (date.AddBusinessDays(0, holidays) == date).VerifyExpression();
+    }
+
+    [Test]
+    public void AddBusinessDays_NullHolidays_ThrowsArgumentNullException()
+    {
+        var date = new DateTime(2023, 10, 23);
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.AddBusinessDays(1, null!); });
+    }
+
+    [Test]
+    public void AddBusinessDays_WhenDateTimeOffsetAndHoliday_PreservesOffset()
     {
         var friday = new DateTimeOffset(2023, 12, 22, 9, 0, 0, TimeSpan.FromHours(2));
         var holidays = new[] { new DateTimeOffset(2023, 12, 25, 0, 0, 0, TimeSpan.Zero) };
 
-        friday.AddBusinessDays(1, holidays)
-            .ShouldBe(new DateTimeOffset(2023, 12, 26, 9, 0, 0, TimeSpan.FromHours(2)));
+        (friday.AddBusinessDays(1, holidays) == new DateTimeOffset(2023, 12, 26, 9, 0, 0, TimeSpan.FromHours(2))).VerifyExpression();
     }
 }

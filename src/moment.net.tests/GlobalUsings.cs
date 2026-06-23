@@ -7,3 +7,4 @@ global using MomentNet.Manipulate;
 global using MomentNet.Plugins.BusinessDays;
 global using MomentNet.Plugins.Range;
 global using MomentNet.Query;
+global using OmniAssert;

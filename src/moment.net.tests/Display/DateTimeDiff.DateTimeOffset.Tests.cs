@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
@@ -16,16 +15,15 @@ public class DateTimeDiffDateTimeOffsetTests
     public void DiffInDays_VariousDates_ReturnsExpectedDifference(
         string dateString, string otherDateString, double expected)
     {
-        MakeUtc(dateString).DiffInDays(MakeUtc(otherDateString)).ShouldBe(expected);
+        (MakeUtc(dateString).DiffInDays(MakeUtc(otherDateString)) == expected).VerifyExpression();
     }
 
     [Test]
     public void DiffInDays_CrossOffset_NormalizesToUtc()
     {
-        // Both represent the same UTC instant → diff should be 0
         var utc = new DateTimeOffset(2023, 10, 23, 0, 0, 0, TimeSpan.Zero);
         var plusTwo = new DateTimeOffset(2023, 10, 23, 2, 0, 0, TimeSpan.FromHours(2));
-        utc.DiffInDays(plusTwo).ShouldBe(0.0);
+        (utc.DiffInDays(plusTwo) == 0.0).VerifyExpression();
     }
 
     [TestCase("2023-10-23", "2023-11-23", -1.0)]
@@ -35,7 +33,7 @@ public class DateTimeDiffDateTimeOffsetTests
     public void DiffInMonths_VariousDates_ReturnsExpectedDifference(
         string dateString, string otherDateString, double expected)
     {
-        MakeUtc(dateString).DiffInMonths(MakeUtc(otherDateString)).ShouldBe(expected, 1e-10);
+        MakeUtc(dateString).DiffInMonths(MakeUtc(otherDateString)).Verify().ToBeApproximately(expected, 1e-10);
     }
 
     [TestCase("2023-10-23", "2024-10-23", -1.0)]
@@ -45,7 +43,7 @@ public class DateTimeDiffDateTimeOffsetTests
     public void DiffInYears_VariousDates_ReturnsExpectedDifference(
         string dateString, string otherDateString, double expected)
     {
-        MakeUtc(dateString).DiffInYears(MakeUtc(otherDateString)).ShouldBe(expected, 1e-10);
+        MakeUtc(dateString).DiffInYears(MakeUtc(otherDateString)).Verify().ToBeApproximately(expected, 1e-10);
     }
 
     [TestCase("2024-01-01", "2024-07-01", -2.0)]
@@ -54,6 +52,6 @@ public class DateTimeDiffDateTimeOffsetTests
     public void DiffInQuarters_VariousDates_ReturnsExpectedDifference(
         string dateString, string otherDateString, double expected)
     {
-        MakeUtc(dateString).DiffInQuarters(MakeUtc(otherDateString)).ShouldBe(expected, 1e-10);
+        MakeUtc(dateString).DiffInQuarters(MakeUtc(otherDateString)).Verify().ToBeApproximately(expected, 1e-10);
     }
 }
