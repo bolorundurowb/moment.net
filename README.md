@@ -14,12 +14,12 @@
 [![NuGet Version](https://img.shields.io/nuget/v/moment.net)](https://www.nuget.org/packages/moment.net)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/moment.net)](https://www.nuget.org/packages/moment.net)
 
-**moment.net** is a .NET Standard 2.0 library that brings moment.js-style fluent date/time operations to C#. It provides extension methods on both `DateTime` and `DateTimeOffset` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localisation support.
+**moment.net** is a multi-target library (`netstandard2.0`, `net6.0`, `net8.0`) that brings moment.js-style fluent date/time operations to C#. It provides extension methods on `DateTime`, `DateTimeOffset`, and — on .NET 6+ — `DateOnly` and `TimeOnly` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localisation support.
 
 ## Table of Contents
 
 - [Installation](#installation)
-- [Migrating from v1.x to v2.0](#migrating-from-v1x-to-v20)
+- [Migrating from v1.x to v2.x](#migrating-from-v1x-to-v2x)
 - [Quick Start](#quick-start)
 - [Namespace Groups](#namespace-groups)
 - [API Reference](#api-reference)
@@ -34,6 +34,7 @@
   - [Formatting](#formatting)
   - [Unix Time](#unix-time)
 - [DateTimeOffset Support](#datetimeoffset-support)
+- [DateOnly and TimeOnly Support](#dateonly-and-timeonly-support)
 - [Localisation](#localisation)
 - [Configuration](#configuration)
 - [Contributing](#contributing)
@@ -53,10 +54,10 @@ Install-Package moment.net
 
 ### PackageReference
 ```xml
-<PackageReference Include="moment.net" Version="2.0.0" />
+<PackageReference Include="moment.net" Version="2.1.0" />
 ```
 
-## Migrating from v1.x to v2.0
+## Migrating from v1.x to v2.x
 
 Version 2.0 introduces `DateTimeOffset` support across the entire API, restructures namespaces, and fixes several correctness issues. The changes below are what you need to update when upgrading.
 
@@ -64,7 +65,7 @@ Version 2.0 introduces `DateTimeOffset` support across the entire API, restructu
 
 In v1.x, all extension methods lived in a single namespace (`MomentNet`). v2.0 organises them into focused groups. Replace your old `using` statements:
 
-| v1.x                | v2.0                                                                                               |
+| v1.x                | v2.x                                                                                               |
 |---------------------|----------------------------------------------------------------------------------------------------|
 | `using moment.net;` | `using MomentNet;` (static helpers: `Moment.Min`, `Moment.Max`, `Moment.Range`)                    |
 | *(same as above)*   | `using MomentNet.Display;` (relative time, calendar time, formatting, Unix timestamps, date diffs) |
@@ -72,7 +73,6 @@ In v1.x, all extension methods lived in a single namespace (`MomentNet`). v2.0 o
 | *(same as above)*   | `using MomentNet.GetSet;` (quarter, week, ISO week, first/last date in week)                       |
 | *(same as above)*   | `using MomentNet.Manipulate;` (`StartOf`, `EndOf`, `Next`, `Last`, `Final`, `DateTimeAnchor`)      |
 | *(same as above)*   | `using MomentNet.Query;` (comparisons, leap year, daylight saving)                                 |
-| *(same as above)*   | `using MomentNet.I18n;` (culture configuration)                                                    |
 | *(same as above)*   | `using MomentNet.Plugins.BusinessDays;` (business day utilities)                                   |
 | *(same as above)*   | `using MomentNet.Plugins.Range;` (date range types)                                                |
 
@@ -130,6 +130,10 @@ The non-holiday `AddBusinessDays(int)` overload is now O(1) instead of O(n). Lar
 
 Every method that previously only accepted `DateTime` now has a `DateTimeOffset` overload. The UTC offset is preserved on all returned values, and comparisons are offset-aware (they compare the underlying UTC instants). No migration action is needed for existing `DateTime` code — all existing APIs remain unchanged.
 
+### New in v2.1: DateOnly and TimeOnly
+
+On .NET 6+, most APIs also accept `DateOnly` (and `TimeOnly` for time-period and comparison helpers). See [DateOnly and TimeOnly Support](#dateonly-and-timeonly-support). `ReadOnlySpan` overloads for `Moment.Min` and `Moment.Max` are available on .NET 8+.
+
 ## Quick Start
 
 ```csharp
@@ -170,6 +174,18 @@ dto.StartOf(DateTimeAnchor.Month);     // 2024-03-01T00:00:00+05:00
 dto.Next(DayOfWeek.Monday);            // next Monday, same +05:00 offset
 dto.IsWeekend();                       // false
 dto.UnixTimestampInSeconds();          // seconds since epoch, normalized to UTC
+
+// DateOnly and TimeOnly (.NET 6+)
+var dateOnly = new DateOnly(2024, 3, 15);
+dateOnly.FromNow();                        // "a year ago"
+dateOnly.StartOf(DateTimeAnchor.Month);      // 2024-03-01
+dateOnly.Next(DayOfWeek.Monday);             // next Monday
+dateOnly.IsWeekday();                        // true (Friday)
+
+var timeOnly = new TimeOnly(14, 30, 45);
+timeOnly.StartOf(DateTimeAnchor.Hour);       // 14:00:00
+timeOnly.EndOf(DateTimeAnchor.Minute);       // 14:30:59.999
+timeOnly.IsBetween(new TimeOnly(14, 0), new TimeOnly(15, 0)); // true
 ```
 
 ## Namespace Groups
@@ -178,15 +194,14 @@ The library follows Moment.js-style groupings. Import only the groups you need:
 
 | Namespace                        | Includes                                                                    |
 |----------------------------------|-----------------------------------------------------------------------------|
-| `MomentNet`                      | `Moment.Min`, `Moment.Max`, `Moment.Range`                                  |
+| `MomentNet`                      | `Moment.Min`, `Moment.Max`, `Moment.Range` (includes `DateOnly` on .NET 6+) |
 | `MomentNet.Display`              | Relative time, calendar time, formatting, Unix timestamps, date differences |
 | `MomentNet.Display.Models`       | Display configuration models such as `CalendarTimeFormats`                  |
 | `MomentNet.GetSet`               | Quarter, week, ISO week, first/last date in week                            |
 | `MomentNet.Manipulate`           | `StartOf`, `EndOf`, `Next`, `Last`, `Final`, `DateTimeAnchor`               |
 | `MomentNet.Query`                | Comparison helpers, leap year checks, daylight saving checks                |
-| `MomentNet.I18n`                 | Culture and localisation configuration                                      |
 | `MomentNet.Plugins.BusinessDays` | Business day and holiday-aware business day helpers                         |
-| `MomentNet.Plugins.Range`        | Date range types and range operations                                       |
+| `MomentNet.Plugins.Range`        | Date range types and range operations (`MomentDateOnlyRange` on .NET 6+)    |
 
 ## API Reference
 
@@ -383,6 +398,14 @@ var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
 range.Contains(new DateTime(2024, 1, 15)); // true
 range.Overlaps(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5))); // true
 range.Intersect(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5))); // Jan 20-31
+
+// DateOnly (.NET 6+)
+Moment.Min(dateOnly1, dateOnly2);
+Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+
+// ReadOnlySpan overloads (.NET 8+) — allocation-free Min/Max
+ReadOnlySpan<DateTime> dates = [date1, date2, date3];
+Moment.Min(dates);
 ```
 
 ### Formatting
@@ -392,6 +415,8 @@ range.Intersect(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5)
 | `Format()`                 | ISO-8601 format (default)  | `date.Format()` → `"1971-01-01T00:00:00+00:00"`      |
 | `Format(pattern)`          | Custom format string       | `date.Format("yyyy MMM dd")` → `"1971 Jan 01"`       |
 | `Format(pattern, culture)` | Custom format with culture | `date.Format("dd MMMM yyyy", new CultureInfo("de"))` |
+
+Also available on `DateTimeOffset`, and on `DateOnly` / `TimeOnly` (.NET 6+).
 
 ### Unix Time
 
@@ -473,6 +498,61 @@ dto.Format("dd MMMM yyyy");          // "15 March 2024"
 dto.CalendarTime();                  // relative to DateTimeOffset.Now
 ```
 
+## DateOnly and TimeOnly Support
+
+On **.NET 6+**, moment.net mirrors most of the `DateTime` API for `DateOnly` and adds time-period helpers for `TimeOnly`. These overloads are not available when targeting `netstandard2.0` alone.
+
+### DateOnly
+
+| Area             | Supported methods                                                                             |
+|------------------|-----------------------------------------------------------------------------------------------|
+| Relative time    | `FromNow`, `From`, `ToNow`, `To`                                                              |
+| Calendar time    | `CalendarTime`                                                                                |
+| Formatting       | `Format`                                                                                      |
+| Unix time        | `UnixTimestampInSeconds`, `UnixTimestampInMilliseconds`                                       |
+| Date differences | `DiffInDays`, `DiffInMonths`, `DiffInQuarters`, `DiffInYears`                                 |
+| Date anchors     | `StartOf`, `EndOf` (`Day`, `Week`, `IsoWeek`, `Month`, `Quarter`, `Year`)                     |
+| Date positioning | `Next`, `Last`, `Final`                                                                       |
+| Week/quarter     | `Quarter`, `Week`, `IsoWeek`, `IsoWeekYear`, `FirstDateInWeek`, `LastDateInWeek`              |
+| Comparison       | `IsLeapYear`, `IsSame`, `IsBefore`, `IsSameOrBefore`, `IsAfter`, `IsSameOrAfter`, `IsBetween` |
+| Business days    | `IsBusinessDay`, `IsWeekend`, `IsWeekday`, `AddBusinessDays`                                  |
+| Daylight saving  | `IsDaylightSavingTime`                                                                        |
+| Utilities        | `Moment.Min`, `Moment.Max`, `Moment.Range` → `MomentDateOnlyRange`                            |
+
+```csharp
+var date = new DateOnly(2024, 3, 15);
+
+date.FromNow();                         // relative to today
+date.StartOf(DateTimeAnchor.Quarter);   // 2024-01-01
+date.Final().Monday().InMonth();        // last Monday of March 2024
+date.AddBusinessDays(3);                // skips weekends
+
+var range = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+range.Contains(new DateOnly(2024, 1, 15)); // true
+```
+
+Relative-time methods compare calendar dates (midnight is used when converting to `DateTime` internally).
+
+### TimeOnly
+
+`TimeOnly` support covers period boundaries and comparisons:
+
+| Method                                                                          | Supported anchors         |
+|---------------------------------------------------------------------------------|---------------------------|
+| `StartOf(anchor)`                                                               | `Minute`, `Hour`          |
+| `EndOf(anchor)`                                                                 | `Minute`, `Hour`          |
+| `IsSame`, `IsBefore`, `IsSameOrBefore`, `IsAfter`, `IsSameOrAfter`, `IsBetween` | —                         |
+| `Format`                                                                        | custom or default pattern |
+
+```csharp
+var time = new TimeOnly(14, 30, 45);
+
+time.StartOf(DateTimeAnchor.Hour);  // 14:00:00
+time.EndOf(DateTimeAnchor.Minute);  // 14:30:59.999
+time.Format("HH:mm");               // "14:30"
+time.IsBetween(new TimeOnly(14, 0), new TimeOnly(15, 0)); // true
+```
+
 ## Localisation
 
 Moment.net supports multiple languages for relative time and calendar output. Pass a `CultureInfo` to any method that produces human-readable text:
@@ -512,17 +592,15 @@ past.To(future, true, new CultureInfo("de"));   // "6 Jahre"
 
 ## Configuration
 
-### Default Culture
-
-By default, moment.net uses the current thread's culture. You can change this behavior:
+Localised methods accept an optional `CultureInfo` parameter. When omitted, the current thread culture is used:
 
 ```csharp
-using MomentNet.I18n;
-
-// Use a specific default culture instead of thread culture
-CultureWrapper.DefaultCulture = new CultureInfo("en-US");
-CultureWrapper.UseCurrentThreadCultureAsDefault = false;
+date.FromNow(new CultureInfo("es"));           // "hace 5 minutos"
+date.FromNow(true, new CultureInfo("de"));       // suffixless: "5 Minuten"
+date.CalendarTime(formats: null);               // uses CultureInfo.CurrentCulture
 ```
+
+The library does not mutate `Thread.CurrentThread.CurrentCulture`. Pass the culture explicitly on each call that produces human-readable output.
 
 ## Contributing
 

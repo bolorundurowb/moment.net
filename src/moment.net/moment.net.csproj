@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <PackageVersion>2.0.0</PackageVersion>
-        <Title>Moment Dotnet</Title>
+        <PackageVersion>2.1.0</PackageVersion>
+        <Title>Moment.NET</Title>
         <Authors>bolorundurowb yemikudaisi pengelbrecht2627 alegaio7</Authors>
         <Description>A library aimed at adding in some relevant functionality as seen in moment.js that is missing in the System.DateTime construct</Description>
         <Copyright>(c) 2019-2026</Copyright>
@@ -11,12 +11,14 @@
         <RepositoryUrl>https://github.com/bolorundurowb/moment.net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>moment momentjs datetime relative-time time date calendar</PackageTags>
-        <PackageReleaseNotes>- Add DateTimeOffset overloads for every DateTime API (RelativeTime, BusinessDay, PositionalTime, DateTimeDiff)
-- Add FinalDaysOffset and FinalSpanOffset for offset-aware last-day-of-period queries
-- DateTimeOffset methods preserve the original UTC offset in returned values
-- Namespace has been updated to match .NET best practices
-- Classes have been moved to specific namespaces
-- DateTimeOffset comparisons are offset-aware (compare underlying UTC instants)</PackageReleaseNotes>
+        <PackageReleaseNotes>- Add DateTimeOffset overloads for every DateTime API (RelativeTime, BusinessDay, PositionalTime, DateTimeDiff, manipulation, and more)
+- Add DateOnly and TimeOnly extensions for relative time, calendar time, formatting, manipulation, and week/quarter helpers
+- Add Moment.Min, Moment.Max, and Moment.Range for DateTime, DateTimeOffset, and DateOnly
+- Add ReadOnlySpan Min/Max overloads on .NET 8+
+- Add IsDaylightSavingTime extensions and quarter/ISO-week APIs (StartOf/EndOf Quarter and IsoWeek, DiffInQuarters)
+- Multi-target net6.0, net8.0, and netstandard2.0; package icon and expanded README
+- Fix CalendarTime to format the source date (not the reference), DiffInMonths fractional day calculation, and week-boundary logic in StartOf/EndOf(Week)
+- Improve AddBusinessDays to O(1) for non-holiday overloads; DateTimeOffset methods preserve UTC offset with offset-aware comparisons</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <RootNamespace>MomentNet</RootNamespace>
