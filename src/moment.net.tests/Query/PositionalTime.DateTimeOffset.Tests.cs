@@ -34,7 +34,6 @@ public class PositionalTimeDateTimeOffsetTests
     [Test]
     public void IsSame_IdenticalInstants_DifferentOffsets_ReturnsTrue()
     {
-       
         var utc = new DateTimeOffset(2022, 1, 1, 0, 0, 0, TimeSpan.Zero);
         var plusOne = new DateTimeOffset(2022, 1, 1, 1, 0, 0, TimeSpan.FromHours(1));
         utc.IsSame(plusOne).Verify().ToBeTrue();
@@ -61,7 +60,6 @@ public class PositionalTimeDateTimeOffsetTests
     [Test]
     public void IsBefore_CrossOffset_ComparesInstants()
     {
-       
         var utc = new DateTimeOffset(2022, 1, 1, 0, 0, 0, TimeSpan.Zero);
         var plusOne = new DateTimeOffset(2022, 1, 1, 1, 0, 0, TimeSpan.FromHours(1));
         utc.IsBefore(plusOne).Verify().ToBeFalse();
@@ -106,20 +104,18 @@ public class PositionalTimeDateTimeOffsetTests
         string dateString, string startString, string endString, bool expected)
     {
         var offset = TimeSpan.FromHours(2);
-        var date  = new DateTimeOffset(DateTime.Parse(dateString), offset);
+        var date = new DateTimeOffset(DateTime.Parse(dateString), offset);
         var start = new DateTimeOffset(DateTime.Parse(startString), offset);
-        var end   = new DateTimeOffset(DateTime.Parse(endString), offset);
+        var end = new DateTimeOffset(DateTime.Parse(endString), offset);
         (date.IsBetween(start, end) == expected).VerifyExpression();
     }
 
     [Test]
     public void IsBetween_CrossOffsetBoundaries_ComparesInstants()
     {
-       
-       
-        var date  = new DateTimeOffset(2023, 10, 23, 0, 0, 0, TimeSpan.FromHours(2));
+        var date = new DateTimeOffset(2023, 10, 23, 0, 0, 0, TimeSpan.FromHours(2));
         var start = new DateTimeOffset(2023, 10, 22, 22, 0, 0, TimeSpan.Zero);
-        var end   = new DateTimeOffset(2023, 10, 24, 0, 0, 0, TimeSpan.Zero);
+        var end = new DateTimeOffset(2023, 10, 24, 0, 0, 0, TimeSpan.Zero);
         date.IsBetween(start, end).Verify().ToBeTrue();
     }
 }

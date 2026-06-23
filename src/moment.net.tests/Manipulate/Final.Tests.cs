@@ -158,13 +158,13 @@ public class FinalTests
         var finalDays = May2008Utc.Final();
         var result = expected switch
         {
-            DayOfWeek.Monday    => finalDays.Monday().InMonth(),
-            DayOfWeek.Tuesday   => finalDays.Tuesday().InMonth(),
+            DayOfWeek.Monday => finalDays.Monday().InMonth(),
+            DayOfWeek.Tuesday => finalDays.Tuesday().InMonth(),
             DayOfWeek.Wednesday => finalDays.Wednesday().InMonth(),
-            DayOfWeek.Thursday  => finalDays.Thursday().InMonth(),
-            DayOfWeek.Friday    => finalDays.Friday().InMonth(),
-            DayOfWeek.Saturday  => finalDays.Saturday().InMonth(),
-            DayOfWeek.Sunday    => finalDays.Sunday().InMonth(),
+            DayOfWeek.Thursday => finalDays.Thursday().InMonth(),
+            DayOfWeek.Friday => finalDays.Friday().InMonth(),
+            DayOfWeek.Saturday => finalDays.Saturday().InMonth(),
+            DayOfWeek.Sunday => finalDays.Sunday().InMonth(),
             _ => throw new ArgumentOutOfRangeException()
         };
         (result.DayOfWeek == expected).VerifyExpression();
@@ -182,13 +182,13 @@ public class FinalTests
         var finalDays = May2008Utc.Final();
         var result = expected switch
         {
-            DayOfWeek.Monday    => finalDays.Monday().InYear(),
-            DayOfWeek.Tuesday   => finalDays.Tuesday().InYear(),
+            DayOfWeek.Monday => finalDays.Monday().InYear(),
+            DayOfWeek.Tuesday => finalDays.Tuesday().InYear(),
             DayOfWeek.Wednesday => finalDays.Wednesday().InYear(),
-            DayOfWeek.Thursday  => finalDays.Thursday().InYear(),
-            DayOfWeek.Friday    => finalDays.Friday().InYear(),
-            DayOfWeek.Saturday  => finalDays.Saturday().InYear(),
-            DayOfWeek.Sunday    => finalDays.Sunday().InYear(),
+            DayOfWeek.Thursday => finalDays.Thursday().InYear(),
+            DayOfWeek.Friday => finalDays.Friday().InYear(),
+            DayOfWeek.Saturday => finalDays.Saturday().InYear(),
+            DayOfWeek.Sunday => finalDays.Sunday().InYear(),
             _ => throw new ArgumentOutOfRangeException()
         };
         (result.DayOfWeek == expected).VerifyExpression();
@@ -206,13 +206,13 @@ public class FinalTests
         var finalDays = May2008Utc.Final();
         var result = day switch
         {
-            DayOfWeek.Monday    => finalDays.Monday().InYear(),
-            DayOfWeek.Tuesday   => finalDays.Tuesday().InYear(),
+            DayOfWeek.Monday => finalDays.Monday().InYear(),
+            DayOfWeek.Tuesday => finalDays.Tuesday().InYear(),
             DayOfWeek.Wednesday => finalDays.Wednesday().InYear(),
-            DayOfWeek.Thursday  => finalDays.Thursday().InYear(),
-            DayOfWeek.Friday    => finalDays.Friday().InYear(),
-            DayOfWeek.Saturday  => finalDays.Saturday().InYear(),
-            DayOfWeek.Sunday    => finalDays.Sunday().InYear(),
+            DayOfWeek.Thursday => finalDays.Thursday().InYear(),
+            DayOfWeek.Friday => finalDays.Friday().InYear(),
+            DayOfWeek.Saturday => finalDays.Saturday().InYear(),
+            DayOfWeek.Sunday => finalDays.Sunday().InYear(),
             _ => throw new ArgumentOutOfRangeException()
         };
         (result.Month == 12).VerifyExpression();

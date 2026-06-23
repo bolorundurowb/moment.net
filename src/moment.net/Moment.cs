@@ -184,4 +184,114 @@ public static class Moment
     /// </summary>
     public static MomentDateOnlyRange Range(DateOnly start, DateOnly end) => new MomentDateOnlyRange(start, end);
 #endif
+
+#if NET8_0_OR_GREATER
+    /// <summary>
+    /// Returns the earliest date from the supplied dates.
+    /// </summary>
+    public static DateTime Min(params ReadOnlySpan<DateTime> dates)
+    {
+        if (dates.IsEmpty)
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var min = dates[0];
+        for (var i = 1; i < dates.Length; i++)
+        {
+            if (dates[i] < min)
+                min = dates[i];
+        }
+
+        return min;
+    }
+
+    /// <summary>
+    /// Returns the latest date from the supplied dates.
+    /// </summary>
+    public static DateTime Max(params ReadOnlySpan<DateTime> dates)
+    {
+        if (dates.IsEmpty)
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var max = dates[0];
+        for (var i = 1; i < dates.Length; i++)
+        {
+            if (dates[i] > max)
+                max = dates[i];
+        }
+
+        return max;
+    }
+
+    /// <summary>
+    /// Returns the earliest instant from the supplied dates.
+    /// </summary>
+    public static DateTimeOffset Min(params ReadOnlySpan<DateTimeOffset> dates)
+    {
+        if (dates.IsEmpty)
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var min = dates[0];
+        for (var i = 1; i < dates.Length; i++)
+        {
+            if (dates[i] < min)
+                min = dates[i];
+        }
+
+        return min;
+    }
+
+    /// <summary>
+    /// Returns the latest instant from the supplied dates.
+    /// </summary>
+    public static DateTimeOffset Max(params ReadOnlySpan<DateTimeOffset> dates)
+    {
+        if (dates.IsEmpty)
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var max = dates[0];
+        for (var i = 1; i < dates.Length; i++)
+        {
+            if (dates[i] > max)
+                max = dates[i];
+        }
+
+        return max;
+    }
+
+    /// <summary>
+    /// Returns the earliest date from the supplied <see cref="DateOnly"/> values.
+    /// </summary>
+    public static DateOnly Min(params ReadOnlySpan<DateOnly> dates)
+    {
+        if (dates.IsEmpty)
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var min = dates[0];
+        for (var i = 1; i < dates.Length; i++)
+        {
+            if (dates[i] < min)
+                min = dates[i];
+        }
+
+        return min;
+    }
+
+    /// <summary>
+    /// Returns the latest date from the supplied <see cref="DateOnly"/> values.
+    /// </summary>
+    public static DateOnly Max(params ReadOnlySpan<DateOnly> dates)
+    {
+        if (dates.IsEmpty)
+            throw new ArgumentException("At least one date must be supplied.", nameof(dates));
+
+        var max = dates[0];
+        for (var i = 1; i < dates.Length; i++)
+        {
+            if (dates[i] > max)
+                max = dates[i];
+        }
+
+        return max;
+    }
+#endif
 }
