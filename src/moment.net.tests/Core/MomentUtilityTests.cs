@@ -103,4 +103,87 @@ public class MomentUtilityTests
         range.Start.ShouldBe(start);
         range.End.ShouldBe(end);
     }
+
+    [Test]
+    public void Min_ReadOnlySpan_ReturnsEarliestDate()
+    {
+        var earliest = new DateTime(2024, 1, 1);
+        var latest = new DateTime(2024, 3, 1);
+        var middle = new DateTime(2024, 2, 1);
+
+        Moment.Min(latest, earliest, middle).ShouldBe(earliest);
+        Moment.Min(new[] { latest, earliest, middle }.AsSpan()).ShouldBe(earliest);
+    }
+
+    [Test]
+    public void Max_ReadOnlySpan_ReturnsLatestDate()
+    {
+        var earliest = new DateTime(2024, 1, 1);
+        var latest = new DateTime(2024, 3, 1);
+        var middle = new DateTime(2024, 2, 1);
+
+        Moment.Max(earliest, latest, middle).ShouldBe(latest);
+        Moment.Max(new[] { earliest, latest, middle }.AsSpan()).ShouldBe(latest);
+    }
+
+    [Test]
+    public void Min_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Min(ReadOnlySpan<DateTime>.Empty));
+    }
+
+    [Test]
+    public void Max_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Max(ReadOnlySpan<DateTime>.Empty));
+    }
+
+    [Test]
+    public void DateTimeOffsetMinMax_ReadOnlySpan_CompareInstants()
+    {
+        var earlierInstant = new DateTimeOffset(2024, 1, 1, 10, 0, 0, TimeSpan.Zero);
+        var laterInstant = new DateTimeOffset(2024, 1, 1, 12, 0, 0, TimeSpan.FromHours(1));
+
+        Moment.Min(laterInstant, earlierInstant).ShouldBe(earlierInstant);
+        Moment.Max(earlierInstant, laterInstant).ShouldBe(laterInstant);
+        Moment.Min(new[] { laterInstant, earlierInstant }.AsSpan()).ShouldBe(earlierInstant);
+        Moment.Max(new[] { earlierInstant, laterInstant }.AsSpan()).ShouldBe(laterInstant);
+    }
+
+    [Test]
+    public void DateTimeOffsetMin_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Min(ReadOnlySpan<DateTimeOffset>.Empty));
+    }
+
+    [Test]
+    public void DateTimeOffsetMax_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Max(ReadOnlySpan<DateTimeOffset>.Empty));
+    }
+
+    [Test]
+    public void DateOnlyMinMax_ReadOnlySpan_ReturnsEarliestAndLatest()
+    {
+        var earliest = new DateOnly(2024, 1, 1);
+        var latest = new DateOnly(2024, 3, 1);
+        var middle = new DateOnly(2024, 2, 1);
+
+        Moment.Min(latest, earliest, middle).ShouldBe(earliest);
+        Moment.Max(earliest, latest, middle).ShouldBe(latest);
+        Moment.Min(new[] { latest, earliest, middle }.AsSpan()).ShouldBe(earliest);
+        Moment.Max(new[] { earliest, latest, middle }.AsSpan()).ShouldBe(latest);
+    }
+
+    [Test]
+    public void DateOnlyMin_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Min(ReadOnlySpan<DateOnly>.Empty));
+    }
+
+    [Test]
+    public void DateOnlyMax_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Max(ReadOnlySpan<DateOnly>.Empty));
+    }
 }

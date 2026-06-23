@@ -107,9 +107,9 @@ public class PositionalTimeDateTimeOffsetTests
         string dateString, string startString, string endString, bool expected)
     {
         var offset = TimeSpan.FromHours(2);
-        var date  = new DateTimeOffset(DateTime.Parse(dateString), offset);
+        var date = new DateTimeOffset(DateTime.Parse(dateString), offset);
         var start = new DateTimeOffset(DateTime.Parse(startString), offset);
-        var end   = new DateTimeOffset(DateTime.Parse(endString), offset);
+        var end = new DateTimeOffset(DateTime.Parse(endString), offset);
         date.IsBetween(start, end).ShouldBe(expected);
     }
 
@@ -118,9 +118,9 @@ public class PositionalTimeDateTimeOffsetTests
     {
         // date is 2023-10-23T00:00:00+02:00 = 2023-10-22T22:00:00Z
         // start is 2023-10-22T22:00:00Z → same instant, inclusive
-        var date  = new DateTimeOffset(2023, 10, 23, 0, 0, 0, TimeSpan.FromHours(2));
+        var date = new DateTimeOffset(2023, 10, 23, 0, 0, 0, TimeSpan.FromHours(2));
         var start = new DateTimeOffset(2023, 10, 22, 22, 0, 0, TimeSpan.Zero);
-        var end   = new DateTimeOffset(2023, 10, 24, 0, 0, 0, TimeSpan.Zero);
+        var end = new DateTimeOffset(2023, 10, 24, 0, 0, 0, TimeSpan.Zero);
         date.IsBetween(start, end).ShouldBeTrue();
     }
 }
