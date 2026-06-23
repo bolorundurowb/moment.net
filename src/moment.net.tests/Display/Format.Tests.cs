@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
@@ -14,7 +13,7 @@ public class FormatTests
         var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
         var formattedDate = date.Format();
 
-        formattedDate.ShouldBe("2020-10-04T00:00:00+00:00");
+        (formattedDate == "2020-10-04T00:00:00+00:00").VerifyExpression();
     }
 
     [Test]
@@ -23,7 +22,7 @@ public class FormatTests
         var date = new DateTime(2020, 10, 04, 0, 0, 0, DateTimeKind.Utc);
         var formattedDate = date.Format("yyy MMM hh", CultureInfo.InvariantCulture);
 
-        formattedDate.ShouldBe("2020 Oct 12");
+        (formattedDate == "2020 Oct 12").VerifyExpression();
     }
 
     [Test]
@@ -33,6 +32,6 @@ public class FormatTests
         var culture = new CultureInfo("fr-CA", false);
         var formattedDate = date.Format("yyy MMM hh", culture);
 
-        formattedDate.ShouldBe("2020 oct. 12", StringCompareShould.IgnoreCase);
+        formattedDate.Verify().ToBeIgnoringCase("2020 oct. 12");
     }
 }

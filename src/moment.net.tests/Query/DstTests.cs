@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Query;
 
@@ -13,7 +12,7 @@ public class DstTests
         var timeZone = GetNewYorkTimeZone();
         var summer = new DateTime(2024, 7, 1, 12, 0, 0);
 
-        summer.IsDaylightSavingTime(timeZone).ShouldBeTrue();
+        summer.IsDaylightSavingTime(timeZone).Verify().ToBeTrue();
     }
 
     [Test]
@@ -22,76 +21,76 @@ public class DstTests
         var timeZone = GetNewYorkTimeZone();
         var winter = new DateTime(2024, 1, 1, 12, 0, 0);
 
-        winter.IsDaylightSavingTime(timeZone).ShouldBeFalse();
+        winter.IsDaylightSavingTime(timeZone).Verify().ToBeFalse();
     }
 
     [Test]
     public void IsDaylightSavingTime_NoArgs_UsesLocalTimeZone()
     {
         var summer = new DateTime(2024, 7, 1, 12, 0, 0, DateTimeKind.Local);
-        summer.IsDaylightSavingTime().ShouldBe(TimeZoneInfo.Local.IsDaylightSavingTime(summer));
+        (summer.IsDaylightSavingTime() == TimeZoneInfo.Local.IsDaylightSavingTime(summer)).VerifyExpression();
     }
 
     [Test]
-    public void DateTimeOffsetIsDaylightSavingTime_NoArgs_UsesLocalTimeZone()
+    public void IsDaylightSavingTime_WhenDateTimeOffsetAndNoTimeZone_UsesLocalTimeZone()
     {
         var summer = new DateTimeOffset(2024, 7, 1, 12, 0, 0, TimeSpan.Zero);
-        summer.IsDaylightSavingTime().ShouldBe(TimeZoneInfo.Local.IsDaylightSavingTime(summer.DateTime));
+        (summer.IsDaylightSavingTime() == TimeZoneInfo.Local.IsDaylightSavingTime(summer.DateTime)).VerifyExpression();
     }
 
     [Test]
-    public void DateTimeOffsetIsDaylightSavingTime_WithTimeZone_UsesSuppliedTimeZone()
+    public void IsDaylightSavingTime_WhenDateTimeOffsetAndTimeZone_UsesSuppliedTimeZone()
     {
         var timeZone = GetNewYorkTimeZone();
         var summer = new DateTimeOffset(2024, 7, 1, 12, 0, 0, TimeSpan.FromHours(-4));
 
-        summer.IsDaylightSavingTime(timeZone).ShouldBeTrue();
+        summer.IsDaylightSavingTime(timeZone).Verify().ToBeTrue();
     }
 
     [Test]
     public void IsDaylightSavingTime_NullTimeZone_ThrowsArgumentNullException()
     {
         var date = new DateTime(2024, 7, 1, 12, 0, 0);
-        Should.Throw<ArgumentNullException>(() => date.IsDaylightSavingTime(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
     }
 
     [Test]
-    public void DateTimeOffsetIsDaylightSavingTime_NullTimeZone_ThrowsArgumentNullException()
+    public void IsDaylightSavingTime_WhenDateTimeOffsetAndNullTimeZone_ThrowsArgumentNullException()
     {
         var date = new DateTimeOffset(2024, 7, 1, 12, 0, 0, TimeSpan.Zero);
-        Should.Throw<ArgumentNullException>(() => date.IsDaylightSavingTime(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
     }
 
     [Test]
-    public void DateOnlyIsDaylightSavingTime_WithTimeZone_ReturnsTrueForSummerDate()
+    public void IsDaylightSavingTime_WhenDateOnlyAndSummer_ReturnsTrue()
     {
         var timeZone = GetNewYorkTimeZone();
         var summer = new DateOnly(2024, 7, 1);
 
-        summer.IsDaylightSavingTime(timeZone).ShouldBeTrue();
+        summer.IsDaylightSavingTime(timeZone).Verify().ToBeTrue();
     }
 
     [Test]
-    public void DateOnlyIsDaylightSavingTime_WithTimeZone_ReturnsFalseForWinterDate()
+    public void IsDaylightSavingTime_WhenDateOnlyAndWinter_ReturnsFalse()
     {
         var timeZone = GetNewYorkTimeZone();
         var winter = new DateOnly(2024, 1, 1);
 
-        winter.IsDaylightSavingTime(timeZone).ShouldBeFalse();
+        winter.IsDaylightSavingTime(timeZone).Verify().ToBeFalse();
     }
 
     [Test]
-    public void DateOnlyIsDaylightSavingTime_NullTimeZone_ThrowsArgumentNullException()
+    public void IsDaylightSavingTime_WhenDateOnlyAndNullTimeZone_ThrowsArgumentNullException()
     {
         var date = new DateOnly(2024, 7, 1);
-        Should.Throw<ArgumentNullException>(() => date.IsDaylightSavingTime(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
     }
 
     [Test]
-    public void DateOnlyIsDaylightSavingTime_NoArgs_UsesLocalTimeZone()
+    public void IsDaylightSavingTime_WhenDateOnlyAndNoTimeZone_UsesLocalTimeZone()
     {
         var summer = new DateOnly(2024, 7, 1);
-        summer.IsDaylightSavingTime().ShouldBe(TimeZoneInfo.Local.IsDaylightSavingTime(summer.ToDateTime(default)));
+        (summer.IsDaylightSavingTime() == TimeZoneInfo.Local.IsDaylightSavingTime(summer.ToDateTime(default))).VerifyExpression();
     }
 
     private static TimeZoneInfo GetNewYorkTimeZone()

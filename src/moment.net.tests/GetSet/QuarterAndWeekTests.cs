@@ -1,9 +1,7 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using MomentNet.Manipulate;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.GetSet;
 
@@ -13,10 +11,10 @@ public class QuarterAndWeekTests
     [Test]
     public void Quarter_ReturnsCalendarQuarter()
     {
-        new DateTime(2024, 1, 15).Quarter().ShouldBe(1);
-        new DateTime(2024, 5, 15).Quarter().ShouldBe(2);
-        new DateTime(2024, 8, 15).Quarter().ShouldBe(3);
-        new DateTime(2024, 12, 15).Quarter().ShouldBe(4);
+        (new DateTime(2024, 1, 15).Quarter() == 1).VerifyExpression();
+        (new DateTime(2024, 5, 15).Quarter() == 2).VerifyExpression();
+        (new DateTime(2024, 8, 15).Quarter() == 3).VerifyExpression();
+        (new DateTime(2024, 12, 15).Quarter() == 4).VerifyExpression();
     }
 
     [Test]
@@ -26,8 +24,8 @@ public class QuarterAndWeekTests
 
         var result = date.StartOf(DateTimeAnchor.Quarter);
 
-        result.ShouldBe(new DateTime(2024, 4, 1, 0, 0, 0, DateTimeKind.Utc));
-        result.Kind.ShouldBe(DateTimeKind.Utc);
+        (result == new DateTime(2024, 4, 1, 0, 0, 0, DateTimeKind.Utc)).VerifyExpression();
+        (result.Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
@@ -35,8 +33,7 @@ public class QuarterAndWeekTests
     {
         var date = new DateTime(2024, 5, 15, 13, 45, 30, DateTimeKind.Utc);
 
-        date.EndOf(DateTimeAnchor.Quarter)
-            .ShouldBe(new DateTime(2024, 6, 30, 23, 59, 59, 999, DateTimeKind.Utc));
+        (date.EndOf(DateTimeAnchor.Quarter) == new DateTime(2024, 6, 30, 23, 59, 59, 999, DateTimeKind.Utc)).VerifyExpression();
     }
 
     [Test]
@@ -45,7 +42,7 @@ public class QuarterAndWeekTests
         var later = new DateTime(2024, 7, 1);
         var earlier = new DateTime(2024, 1, 1);
 
-        later.DiffInQuarters(earlier).ShouldBe(2.0);
+        (later.DiffInQuarters(earlier) == 2.0).VerifyExpression();
     }
 
     [Test]
@@ -53,8 +50,8 @@ public class QuarterAndWeekTests
     {
         var date = new DateTime(2021, 1, 1);
 
-        date.IsoWeek().ShouldBe(53);
-        date.IsoWeekYear().ShouldBe(2020);
+        (date.IsoWeek() == 53).VerifyExpression();
+        (date.IsoWeekYear() == 2020).VerifyExpression();
     }
 
     [Test]
@@ -62,8 +59,7 @@ public class QuarterAndWeekTests
     {
         var date = new DateTime(2024, 1, 3, 10, 30, 0, DateTimeKind.Utc);
 
-        date.StartOf(DateTimeAnchor.IsoWeek)
-            .ShouldBe(new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+        (date.StartOf(DateTimeAnchor.IsoWeek) == new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc)).VerifyExpression();
     }
 
     [Test]
@@ -71,8 +67,7 @@ public class QuarterAndWeekTests
     {
         var date = new DateTime(2024, 1, 3, 10, 30, 0, DateTimeKind.Utc);
 
-        date.EndOf(DateTimeAnchor.IsoWeek)
-            .ShouldBe(new DateTime(2024, 1, 7, 23, 59, 59, 999, DateTimeKind.Utc));
+        (date.EndOf(DateTimeAnchor.IsoWeek) == new DateTime(2024, 1, 7, 23, 59, 59, 999, DateTimeKind.Utc)).VerifyExpression();
     }
 
     [Test]
@@ -80,7 +75,7 @@ public class QuarterAndWeekTests
     {
         var date = new DateTime(2024, 1, 7);
 
-        date.Week(CultureInfo.GetCultureInfo("en-US")).ShouldBe(2);
+        (date.Week(CultureInfo.GetCultureInfo("en-US")) == 2).VerifyExpression();
     }
 
     [Test]
@@ -88,21 +83,20 @@ public class QuarterAndWeekTests
     {
         var date = new DateTimeOffset(2024, 5, 15, 13, 45, 30, TimeSpan.FromHours(2));
 
-        date.Quarter().ShouldBe(2);
-        date.IsoWeek().ShouldBe(20);
-        date.StartOf(DateTimeAnchor.Quarter)
-            .ShouldBe(new DateTimeOffset(2024, 4, 1, 0, 0, 0, TimeSpan.FromHours(2)));
+        (date.Quarter() == 2).VerifyExpression();
+        (date.IsoWeek() == 20).VerifyExpression();
+        (date.StartOf(DateTimeAnchor.Quarter) == new DateTimeOffset(2024, 4, 1, 0, 0, 0, TimeSpan.FromHours(2))).VerifyExpression();
     }
 
     [Test]
-    public void DateTime_Week_CurrentCulture_ReturnsCorrectWeek()
+    public void Week_WhenDateTimeAndCurrentCulture_ReturnsCorrectWeek()
     {
         var originalCulture = Thread.CurrentThread.CurrentCulture;
         try
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
-            var date = new DateTime(2024, 1, 7); // Sunday
-            date.Week().ShouldBe(2);
+            var date = new DateTime(2024, 1, 7);
+            (date.Week() == 2).VerifyExpression();
         }
         finally
         {
@@ -111,21 +105,21 @@ public class QuarterAndWeekTests
     }
 
     [Test]
-    public void DateTime_Week_FrenchCulture_ReturnsCorrectWeek()
+    public void Week_WhenDateTimeAndFrenchCulture_ReturnsCorrectWeek()
     {
-        var date = new DateTime(2024, 1, 7); // Sunday
-        date.Week(CultureInfo.GetCultureInfo("fr-FR")).ShouldBe(1);
+        var date = new DateTime(2024, 1, 7);
+        (date.Week(CultureInfo.GetCultureInfo("fr-FR")) == 1).VerifyExpression();
     }
 
     [Test]
-    public void DateTimeOffset_Week_CurrentCulture_ReturnsCorrectWeek()
+    public void Week_WhenDateTimeOffsetAndCurrentCulture_ReturnsCorrectWeek()
     {
         var originalCulture = Thread.CurrentThread.CurrentCulture;
         try
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             var date = new DateTimeOffset(2024, 1, 7, 0, 0, 0, TimeSpan.Zero);
-            date.Week().ShouldBe(2);
+            (date.Week() == 2).VerifyExpression();
         }
         finally
         {
@@ -134,16 +128,16 @@ public class QuarterAndWeekTests
     }
 
     [Test]
-    public void DateTimeOffset_Week_FrenchCulture_ReturnsCorrectWeek()
+    public void Week_WhenDateTimeOffsetAndFrenchCulture_ReturnsCorrectWeek()
     {
         var date = new DateTimeOffset(2024, 1, 7, 0, 0, 0, TimeSpan.Zero);
-        date.Week(CultureInfo.GetCultureInfo("fr-FR")).ShouldBe(1);
+        (date.Week(CultureInfo.GetCultureInfo("fr-FR")) == 1).VerifyExpression();
     }
 
     [Test]
-    public void DateTimeOffset_IsoWeekYear_ReturnsCorrectYear()
+    public void IsoWeekYear_WhenDateTimeOffset_ReturnsCorrectYear()
     {
         var date = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero);
-        date.IsoWeekYear().ShouldBe(2020);
+        (date.IsoWeekYear() == 2020).VerifyExpression();
     }
 }

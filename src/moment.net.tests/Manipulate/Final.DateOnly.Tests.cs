@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
@@ -14,37 +13,37 @@ public class FinalDateOnlyTests
     [Test]
     public void Final_InMonth_ReturnsLastMondayOfMonth()
     {
-        May2008.Final().Monday().InMonth().ShouldBe(new DateOnly(2008, 5, 26));
+        (May2008.Final().Monday().InMonth() == new DateOnly(2008, 5, 26)).VerifyExpression();
     }
 
     [Test]
     public void Final_InMonth_ReturnsLastSundayOfMonth()
     {
-        May2008.Final().Sunday().InMonth().ShouldBe(new DateOnly(2008, 5, 25));
+        (May2008.Final().Sunday().InMonth() == new DateOnly(2008, 5, 25)).VerifyExpression();
     }
 
     [Test]
     public void Final_InMonth_LeapYearFebruary_ReturnsLastFriday()
     {
-        Feb2008.Final().Friday().InMonth().ShouldBe(new DateOnly(2008, 2, 29));
+        (Feb2008.Final().Friday().InMonth() == new DateOnly(2008, 2, 29)).VerifyExpression();
     }
 
     [Test]
     public void Final_InMonth_NonLeapYearFebruary_ReturnsLastSaturday()
     {
-        Feb2009.Final().Saturday().InMonth().ShouldBe(new DateOnly(2009, 2, 28));
+        (Feb2009.Final().Saturday().InMonth() == new DateOnly(2009, 2, 28)).VerifyExpression();
     }
 
     [Test]
     public void Final_InYear_ReturnsLastMondayOfYear()
     {
-        May2008.Final().Monday().InYear().ShouldBe(new DateOnly(2008, 12, 29));
+        (May2008.Final().Monday().InYear() == new DateOnly(2008, 12, 29)).VerifyExpression();
     }
 
     [Test]
     public void Final_InYear_ReturnsLastWednesdayOfYear()
     {
-        May2008.Final().Wednesday().InYear().ShouldBe(new DateOnly(2008, 12, 31));
+        (May2008.Final().Wednesday().InYear() == new DateOnly(2008, 12, 31)).VerifyExpression();
     }
 
     [TestCase(DayOfWeek.Monday)]
@@ -68,6 +67,6 @@ public class FinalDateOnlyTests
             DayOfWeek.Sunday => finalDays.Sunday().InMonth(),
             _ => throw new ArgumentOutOfRangeException()
         };
-        result.DayOfWeek.ShouldBe(expected);
+        (result.DayOfWeek == expected).VerifyExpression();
     }
 }

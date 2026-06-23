@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
@@ -14,84 +13,84 @@ public class TimeFromTests
     public void FromNow_WithinFewSeconds_ReturnsFewSecondsAgo()
     {
         var aFewSecondsAgo = DateTime.UtcNow.AddSeconds(-20);
-        aFewSecondsAgo.FromNow(Invariant).ShouldBe("few seconds ago");
+        (aFewSecondsAgo.FromNow(Invariant) == "few seconds ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_MoreThan45Seconds_ReturnsOneMinuteAgo()
     {
         var largeSecondsAgo = DateTime.UtcNow.AddSeconds(-50);
-        largeSecondsAgo.FromNow(Invariant).ShouldBe("one minute ago");
+        (largeSecondsAgo.FromNow(Invariant) == "one minute ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_ExactlyOneMinute_ReturnsOneMinuteAgo()
     {
         var afewMinutesAgo = DateTime.Now.AddMinutes(-1).AddSeconds(-1);
-        afewMinutesAgo.FromNow(Invariant).ShouldBe("one minute ago");
+        (afewMinutesAgo.FromNow(Invariant) == "one minute ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_MultipleMinutes_ReturnsMinutesAgo()
     {
         var minutesAgo = DateTime.Now.AddMinutes(-15);
-        minutesAgo.FromNow(Invariant).ShouldBe("15 minutes ago");
+        (minutesAgo.FromNow(Invariant) == "15 minutes ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_NearOneHour_ReturnsOneHourAgo()
     {
         var dateTime = DateTime.UtcNow.AddMinutes(-65);
-        dateTime.FromNow(Invariant).ShouldBe("one hour ago");
+        (dateTime.FromNow(Invariant) == "one hour ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_MultipleHours_ReturnsHoursAgo()
     {
         var dateTime = DateTime.UtcNow.AddHours(-20);
-        dateTime.FromNow(Invariant).ShouldBe("20 hours ago");
+        (dateTime.FromNow(Invariant) == "20 hours ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_NearOneDay_ReturnsOneDayAgo()
     {
         var dateTime = DateTime.UtcNow.AddHours(-25);
-        dateTime.FromNow(Invariant).ShouldBe("one day ago");
+        (dateTime.FromNow(Invariant) == "one day ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_MultipleDays_ReturnsDaysAgo()
     {
         var dateTime = DateTime.UtcNow.AddDays(-4);
-        dateTime.FromNow(Invariant).ShouldBe("4 days ago");
+        (dateTime.FromNow(Invariant) == "4 days ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_NearOneMonth_ReturnsOneMonthAgo()
     {
         var dateTime = DateTime.UtcNow.AddDays(-27);
-        dateTime.FromNow(Invariant).ShouldBe("one month ago");
+        (dateTime.FromNow(Invariant) == "one month ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_MultipleMonths_ReturnsMonthsAgo()
     {
         var dateTime = DateTime.UtcNow.AddDays(-60);
-        dateTime.FromNow(Invariant).ShouldBe("2 months ago");
+        (dateTime.FromNow(Invariant) == "2 months ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_NearOneYear_ReturnsOneYearAgo()
     {
         var dateTime = DateTime.UtcNow.AddDays(-360);
-        dateTime.FromNow(Invariant).ShouldBe("one year ago");
+        (dateTime.FromNow(Invariant) == "one year ago").VerifyExpression();
     }
 
     [Test]
     public void FromNow_MultipleYears_ReturnsYearsAgo()
     {
         var dateTime = DateTime.UtcNow.AddDays(-570);
-        dateTime.FromNow(Invariant).ShouldBe("2 years ago");
+        (dateTime.FromNow(Invariant) == "2 years ago").VerifyExpression();
     }
 
     [Test]
@@ -100,7 +99,7 @@ public class TimeFromTests
         var twoThousandAndTwelve = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         var twoThousandAndEighteen = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        twoThousandAndTwelve.From(twoThousandAndEighteen, Invariant).ShouldBe("6 years ago");
+        (twoThousandAndTwelve.From(twoThousandAndEighteen, Invariant) == "6 years ago").VerifyExpression();
     }
 
     [Test]
@@ -109,7 +108,7 @@ public class TimeFromTests
         var utcNow = DateTime.UtcNow.AddMinutes(-10);
         var now = DateTime.Now.AddMinutes(-10);
 
-        utcNow.FromNow(Invariant).ShouldBe(now.FromNow(Invariant));
+        (utcNow.FromNow(Invariant) == now.FromNow(Invariant)).VerifyExpression();
     }
 
     [TestCase("es", "algunos segundos atrás")]
@@ -120,6 +119,6 @@ public class TimeFromTests
     public void FromNow_LocalisedCulture_ReturnsLocalisedString(string cultureName, string expected)
     {
         var aFewSecondsAgo = DateTime.UtcNow.AddSeconds(-20);
-        aFewSecondsAgo.FromNow(CultureInfo.GetCultureInfo(cultureName)).ShouldBe(expected);
+        (aFewSecondsAgo.FromNow(CultureInfo.GetCultureInfo(cultureName)) == expected).VerifyExpression();
     }
 }

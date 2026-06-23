@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
@@ -14,7 +13,7 @@ public class DateTimeDiffTests
     {
         var date = DateTime.Parse(dateString);
         var otherDate = DateTime.Parse(otherDateString);
-        date.DiffInDays(otherDate).ShouldBe(expected);
+        (date.DiffInDays(otherDate) == expected).VerifyExpression();
     }
 
     [TestCase("2023-10-23", "2023-11-23", -1.0)]
@@ -25,7 +24,7 @@ public class DateTimeDiffTests
     {
         var date = DateTime.Parse(dateString);
         var otherDate = DateTime.Parse(otherDateString);
-        date.DiffInMonths(otherDate).ShouldBe(expected, 1e-10);
+        date.DiffInMonths(otherDate).Verify().ToBeApproximately(expected, 1e-10);
     }
 
     [TestCase("2023-10-23", "2024-10-23", -1.0)]
@@ -36,7 +35,7 @@ public class DateTimeDiffTests
     {
         var date = DateTime.Parse(dateString);
         var otherDate = DateTime.Parse(otherDateString);
-        date.DiffInYears(otherDate).ShouldBe(expected, 1e-10);
+        date.DiffInYears(otherDate).Verify().ToBeApproximately(expected, 1e-10);
     }
 
     [TestCase("2024-01-01", "2024-07-01", -2.0)]
@@ -46,6 +45,6 @@ public class DateTimeDiffTests
     {
         var date = DateTime.Parse(dateString);
         var otherDate = DateTime.Parse(otherDateString);
-        date.DiffInQuarters(otherDate).ShouldBe(expected, 1e-10);
+        date.DiffInQuarters(otherDate).Verify().ToBeApproximately(expected, 1e-10);
     }
 }

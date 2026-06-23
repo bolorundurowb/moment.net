@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Query;
 
@@ -15,7 +14,7 @@ public class PositionalTimeTests
         var date = DateTime.Parse($"{year}-01-02");
         var result = date.IsLeapYear();
 
-        result.ShouldBeFalse();
+        result.Verify().ToBeFalse();
     }
 
     [TestCase(1992)]
@@ -25,7 +24,7 @@ public class PositionalTimeTests
         var date = DateTime.Parse($"{year}-01-02");
         var result = date.IsLeapYear();
 
-        result.ShouldBeTrue();
+        result.Verify().ToBeTrue();
     }
 
     [TestCase("1972-01-01", "1972-01-01")]
@@ -37,7 +36,7 @@ public class PositionalTimeTests
         var comparison = DateTime.Parse(second);
         var result = date.IsSame(comparison);
 
-        result.ShouldBeTrue();
+        result.Verify().ToBeTrue();
     }
 
     [TestCase("1972-01-01", "1972-01-02")]
@@ -49,7 +48,7 @@ public class PositionalTimeTests
         var comparison = DateTime.Parse(second);
         var result = date.IsSame(comparison);
 
-        result.ShouldBeFalse();
+        result.Verify().ToBeFalse();
     }
 
     [TestCase(1)]
@@ -62,7 +61,7 @@ public class PositionalTimeTests
         var comparison = date - TimeSpan.FromSeconds(timeToAdd);
         var result = comparison.IsBefore(date);
 
-        result.ShouldBeTrue();
+        result.Verify().ToBeTrue();
     }
 
     [TestCase(0)]
@@ -76,7 +75,7 @@ public class PositionalTimeTests
         var comparison = date - TimeSpan.FromSeconds(timeToAdd);
         var result = comparison.IsSameOrBefore(date);
 
-        result.ShouldBeTrue();
+        result.Verify().ToBeTrue();
     }
 
     [TestCase(1)]
@@ -89,7 +88,7 @@ public class PositionalTimeTests
         var comparison = date + TimeSpan.FromSeconds(timeToAdd);
         var result = comparison.IsAfter(date);
 
-        result.ShouldBeTrue();
+        result.Verify().ToBeTrue();
     }
 
     [TestCase(0)]
@@ -103,7 +102,7 @@ public class PositionalTimeTests
         var comparison = date + TimeSpan.FromSeconds(timeToAdd);
         var result = comparison.IsSameOrAfter(date);
 
-        result.ShouldBeTrue();
+        result.Verify().ToBeTrue();
     }
 
     [TestCase("2023-10-23", "2023-10-20", "2023-10-25", true)]
@@ -116,6 +115,6 @@ public class PositionalTimeTests
         var date = DateTime.Parse(dateString);
         var start = DateTime.Parse(startString);
         var end = DateTime.Parse(endString);
-        date.IsBetween(start, end).ShouldBe(expected);
+        (date.IsBetween(start, end) == expected).VerifyExpression();
     }
 }

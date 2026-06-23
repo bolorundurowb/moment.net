@@ -1,9 +1,7 @@
 using System;
 using System.Globalization;
 using System.Threading;
-using MomentNet.Manipulate;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Manipulate;
 
@@ -23,55 +21,55 @@ public class EndOfTests : IDisposable
     public void EndOf_Minute_SetsSecondsTo59()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.EndOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:30:59");
-        date.EndOf(DateTimeAnchor.Minute).Kind.ShouldBe(DateTimeKind.Utc);
+        (date.EndOf(DateTimeAnchor.Minute).ToString("dd/MM/yyyy HH:mm:ss") == "01/05/2008 08:30:59").VerifyExpression();
+        (date.EndOf(DateTimeAnchor.Minute).Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void EndOf_Hour_SetsMinutesAndSecondsTo59()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.EndOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 08:59:59");
-        date.EndOf(DateTimeAnchor.Hour).Kind.ShouldBe(DateTimeKind.Utc);
+        (date.EndOf(DateTimeAnchor.Hour).ToString("dd/MM/yyyy HH:mm:ss") == "01/05/2008 08:59:59").VerifyExpression();
+        (date.EndOf(DateTimeAnchor.Hour).Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void EndOf_Day_ReturnsFinalSecondOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.EndOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/05/2008 23:59:59");
-        date.EndOf(DateTimeAnchor.Day).Kind.ShouldBe(DateTimeKind.Utc);
+        (date.EndOf(DateTimeAnchor.Day).ToString("dd/MM/yyyy HH:mm:ss") == "01/05/2008 23:59:59").VerifyExpression();
+        (date.EndOf(DateTimeAnchor.Day).Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void EndOf_Week_ReturnsSaturdayAtEndOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.EndOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 23:59:59");
-        date.EndOf(DateTimeAnchor.Week).Kind.ShouldBe(DateTimeKind.Utc);
+        (date.EndOf(DateTimeAnchor.Week).ToString("dd/MM/yyyy HH:mm:ss") == "03/05/2008 23:59:59").VerifyExpression();
+        (date.EndOf(DateTimeAnchor.Week).Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void EndOf_Month_ReturnsLastDayAtEndOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.EndOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/05/2008 23:59:59");
-        date.EndOf(DateTimeAnchor.Month).Kind.ShouldBe(DateTimeKind.Utc);
+        (date.EndOf(DateTimeAnchor.Month).ToString("dd/MM/yyyy HH:mm:ss") == "31/05/2008 23:59:59").VerifyExpression();
+        (date.EndOf(DateTimeAnchor.Month).Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void EndOf_Year_ReturnsDecember31AtEndOfDay()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("31/12/2008 23:59:59");
-        date.EndOf(DateTimeAnchor.Year).Kind.ShouldBe(DateTimeKind.Utc);
+        (date.EndOf(DateTimeAnchor.Year).ToString("dd/MM/yyyy HH:mm:ss") == "31/12/2008 23:59:59").VerifyExpression();
+        (date.EndOf(DateTimeAnchor.Year).Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void EndOf_InvalidAnchor_ThrowsArgumentException()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        Should.Throw<ArgumentException>(() => date.EndOf((DateTimeAnchor)999));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { date.EndOf((DateTimeAnchor)999); });
     }
 
     public void Dispose()

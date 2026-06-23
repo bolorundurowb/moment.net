@@ -1,7 +1,5 @@
 using System;
-using MomentNet.Plugins.Range;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Plugins.Range;
 
@@ -13,7 +11,7 @@ public class DateRangeTests
     {
         var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
 
-        range.Contains(new DateTime(2024, 1, 15)).ShouldBeTrue();
+        range.Contains(new DateTime(2024, 1, 15)).Verify().ToBeTrue();
     }
 
     [Test]
@@ -21,7 +19,7 @@ public class DateRangeTests
     {
         var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
 
-        range.Contains(new DateTime(2024, 1, 1), inclusive: false).ShouldBeFalse();
+        range.Contains(new DateTime(2024, 1, 1), inclusive: false).Verify().ToBeFalse();
     }
 
     [Test]
@@ -30,7 +28,7 @@ public class DateRangeTests
         var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
         var contained = Moment.Range(new DateTime(2024, 1, 10), new DateTime(2024, 1, 20));
 
-        range.Contains(contained).ShouldBeTrue();
+        range.Contains(contained).Verify().ToBeTrue();
     }
 
     [Test]
@@ -39,7 +37,7 @@ public class DateRangeTests
         var first = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 15));
         var second = Moment.Range(new DateTime(2024, 1, 10), new DateTime(2024, 1, 31));
 
-        first.Overlaps(second).ShouldBeTrue();
+        first.Overlaps(second).Verify().ToBeTrue();
     }
 
     [Test]
@@ -50,9 +48,9 @@ public class DateRangeTests
 
         var intersection = first.Intersect(second);
 
-        intersection.ShouldNotBeNull();
-        intersection.Start.ShouldBe(new DateTime(2024, 1, 10));
-        intersection.End.ShouldBe(new DateTime(2024, 1, 15));
+        intersection.Verify().NotToBeNull();
+        (intersection.Start == new DateTime(2024, 1, 10)).VerifyExpression();
+        (intersection.End == new DateTime(2024, 1, 15)).VerifyExpression();
     }
 
     [Test]
@@ -61,92 +59,92 @@ public class DateRangeTests
         var first = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 15));
         var second = Moment.Range(new DateTime(2024, 2, 1), new DateTime(2024, 2, 15));
 
-        first.Intersect(second).ShouldBeNull();
+        first.Intersect(second).Verify().ToBeNull();
     }
 
     [Test]
     public void Constructor_WhenStartIsAfterEnd_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => new MomentRange(new DateTime(2024, 2, 1), new DateTime(2024, 1, 1)));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { new MomentRange(new DateTime(2024, 2, 1), new DateTime(2024, 1, 1)); });
     }
 
     [Test]
-    public void ConstructorOffset_WhenStartIsAfterEnd_ThrowsArgumentException()
+    public void Constructor_WhenDateTimeOffsetStartAfterEnd_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => new MomentRangeOffset(
+        OmniAssert.Assert.Throws<ArgumentException>(() => { new MomentRangeOffset(
             new DateTimeOffset(2024, 2, 1, 0, 0, 0, TimeSpan.Zero),
-            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)));
+            new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)); });
     }
 
     [Test]
     public void Duration_ReturnsCorrectTimeSpan()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 2));
-        range.Duration.ShouldBe(TimeSpan.FromDays(1));
+        (range.Duration == TimeSpan.FromDays(1)).VerifyExpression();
     }
 
     [Test]
-    public void DurationOffset_ReturnsCorrectTimeSpan()
+    public void Duration_WhenDateTimeOffset_ReturnsCorrectTimeSpan()
     {
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 1, 12, 0, 0, TimeSpan.Zero));
-        range.Duration.ShouldBe(TimeSpan.FromHours(12));
+        (range.Duration == TimeSpan.FromHours(12)).VerifyExpression();
     }
 
     [Test]
     public void Contains_OtherRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        Should.Throw<ArgumentNullException>(() => range.Contains((MomentRange)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Contains((MomentRange)null!); });
     }
 
     [Test]
-    public void ContainsOffset_OtherRangeNull_ThrowsArgumentNullException()
+    public void Contains_WhenDateTimeOffsetRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
-        Should.Throw<ArgumentNullException>(() => range.Contains((MomentRangeOffset)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Contains((MomentRangeOffset)null!); });
     }
 
     [Test]
     public void Overlaps_OtherRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        Should.Throw<ArgumentNullException>(() => range.Overlaps(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
     }
 
     [Test]
-    public void OverlapsOffset_OtherRangeNull_ThrowsArgumentNullException()
+    public void Overlaps_WhenDateTimeOffsetRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
-        Should.Throw<ArgumentNullException>(() => range.Overlaps(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
     }
 
     [Test]
     public void Intersect_OtherRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        Should.Throw<ArgumentNullException>(() => range.Intersect(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
     }
 
     [Test]
-    public void IntersectOffset_OtherRangeNull_ThrowsArgumentNullException()
+    public void Intersect_WhenDateTimeOffsetRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
-        Should.Throw<ArgumentNullException>(() => range.Intersect(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
     }
 
     [Test]
     public void Contains_Exclusive_ReturnsFalseForEndBoundary()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        range.Contains(new DateTime(2024, 1, 31), inclusive: false).ShouldBeFalse();
+        range.Contains(new DateTime(2024, 1, 31), inclusive: false).Verify().ToBeFalse();
     }
 
     [Test]
@@ -154,11 +152,11 @@ public class DateRangeTests
     {
         var first = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 15));
         var second = new MomentRange(new DateTime(2024, 1, 15), new DateTime(2024, 1, 31));
-        first.Overlaps(second, inclusive: false).ShouldBeFalse();
+        first.Overlaps(second, inclusive: false).Verify().ToBeFalse();
     }
 
     [Test]
-    public void DateTimeOffsetRange_IntersectsByInstant()
+    public void Intersect_WhenDateTimeOffset_ComparesByInstant()
     {
         var first = Moment.Range(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
@@ -169,89 +167,89 @@ public class DateRangeTests
 
         var intersection = first.Intersect(second);
 
-        intersection.ShouldNotBeNull();
-        intersection.Start.ShouldBe(new DateTimeOffset(2024, 1, 5, 2, 0, 0, TimeSpan.FromHours(2)));
-        intersection.End.ShouldBe(new DateTimeOffset(2024, 1, 10, 0, 0, 0, TimeSpan.Zero));
+        intersection.Verify().NotToBeNull();
+        (intersection.Start == new DateTimeOffset(2024, 1, 5, 2, 0, 0, TimeSpan.FromHours(2))).VerifyExpression();
+        (intersection.End == new DateTimeOffset(2024, 1, 10, 0, 0, 0, TimeSpan.Zero)).VerifyExpression();
     }
 
     [Test]
-    public void DateOnlyRange_Contains_ReturnsTrueForDateInsideRange()
+    public void Contains_WhenDateOnly_ReturnsTrueForDateInsideRange()
     {
         var range = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
 
-        range.Contains(new DateOnly(2024, 1, 15)).ShouldBeTrue();
+        range.Contains(new DateOnly(2024, 1, 15)).Verify().ToBeTrue();
     }
 
     [Test]
-    public void DateOnlyRange_Contains_WhenExclusive_ReturnsFalseForBoundaryDate()
+    public void Contains_WhenDateOnlyAndExclusive_ReturnsFalseForBoundaryDate()
     {
         var range = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
 
-        range.Contains(new DateOnly(2024, 1, 1), inclusive: false).ShouldBeFalse();
+        range.Contains(new DateOnly(2024, 1, 1), inclusive: false).Verify().ToBeFalse();
     }
 
     [Test]
-    public void DateOnlyRange_Overlaps_ReturnsTrueForPartiallyOverlappingRanges()
+    public void Overlaps_WhenDateOnly_ReturnsTrueForPartiallyOverlappingRanges()
     {
         var first = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 15));
         var second = Moment.Range(new DateOnly(2024, 1, 10), new DateOnly(2024, 1, 31));
 
-        first.Overlaps(second).ShouldBeTrue();
+        first.Overlaps(second).Verify().ToBeTrue();
     }
 
     [Test]
-    public void DateOnlyRange_Intersect_ReturnsOverlappingRange()
+    public void Intersect_WhenDateOnly_ReturnsOverlappingRange()
     {
         var first = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 15));
         var second = Moment.Range(new DateOnly(2024, 1, 10), new DateOnly(2024, 1, 31));
 
         var intersection = first.Intersect(second);
 
-        intersection.ShouldNotBeNull();
-        intersection!.Start.ShouldBe(new DateOnly(2024, 1, 10));
-        intersection.End.ShouldBe(new DateOnly(2024, 1, 15));
+        intersection.Verify().NotToBeNull();
+        (intersection!.Start == new DateOnly(2024, 1, 10)).VerifyExpression();
+        (intersection.End == new DateOnly(2024, 1, 15)).VerifyExpression();
     }
 
     [Test]
-    public void DateOnlyRange_Constructor_WhenStartIsAfterEnd_ThrowsArgumentException()
+    public void Constructor_WhenDateOnlyStartAfterEnd_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => new MomentDateOnlyRange(new DateOnly(2024, 2, 1), new DateOnly(2024, 1, 1)));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { new MomentDateOnlyRange(new DateOnly(2024, 2, 1), new DateOnly(2024, 1, 1)); });
     }
 
     [Test]
-    public void DateOnlyRange_Duration_ReturnsCorrectTimeSpan()
+    public void Duration_WhenDateOnly_ReturnsCorrectTimeSpan()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 2));
-        range.Duration.ShouldBe(TimeSpan.FromDays(1));
+        (range.Duration == TimeSpan.FromDays(1)).VerifyExpression();
     }
 
     [Test]
-    public void DateOnlyRange_Contains_OtherRangeNull_ThrowsArgumentNullException()
+    public void Contains_WhenDateOnlyRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
-        Should.Throw<ArgumentNullException>(() => range.Contains((MomentDateOnlyRange)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Contains((MomentDateOnlyRange)null!); });
     }
 
     [Test]
-    public void DateOnlyRange_Contains_ExclusiveRange_ReturnsFalseWhenNotFullyInside()
+    public void Contains_WhenDateOnlyAndExclusiveRange_ReturnsFalseWhenNotFullyInside()
     {
         var outer = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
         var inner = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 15));
 
-        outer.Contains(inner, inclusive: false).ShouldBeFalse();
+        outer.Contains(inner, inclusive: false).Verify().ToBeFalse();
     }
 
     [Test]
-    public void DateOnlyRange_Overlaps_NullOther_ThrowsArgumentNullException()
+    public void Overlaps_WhenDateOnlyRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
-        Should.Throw<ArgumentNullException>(() => range.Overlaps(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
     }
 
     [Test]
-    public void DateOnlyRange_Intersect_NullOther_ThrowsArgumentNullException()
+    public void Intersect_WhenDateOnlyRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
-        Should.Throw<ArgumentNullException>(() => range.Intersect(null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
     }
 }

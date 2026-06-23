@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Core;
 
@@ -14,7 +13,7 @@ public class MomentUtilityTests
         var earliest = new DateTime(2024, 1, 1);
         var latest = new DateTime(2024, 3, 1);
 
-        Moment.Min(latest, earliest, new DateTime(2024, 2, 1)).ShouldBe(earliest);
+        (Moment.Min(latest, earliest, new DateTime(2024, 2, 1)) == earliest).VerifyExpression();
     }
 
     [Test]
@@ -23,136 +22,136 @@ public class MomentUtilityTests
         var earliest = new DateTime(2024, 1, 1);
         var latest = new DateTime(2024, 3, 1);
 
-        Moment.Max(earliest, latest, new DateTime(2024, 2, 1)).ShouldBe(latest);
+        (Moment.Max(earliest, latest, new DateTime(2024, 2, 1)) == latest).VerifyExpression();
     }
 
     [Test]
     public void Min_WithNoDates_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateTime>()));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateTime>()); });
     }
 
     [Test]
     public void Max_WithNoDates_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateTime>()));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateTime>()); });
     }
 
     [Test]
     public void Min_NullDates_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentNullException>(() => Moment.Min((IEnumerable<DateTime>)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateTime>)null!); });
     }
 
     [Test]
     public void Max_NullDates_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentNullException>(() => Moment.Max((IEnumerable<DateTime>)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateTime>)null!); });
     }
 
     [Test]
-    public void DateTimeOffsetMinMax_CompareInstants()
+    public void MinMax_WhenDateTimeOffset_ComparesInstants()
     {
         var earlierInstant = new DateTimeOffset(2024, 1, 1, 10, 0, 0, TimeSpan.Zero);
         var laterInstant = new DateTimeOffset(2024, 1, 1, 12, 0, 0, TimeSpan.FromHours(1));
 
-        Moment.Min(laterInstant, earlierInstant).ShouldBe(earlierInstant);
-        Moment.Max(earlierInstant, laterInstant).ShouldBe(laterInstant);
+        (Moment.Min(laterInstant, earlierInstant) == earlierInstant).VerifyExpression();
+        (Moment.Max(earlierInstant, laterInstant) == laterInstant).VerifyExpression();
     }
 
     [Test]
-    public void DateTimeOffsetMin_NullDates_ThrowsArgumentNullException()
+    public void Min_WhenDateTimeOffsetAndNull_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentNullException>(() => Moment.Min((IEnumerable<DateTimeOffset>)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateTimeOffset>)null!); });
     }
 
     [Test]
-    public void DateTimeOffsetMax_NullDates_ThrowsArgumentNullException()
+    public void Max_WhenDateTimeOffsetAndNull_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentNullException>(() => Moment.Max((IEnumerable<DateTimeOffset>)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateTimeOffset>)null!); });
     }
 
     [Test]
-    public void DateTimeOffsetMin_EmptyDates_ThrowsArgumentException()
+    public void Min_WhenDateTimeOffsetAndEmpty_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateTimeOffset>()));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateTimeOffset>()); });
     }
 
     [Test]
-    public void DateTimeOffsetMax_EmptyDates_ThrowsArgumentException()
+    public void Max_WhenDateTimeOffsetAndEmpty_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateTimeOffset>()));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateTimeOffset>()); });
     }
 
     [Test]
-    public void Range_CreatesDateTimeRange()
+    public void Range_WhenDateTime_CreatesInclusiveRange()
     {
         var start = new DateTime(2024, 1, 1);
         var end = new DateTime(2024, 1, 31);
         var range = Moment.Range(start, end);
-        range.Start.ShouldBe(start);
-        range.End.ShouldBe(end);
+        (range.Start == start).VerifyExpression();
+        (range.End == end).VerifyExpression();
     }
 
     [Test]
-    public void Range_CreatesDateTimeOffsetRange()
+    public void Range_WhenDateTimeOffset_CreatesInclusiveRange()
     {
         var start = new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero);
         var end = new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero);
         var range = Moment.Range(start, end);
-        range.Start.ShouldBe(start);
-        range.End.ShouldBe(end);
+        (range.Start == start).VerifyExpression();
+        (range.End == end).VerifyExpression();
     }
 
     [Test]
-    public void DateOnlyMin_ReturnsEarliestDate()
+    public void Min_WhenDateOnly_ReturnsEarliestDate()
     {
         var earliest = new DateOnly(2024, 1, 1);
         var latest = new DateOnly(2024, 3, 1);
 
-        Moment.Min(latest, earliest, new DateOnly(2024, 2, 1)).ShouldBe(earliest);
+        (Moment.Min(latest, earliest, new DateOnly(2024, 2, 1)) == earliest).VerifyExpression();
     }
 
     [Test]
-    public void DateOnlyMax_ReturnsLatestDate()
+    public void Max_WhenDateOnly_ReturnsLatestDate()
     {
         var earliest = new DateOnly(2024, 1, 1);
         var latest = new DateOnly(2024, 3, 1);
 
-        Moment.Max(earliest, latest, new DateOnly(2024, 2, 1)).ShouldBe(latest);
+        (Moment.Max(earliest, latest, new DateOnly(2024, 2, 1)) == latest).VerifyExpression();
     }
 
     [Test]
-    public void DateOnlyMin_EmptyDates_ThrowsArgumentException()
+    public void Min_WhenDateOnlyAndEmpty_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateOnly>()));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateOnly>()); });
     }
 
     [Test]
-    public void DateOnlyMin_NullDates_ThrowsArgumentNullException()
+    public void Min_WhenDateOnlyAndNull_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentNullException>(() => Moment.Min((IEnumerable<DateOnly>)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateOnly>)null!); });
     }
 
     [Test]
-    public void DateOnlyMax_EmptyDates_ThrowsArgumentException()
+    public void Max_WhenDateOnlyAndEmpty_ThrowsArgumentException()
     {
-        Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateOnly>()));
+        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateOnly>()); });
     }
 
     [Test]
-    public void DateOnlyMax_NullDates_ThrowsArgumentNullException()
+    public void Max_WhenDateOnlyAndNull_ThrowsArgumentNullException()
     {
-        Should.Throw<ArgumentNullException>(() => Moment.Max((IEnumerable<DateOnly>)null!));
+        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateOnly>)null!); });
     }
 
     [Test]
-    public void Range_CreatesDateOnlyRange()
+    public void Range_WhenDateOnly_CreatesInclusiveRange()
     {
         var start = new DateOnly(2024, 1, 1);
         var end = new DateOnly(2024, 1, 31);
         var range = Moment.Range(start, end);
-        range.Start.ShouldBe(start);
-        range.End.ShouldBe(end);
+        (range.Start == start).VerifyExpression();
+        (range.End == end).VerifyExpression();
     }
 }

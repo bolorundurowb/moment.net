@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.Display;
 
@@ -17,7 +16,7 @@ public class RelativeTimeThresholdTests
     {
         var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var past = now.AddSeconds(-seconds);
-        past.From(now, true, CultureInfo.InvariantCulture).ShouldBe(expected);
+        (past.From(now, true, CultureInfo.InvariantCulture) == expected).VerifyExpression();
     }
 
     [TestCase(44, "44 minutes")]
@@ -28,7 +27,7 @@ public class RelativeTimeThresholdTests
     {
         var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var past = now.AddMinutes(-minutes);
-        past.From(now, true, CultureInfo.InvariantCulture).ShouldBe(expected);
+        (past.From(now, true, CultureInfo.InvariantCulture) == expected).VerifyExpression();
     }
 
     [TestCase(21, "21 hours")]
@@ -39,7 +38,7 @@ public class RelativeTimeThresholdTests
     {
         var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var past = now.AddHours(-hours);
-        past.From(now, true, CultureInfo.InvariantCulture).ShouldBe(expected);
+        (past.From(now, true, CultureInfo.InvariantCulture) == expected).VerifyExpression();
     }
 
     [TestCase(25, "25 days")]
@@ -50,7 +49,7 @@ public class RelativeTimeThresholdTests
     {
         var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var past = now.AddDays(-days);
-        past.From(now, true, CultureInfo.InvariantCulture).ShouldBe(expected);
+        (past.From(now, true, CultureInfo.InvariantCulture) == expected).VerifyExpression();
     }
 
     [TestCase(319, "10 months")]
@@ -61,20 +60,20 @@ public class RelativeTimeThresholdTests
     {
         var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
         var past = now.AddDays(-days);
-        past.From(now, true, CultureInfo.InvariantCulture).ShouldBe(expected);
+        (past.From(now, true, CultureInfo.InvariantCulture) == expected).VerifyExpression();
     }
 
     [Test]
     public void FromNow_LocalTime_ReturnsCorrectRelativeTime()
     {
         var past = DateTime.Now.AddMinutes(-5);
-        past.FromNow(true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (past.FromNow(true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 
     [Test]
     public void ToNow_LocalTime_ReturnsCorrectRelativeTime()
     {
         var future = DateTime.Now.AddMinutes(5);
-        future.ToNow(true, CultureInfo.InvariantCulture).ShouldBe("5 minutes");
+        (future.ToNow(true, CultureInfo.InvariantCulture) == "5 minutes").VerifyExpression();
     }
 }

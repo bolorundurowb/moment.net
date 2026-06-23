@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
-using Shouldly;
 
 namespace MomentNet.Tests.GetSet;
 
@@ -22,88 +21,88 @@ public class FirstLastDateInWeekTests : IDisposable
     public void FirstDateInWeek_ReturnsFirstDayOfWeek()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.FirstDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("27/04/2008 00:00:00");
-        date.FirstDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
+        (date.FirstDateInWeek().ToString("dd/MM/yyyy HH:mm:ss") == "27/04/2008 00:00:00").VerifyExpression();
+        (date.FirstDateInWeek().Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void LastDateInWeek_ReturnsLastDayOfWeek()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        date.LastDateInWeek().ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("03/05/2008 00:00:00");
-        date.LastDateInWeek().Kind.ShouldBe(DateTimeKind.Utc);
+        (date.LastDateInWeek().ToString("dd/MM/yyyy HH:mm:ss") == "03/05/2008 00:00:00").VerifyExpression();
+        (date.LastDateInWeek().Kind == DateTimeKind.Utc).VerifyExpression();
     }
 
     [Test]
     public void FirstDateInWeek_NoArgs_UsesCurrentCulture()
     {
-        var date = new DateTime(2024, 6, 12); // Wednesday
-        date.FirstDateInWeek().ShouldBe(new DateTime(2024, 6, 9)); // Sunday
+        var date = new DateTime(2024, 6, 12);
+        (date.FirstDateInWeek() == new DateTime(2024, 6, 9)).VerifyExpression();
     }
 
     [Test]
     public void LastDateInWeek_NoArgs_UsesCurrentCulture()
     {
-        var date = new DateTime(2024, 6, 12); // Wednesday
-        date.LastDateInWeek().ShouldBe(new DateTime(2024, 6, 15)); // Saturday
+        var date = new DateTime(2024, 6, 12);
+        (date.LastDateInWeek() == new DateTime(2024, 6, 15)).VerifyExpression();
     }
 
     [Test]
-    public void FirstDateInWeek_SundayInFrenchCulture_ShouldBeMonday()
+    public void FirstDateInWeek_WhenSundayInFrenchCulture_ReturnsMonday()
     {
         var sunday = new DateTime(2024, 6, 16);
         var frenchCulture = CultureInfo.GetCultureInfo("fr-FR");
         var firstDate = sunday.FirstDateInWeek(frenchCulture);
-        firstDate.ShouldBe(new DateTime(2024, 6, 10));
+        (firstDate == new DateTime(2024, 6, 10)).VerifyExpression();
     }
 
     [Test]
     public void FirstDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
     {
-        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MinValue.FirstDateInWeek());
+        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTime.MinValue.FirstDateInWeek(); });
     }
 
     [Test]
     public void FirstDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
     {
-        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MaxValue.FirstDateInWeek());
+        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTime.MaxValue.FirstDateInWeek(); });
     }
 
     [Test]
     public void LastDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
     {
-        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MinValue.LastDateInWeek());
+        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTime.MinValue.LastDateInWeek(); });
     }
 
     [Test]
     public void LastDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
     {
-        Should.Throw<ArgumentOutOfRangeException>(() => DateTime.MaxValue.LastDateInWeek());
+        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTime.MaxValue.LastDateInWeek(); });
     }
 
     [Test]
     public void FirstDateInWeek_December31_ReturnsCorrectStartOfWeek()
     {
-        var date = new DateTime(2023, 12, 31); // Sunday
+        var date = new DateTime(2023, 12, 31);
         var result = date.FirstDateInWeek();
-        result.ShouldBe(new DateTime(2023, 12, 31)); // Sunday
+        (result == new DateTime(2023, 12, 31)).VerifyExpression();
     }
 
     [Test]
     public void LastDateInWeek_January1_ReturnsCorrectEndOfWeek()
     {
-        var date = new DateTime(2024, 1, 1); // Monday
+        var date = new DateTime(2024, 1, 1);
         var result = date.LastDateInWeek();
-        result.ShouldBe(new DateTime(2024, 1, 6)); // Saturday
+        (result == new DateTime(2024, 1, 6)).VerifyExpression();
     }
 
     [Test]
     public void FirstDateInWeek_IsoWeekStartsOnMonday_WorksAtYearBoundary()
     {
         var culture = CultureInfo.GetCultureInfo("fr-FR");
-        var date = new DateTime(2024, 1, 1); // Monday
+        var date = new DateTime(2024, 1, 1);
         var result = date.FirstDateInWeek(culture);
-        result.ShouldBe(new DateTime(2024, 1, 1)); // Monday
+        (result == new DateTime(2024, 1, 1)).VerifyExpression();
     }
 
     public void Dispose()
