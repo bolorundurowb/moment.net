@@ -103,4 +103,56 @@ public class MomentUtilityTests
         range.Start.ShouldBe(start);
         range.End.ShouldBe(end);
     }
+
+    [Test]
+    public void DateOnlyMin_ReturnsEarliestDate()
+    {
+        var earliest = new DateOnly(2024, 1, 1);
+        var latest = new DateOnly(2024, 3, 1);
+
+        Moment.Min(latest, earliest, new DateOnly(2024, 2, 1)).ShouldBe(earliest);
+    }
+
+    [Test]
+    public void DateOnlyMax_ReturnsLatestDate()
+    {
+        var earliest = new DateOnly(2024, 1, 1);
+        var latest = new DateOnly(2024, 3, 1);
+
+        Moment.Max(earliest, latest, new DateOnly(2024, 2, 1)).ShouldBe(latest);
+    }
+
+    [Test]
+    public void DateOnlyMin_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Min(Array.Empty<DateOnly>()));
+    }
+
+    [Test]
+    public void DateOnlyMin_NullDates_ThrowsArgumentNullException()
+    {
+        Should.Throw<ArgumentNullException>(() => Moment.Min((IEnumerable<DateOnly>)null!));
+    }
+
+    [Test]
+    public void DateOnlyMax_EmptyDates_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => Moment.Max(Array.Empty<DateOnly>()));
+    }
+
+    [Test]
+    public void DateOnlyMax_NullDates_ThrowsArgumentNullException()
+    {
+        Should.Throw<ArgumentNullException>(() => Moment.Max((IEnumerable<DateOnly>)null!));
+    }
+
+    [Test]
+    public void Range_CreatesDateOnlyRange()
+    {
+        var start = new DateOnly(2024, 1, 1);
+        var end = new DateOnly(2024, 1, 31);
+        var range = Moment.Range(start, end);
+        range.Start.ShouldBe(start);
+        range.End.ShouldBe(end);
+    }
 }

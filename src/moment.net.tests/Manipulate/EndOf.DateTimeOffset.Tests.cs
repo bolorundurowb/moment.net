@@ -81,6 +81,20 @@ public class EndOfDateTimeOffsetTests : IDisposable
     }
 
     [Test]
+    public void EndOf_IsoWeek_ReturnsFollowingSunday()
+    {
+        var result = May2008PlusTwoHours.EndOf(DateTimeAnchor.IsoWeek);
+        result.ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("04/05/2008 23:59:59");
+    }
+
+    [Test]
+    public void EndOf_Quarter_ReturnsLastDayOfQuarter()
+    {
+        var result = May2008PlusTwoHours.EndOf(DateTimeAnchor.Quarter);
+        result.ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("30/06/2008 23:59:59");
+    }
+
+    [Test]
     public void EndOf_Month_ReturnsLastDayAt235959()
     {
         var result = May2008PlusTwoHours.EndOf(DateTimeAnchor.Month);

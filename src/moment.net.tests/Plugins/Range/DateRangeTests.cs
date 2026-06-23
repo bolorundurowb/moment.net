@@ -173,4 +173,85 @@ public class DateRangeTests
         intersection.Start.ShouldBe(new DateTimeOffset(2024, 1, 5, 2, 0, 0, TimeSpan.FromHours(2)));
         intersection.End.ShouldBe(new DateTimeOffset(2024, 1, 10, 0, 0, 0, TimeSpan.Zero));
     }
+
+    [Test]
+    public void DateOnlyRange_Contains_ReturnsTrueForDateInsideRange()
+    {
+        var range = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+
+        range.Contains(new DateOnly(2024, 1, 15)).ShouldBeTrue();
+    }
+
+    [Test]
+    public void DateOnlyRange_Contains_WhenExclusive_ReturnsFalseForBoundaryDate()
+    {
+        var range = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+
+        range.Contains(new DateOnly(2024, 1, 1), inclusive: false).ShouldBeFalse();
+    }
+
+    [Test]
+    public void DateOnlyRange_Overlaps_ReturnsTrueForPartiallyOverlappingRanges()
+    {
+        var first = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 15));
+        var second = Moment.Range(new DateOnly(2024, 1, 10), new DateOnly(2024, 1, 31));
+
+        first.Overlaps(second).ShouldBeTrue();
+    }
+
+    [Test]
+    public void DateOnlyRange_Intersect_ReturnsOverlappingRange()
+    {
+        var first = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 15));
+        var second = Moment.Range(new DateOnly(2024, 1, 10), new DateOnly(2024, 1, 31));
+
+        var intersection = first.Intersect(second);
+
+        intersection.ShouldNotBeNull();
+        intersection!.Start.ShouldBe(new DateOnly(2024, 1, 10));
+        intersection.End.ShouldBe(new DateOnly(2024, 1, 15));
+    }
+
+    [Test]
+    public void DateOnlyRange_Constructor_WhenStartIsAfterEnd_ThrowsArgumentException()
+    {
+        Should.Throw<ArgumentException>(() => new MomentDateOnlyRange(new DateOnly(2024, 2, 1), new DateOnly(2024, 1, 1)));
+    }
+
+    [Test]
+    public void DateOnlyRange_Duration_ReturnsCorrectTimeSpan()
+    {
+        var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 2));
+        range.Duration.ShouldBe(TimeSpan.FromDays(1));
+    }
+
+    [Test]
+    public void DateOnlyRange_Contains_OtherRangeNull_ThrowsArgumentNullException()
+    {
+        var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+        Should.Throw<ArgumentNullException>(() => range.Contains((MomentDateOnlyRange)null!));
+    }
+
+    [Test]
+    public void DateOnlyRange_Contains_ExclusiveRange_ReturnsFalseWhenNotFullyInside()
+    {
+        var outer = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+        var inner = Moment.Range(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 15));
+
+        outer.Contains(inner, inclusive: false).ShouldBeFalse();
+    }
+
+    [Test]
+    public void DateOnlyRange_Overlaps_NullOther_ThrowsArgumentNullException()
+    {
+        var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+        Should.Throw<ArgumentNullException>(() => range.Overlaps(null!));
+    }
+
+    [Test]
+    public void DateOnlyRange_Intersect_NullOther_ThrowsArgumentNullException()
+    {
+        var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
+        Should.Throw<ArgumentNullException>(() => range.Intersect(null!));
+    }
 }

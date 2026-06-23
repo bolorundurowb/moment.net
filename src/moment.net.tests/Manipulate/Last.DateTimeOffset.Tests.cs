@@ -54,4 +54,10 @@ public class LastDateTimeOffsetTests
     {
         Friday.Last(DayOfWeek.Monday, 1).ShouldBe(Friday.Last(DayOfWeek.Monday));
     }
+
+    [Test]
+    public void Last_WithInvalidCount_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => Friday.Last(DayOfWeek.Monday, 0));
+    }
 }

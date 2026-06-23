@@ -24,4 +24,11 @@ public class LastTests
         date.Last(DayOfWeek.Thursday, 3).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("10/04/2008 08:30:52");
         date.Last(DayOfWeek.Thursday, 3).Kind.ShouldBe(DateTimeKind.Utc);
     }
+
+    [Test]
+    public void Last_WithInvalidCount_ThrowsArgumentOutOfRangeException()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        Should.Throw<ArgumentOutOfRangeException>(() => date.Last(DayOfWeek.Thursday, 0));
+    }
 }

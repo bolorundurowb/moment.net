@@ -54,4 +54,10 @@ public class NextDateTimeOffsetTests
     {
         Friday.Next(DayOfWeek.Monday, 1).ShouldBe(Friday.Next(DayOfWeek.Monday));
     }
+
+    [Test]
+    public void Next_WithInvalidCount_ThrowsArgumentOutOfRangeException()
+    {
+        Should.Throw<ArgumentOutOfRangeException>(() => Friday.Next(DayOfWeek.Monday, 0));
+    }
 }

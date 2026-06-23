@@ -35,6 +35,22 @@ public class BusinessDayHolidayTests
     }
 
     [Test]
+    public void AddBusinessDays_WithZeroDays_ReturnsSameDate()
+    {
+        var date = new DateTime(2023, 10, 23);
+        var holidays = new[] { new DateTime(2023, 12, 25) };
+
+        date.AddBusinessDays(0, holidays).ShouldBe(date);
+    }
+
+    [Test]
+    public void AddBusinessDays_NullHolidays_ThrowsArgumentNullException()
+    {
+        var date = new DateTime(2023, 10, 23);
+        Should.Throw<ArgumentNullException>(() => date.AddBusinessDays(1, null!));
+    }
+
+    [Test]
     public void DateTimeOffset_AddBusinessDays_WithHoliday_PreservesOffset()
     {
         var friday = new DateTimeOffset(2023, 12, 22, 9, 0, 0, TimeSpan.FromHours(2));

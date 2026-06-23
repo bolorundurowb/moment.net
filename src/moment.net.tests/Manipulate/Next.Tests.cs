@@ -24,4 +24,11 @@ public class NextTests
         date.Next(DayOfWeek.Thursday, 3).ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("22/05/2008 08:30:52");
         date.Next(DayOfWeek.Thursday, 3).Kind.ShouldBe(DateTimeKind.Utc);
     }
+
+    [Test]
+    public void Next_WithInvalidCount_ThrowsArgumentOutOfRangeException()
+    {
+        var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
+        Should.Throw<ArgumentOutOfRangeException>(() => date.Next(DayOfWeek.Thursday, 0));
+    }
 }

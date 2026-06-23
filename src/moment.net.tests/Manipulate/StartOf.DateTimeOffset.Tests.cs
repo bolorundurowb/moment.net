@@ -78,6 +78,20 @@ public class StartOfDateTimeOffsetTests : IDisposable
     }
 
     [Test]
+    public void StartOf_IsoWeek_ReturnsPrecedingMonday()
+    {
+        var result = May2008PlusTwoHours.StartOf(DateTimeAnchor.IsoWeek);
+        result.ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("28/04/2008 00:00:00");
+    }
+
+    [Test]
+    public void StartOf_Quarter_ReturnsFirstDayOfQuarter()
+    {
+        var result = May2008PlusTwoHours.StartOf(DateTimeAnchor.Quarter);
+        result.ToString("dd/MM/yyyy HH:mm:ss").ShouldBe("01/04/2008 00:00:00");
+    }
+
+    [Test]
     public void StartOf_Month_ReturnsFirstDayAtMidnight()
     {
         var result = May2008PlusTwoHours.StartOf(DateTimeAnchor.Month);

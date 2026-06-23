@@ -64,4 +64,29 @@ public class BusinessDayDateTimeOffsetTests
         var date = MakeDate("2023-10-20");
         date.AddBusinessDays(3).Offset.ShouldBe(PlusThree);
     }
+
+    [Test]
+    public void IsBusinessDay_WithHoliday_ReturnsFalseForHolidayWeekday()
+    {
+        var holiday = MakeDate("2023-12-25");
+        var holidays = new[] { holiday };
+
+        holiday.IsBusinessDay(holidays).ShouldBeFalse();
+    }
+
+    [Test]
+    public void AddBusinessDays_WithZeroDaysAndHolidays_ReturnsSameDate()
+    {
+        var date = MakeDate("2023-10-23");
+        var holidays = new[] { MakeDate("2023-12-25") };
+
+        date.AddBusinessDays(0, holidays).ShouldBe(date);
+    }
+
+    [Test]
+    public void AddBusinessDays_NullHolidays_ThrowsArgumentNullException()
+    {
+        var date = MakeDate("2023-10-23");
+        Should.Throw<ArgumentNullException>(() => date.AddBusinessDays(1, null!));
+    }
 }
