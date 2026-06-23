@@ -208,4 +208,120 @@ public static class StartEndOfExtensions
 
     private static int GetIsoDayOfWeek(DateTime dateTime) =>
         dateTime.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)dateTime.DayOfWeek;
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns the start of the requested period for the <see cref="DateOnly"/> using the current culture for week calculations.
+    /// </summary>
+    public static DateOnly StartOf(this DateOnly dateOnly, DateTimeAnchor timeAnchor) =>
+        dateOnly.StartOf(timeAnchor, CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the start of the requested period for the <see cref="DateOnly"/> using the supplied culture for week calculations.
+    /// </summary>
+    public static DateOnly StartOf(this DateOnly dateOnly, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    {
+        switch (timeAnchor)
+        {
+            case DateTimeAnchor.Day:
+                return dateOnly;
+            case DateTimeAnchor.Week:
+                var dateTime = dateOnly.ToDateTime(default);
+                var weekStart = FirstDateInWeekDateOnly(dateTime, cultureInfo);
+                return DateOnly.FromDateTime(weekStart);
+            case DateTimeAnchor.IsoWeek:
+                var isoDateTime = dateOnly.ToDateTime(default);
+                var isoWeekStart = isoDateTime.AddDays(1 - GetIsoDayOfWeek(isoDateTime));
+                return DateOnly.FromDateTime(isoWeekStart);
+            case DateTimeAnchor.Month:
+                return new DateOnly(dateOnly.Year, dateOnly.Month, 1);
+            case DateTimeAnchor.Quarter:
+                return new DateOnly(dateOnly.Year, GetStartOfQuarterMonth(dateOnly.Month), 1);
+            case DateTimeAnchor.Year:
+                return new DateOnly(dateOnly.Year, 1, 1);
+            default:
+                throw new ArgumentException("Invalid timeAnchor argument for DateOnly. Only Day, Week, IsoWeek, Month, Quarter, and Year are supported.");
+        }
+    }
+
+    /// <summary>
+    /// Returns the end of the requested period for the <see cref="DateOnly"/> using the current culture for week calculations.
+    /// </summary>
+    public static DateOnly EndOf(this DateOnly dateOnly, DateTimeAnchor timeAnchor) =>
+        dateOnly.EndOf(timeAnchor, CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the end of the requested period for the <see cref="DateOnly"/> using the supplied culture for week calculations.
+    /// </summary>
+    public static DateOnly EndOf(this DateOnly dateOnly, DateTimeAnchor timeAnchor, CultureInfo cultureInfo)
+    {
+        switch (timeAnchor)
+        {
+            case DateTimeAnchor.Day:
+                return dateOnly;
+            case DateTimeAnchor.Week:
+                var dateTime = dateOnly.ToDateTime(default);
+                var weekEnd = LastDateInWeekDateOnly(dateTime, cultureInfo);
+                return DateOnly.FromDateTime(weekEnd);
+            case DateTimeAnchor.IsoWeek:
+                var isoDateTime = dateOnly.ToDateTime(default);
+                var isoWeekEnd = isoDateTime.AddDays(7 - GetIsoDayOfWeek(isoDateTime));
+                return DateOnly.FromDateTime(isoWeekEnd);
+            case DateTimeAnchor.Month:
+                var days = DateTime.DaysInMonth(dateOnly.Year, dateOnly.Month);
+                return new DateOnly(dateOnly.Year, dateOnly.Month, days);
+            case DateTimeAnchor.Quarter:
+                var endMonth = GetStartOfQuarterMonth(dateOnly.Month) + 2;
+                var daysInQuarterEndMonth = DateTime.DaysInMonth(dateOnly.Year, endMonth);
+                return new DateOnly(dateOnly.Year, endMonth, daysInQuarterEndMonth);
+            case DateTimeAnchor.Year:
+                return new DateOnly(dateOnly.Year, 12, DateTime.DaysInMonth(dateOnly.Year, 12));
+            default:
+                throw new ArgumentException("Invalid timeAnchor argument for DateOnly. Only Day, Week, IsoWeek, Month, Quarter, and Year are supported.");
+        }
+    }
+
+    /// <summary>
+    /// Returns the start of the requested period for the <see cref="TimeOnly"/>.
+    /// </summary>
+    public static TimeOnly StartOf(this TimeOnly timeOnly, DateTimeAnchor timeAnchor)
+    {
+        switch (timeAnchor)
+        {
+            case DateTimeAnchor.Minute:
+                return new TimeOnly(timeOnly.Hour, timeOnly.Minute, 0, 0);
+            case DateTimeAnchor.Hour:
+                return new TimeOnly(timeOnly.Hour, 0, 0, 0);
+            default:
+                throw new ArgumentException("Invalid timeAnchor argument for TimeOnly. Only Minute and Hour are supported.");
+        }
+    }
+
+    /// <summary>
+    /// Returns the end of the requested period for the <see cref="TimeOnly"/>.
+    /// </summary>
+    public static TimeOnly EndOf(this TimeOnly timeOnly, DateTimeAnchor timeAnchor)
+    {
+        switch (timeAnchor)
+        {
+            case DateTimeAnchor.Minute:
+                return new TimeOnly(timeOnly.Hour, timeOnly.Minute, 59, 999);
+            case DateTimeAnchor.Hour:
+                return new TimeOnly(timeOnly.Hour, 59, 59, 999);
+            default:
+                throw new ArgumentException("Invalid timeAnchor argument for TimeOnly. Only Minute and Hour are supported.");
+        }
+    }
+
+    private static DateTime FirstDateInWeekDateOnly(DateTime dayInWeek, CultureInfo cultureInfo)
+    {
+        var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+        var firstDateInWeek = dayInWeek.Date;
+        var diff = ((int)firstDateInWeek.DayOfWeek - (int)firstDayOfWeek + 7) % 7;
+        return firstDateInWeek.AddDays(-diff);
+    }
+
+    private static DateTime LastDateInWeekDateOnly(DateTime dayInWeek, CultureInfo cultureInfo) =>
+        FirstDateInWeekDateOnly(dayInWeek, cultureInfo).AddDays(6);
+#endif
 }

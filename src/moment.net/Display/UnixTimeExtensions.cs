@@ -36,4 +36,18 @@ public static class UnixTimeExtensions
     /// </summary>
     public static double UnixTimestampInMilliseconds(this DateTimeOffset dateTimeOffset) =>
         (dateTimeOffset.UtcDateTime - UnixEpoch).TotalMilliseconds;
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns the number of seconds between the <see cref="DateOnly"/> and the Unix epoch.
+    /// </summary>
+    public static double UnixTimestampInSeconds(this DateOnly dateOnly) =>
+        (dateOnly.ToDateTime(default) - UnixEpoch).TotalSeconds;
+
+    /// <summary>
+    /// Returns the number of milliseconds between the <see cref="DateOnly"/> and the Unix epoch.
+    /// </summary>
+    public static double UnixTimestampInMilliseconds(this DateOnly dateOnly) =>
+        (dateOnly.ToDateTime(default) - UnixEpoch).TotalMilliseconds;
+#endif
 }

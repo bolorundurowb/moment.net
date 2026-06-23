@@ -38,4 +38,23 @@ public static class DaylightSavingTimeExtensions
         var converted = TimeZoneInfo.ConvertTime(dateTime, timeZoneInfo);
         return timeZoneInfo.IsDaylightSavingTime(converted.DateTime);
     }
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns whether the <see cref="DateOnly"/> falls in daylight saving time for the local time zone.
+    /// </summary>
+    public static bool IsDaylightSavingTime(this DateOnly dateOnly) =>
+        dateOnly.IsDaylightSavingTime(TimeZoneInfo.Local);
+
+    /// <summary>
+    /// Returns whether the <see cref="DateOnly"/> falls in daylight saving time for the supplied time zone.
+    /// </summary>
+    public static bool IsDaylightSavingTime(this DateOnly dateOnly, TimeZoneInfo timeZoneInfo)
+    {
+        if (timeZoneInfo is null)
+            throw new ArgumentNullException(nameof(timeZoneInfo));
+
+        return timeZoneInfo.IsDaylightSavingTime(dateOnly.ToDateTime(default));
+    }
+#endif
 }

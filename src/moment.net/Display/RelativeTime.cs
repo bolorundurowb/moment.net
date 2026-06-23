@@ -185,6 +185,56 @@ public static class RelativeTime
     public static string To(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset, bool withoutSuffix, CultureInfo? ci = null) =>
         ParseFromFutureTimeSpan(comparisonDateTimeOffset - dateTimeOffset, withoutSuffix, ci);
 
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns a localised relative time string from the <see cref="DateOnly"/> to now.
+    /// </summary>
+    public static string FromNow(this DateOnly dateOnly, CultureInfo? ci = null) =>
+        dateOnly.FromNow(false, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from the <see cref="DateOnly"/> to now.
+    /// </summary>
+    public static string FromNow(this DateOnly dateOnly, bool withoutSuffix, CultureInfo? ci = null) =>
+        dateOnly.ToDateTime(default).FromNow(withoutSuffix, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from the <see cref="DateOnly"/> to another date.
+    /// </summary>
+    public static string From(this DateOnly dateOnly, DateOnly comparisonDate, CultureInfo? ci = null) =>
+        dateOnly.From(comparisonDate, false, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from the <see cref="DateOnly"/> to another date.
+    /// </summary>
+    public static string From(this DateOnly dateOnly, DateOnly comparisonDate, bool withoutSuffix, CultureInfo? ci = null) =>
+        dateOnly.ToDateTime(default).From(comparisonDate.ToDateTime(default), withoutSuffix, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from now to the <see cref="DateOnly"/>.
+    /// </summary>
+    public static string ToNow(this DateOnly dateOnly, CultureInfo? ci = null) =>
+        dateOnly.ToNow(false, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from now to the <see cref="DateOnly"/>.
+    /// </summary>
+    public static string ToNow(this DateOnly dateOnly, bool withoutSuffix, CultureInfo? ci = null) =>
+        dateOnly.ToDateTime(default).ToNow(withoutSuffix, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from the <see cref="DateOnly"/> to a future date.
+    /// </summary>
+    public static string To(this DateOnly dateOnly, DateOnly comparisonDate, CultureInfo? ci = null) =>
+        dateOnly.To(comparisonDate, false, ci);
+
+    /// <summary>
+    /// Returns a localised relative time string from the <see cref="DateOnly"/> to a future date.
+    /// </summary>
+    public static string To(this DateOnly dateOnly, DateOnly comparisonDate, bool withoutSuffix, CultureInfo? ci = null) =>
+        dateOnly.ToDateTime(default).To(comparisonDate.ToDateTime(default), withoutSuffix, ci);
+#endif
+
     private static string ParseFromPastTimeSpan(TimeSpan timeSpan, bool withoutSuffix = false, CultureInfo? ci = null)
     {
         ci ??= CultureInfo.CurrentCulture;

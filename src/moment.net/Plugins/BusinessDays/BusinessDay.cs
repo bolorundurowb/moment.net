@@ -216,4 +216,86 @@ public static class BusinessDay
 
         return holidaySet;
     }
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> is a business day (Monday to Friday).
+    /// </summary>
+    public static bool IsBusinessDay(this DateOnly dateOnly) =>
+        dateOnly.DayOfWeek != DayOfWeek.Saturday && dateOnly.DayOfWeek != DayOfWeek.Sunday;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> is a business day, excluding weekends and supplied holidays.
+    /// </summary>
+    public static bool IsBusinessDay(this DateOnly dateOnly, IEnumerable<DateOnly> holidays) =>
+        dateOnly.IsBusinessDay() && !ToHolidaySet(holidays).Contains(dateOnly);
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> is a weekend (Saturday or Sunday).
+    /// </summary>
+    public static bool IsWeekend(this DateOnly dateOnly) =>
+        dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday;
+
+    /// <summary>
+    /// Check if a <see cref="DateOnly"/> is a weekday (Monday to Friday).
+    /// </summary>
+    public static bool IsWeekday(this DateOnly dateOnly) => !dateOnly.IsWeekend();
+
+    /// <summary>
+    /// Adds business days to the <see cref="DateOnly"/>, skipping weekends.
+    /// Uses week-batching for efficiency on large day counts.
+    /// </summary>
+    public static DateOnly AddBusinessDays(this DateOnly dateOnly, int days)
+    {
+        if (days == 0)
+            return dateOnly;
+
+        var direction = days > 0 ? 1 : -1;
+        var absDays = Math.Abs(days);
+
+        var weeks = absDays / 5;
+        var result = dateOnly.AddDays(weeks * 7 * direction);
+
+        var remaining = absDays % 5;
+        while (remaining > 0)
+        {
+            result = result.AddDays(direction);
+            if (result.IsBusinessDay())
+                remaining--;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Adds business days to the <see cref="DateOnly"/>, skipping weekends and supplied holidays.
+    /// </summary>
+    public static DateOnly AddBusinessDays(this DateOnly dateOnly, int days, IEnumerable<DateOnly> holidays)
+    {
+        if (days == 0)
+            return dateOnly;
+
+        var result = dateOnly;
+        var direction = days > 0 ? 1 : -1;
+        var remainingDays = Math.Abs(days);
+        var holidaySet = ToHolidaySet(holidays);
+
+        while (remainingDays > 0)
+        {
+            result = result.AddDays(direction);
+            if (result.IsBusinessDay() && !holidaySet.Contains(result))
+                remainingDays--;
+        }
+
+        return result;
+    }
+
+    private static HashSet<DateOnly> ToHolidaySet(IEnumerable<DateOnly> holidays)
+    {
+        if (holidays is null)
+            throw new ArgumentNullException(nameof(holidays));
+
+        return new HashSet<DateOnly>(holidays);
+    }
+#endif
 }

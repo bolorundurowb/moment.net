@@ -95,4 +95,35 @@ public static class DateTimeDiff
     /// <returns>The signed difference in years.</returns>
     public static double DiffInYears(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset) =>
         dateTimeOffset.DiffInMonths(comparisonDateTimeOffset) / 12.0;
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns the difference in days between two <see cref="DateOnly"/> values.
+    /// </summary>
+    public static double DiffInDays(this DateOnly dateOnly, DateOnly comparisonDate) =>
+        (dateOnly.ToDateTime(default) - comparisonDate.ToDateTime(default)).TotalDays;
+
+    /// <summary>
+    /// Returns the difference in months between two <see cref="DateOnly"/> values.
+    /// </summary>
+    public static double DiffInMonths(this DateOnly dateOnly, DateOnly comparisonDate)
+    {
+        var months = (dateOnly.Year - comparisonDate.Year) * 12 + dateOnly.Month - comparisonDate.Month;
+        var daysInMonth = DateTime.DaysInMonth(dateOnly.Year, dateOnly.Month);
+        var dayDiff = (double)(dateOnly.Day - comparisonDate.Day) / daysInMonth;
+        return months + dayDiff;
+    }
+
+    /// <summary>
+    /// Returns the difference in quarters between two <see cref="DateOnly"/> values.
+    /// </summary>
+    public static double DiffInQuarters(this DateOnly dateOnly, DateOnly comparisonDate) =>
+        dateOnly.DiffInMonths(comparisonDate) / 3.0;
+
+    /// <summary>
+    /// Returns the difference in years between two <see cref="DateOnly"/> values.
+    /// </summary>
+    public static double DiffInYears(this DateOnly dateOnly, DateOnly comparisonDate) =>
+        dateOnly.DiffInMonths(comparisonDate) / 12.0;
+#endif
 }

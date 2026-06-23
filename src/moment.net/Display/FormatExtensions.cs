@@ -22,4 +22,24 @@ public static class FormatExtensions
         format = string.IsNullOrEmpty(format) ? "yyyy-MM-ddTHH:mm:sszzz" : format;
         return dateTimeOffset.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
     }
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns a formatted date string for a <see cref="DateOnly"/>. If no format is specified it returns an ISO-8601 date string.
+    /// </summary>
+    public static string Format(this DateOnly dateOnly, string? format = null, CultureInfo? cultureInfo = null)
+    {
+        format = string.IsNullOrEmpty(format) ? "yyyy-MM-dd" : format;
+        return dateOnly.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
+    }
+
+    /// <summary>
+    /// Returns a formatted time string for a <see cref="TimeOnly"/>. If no format is specified it returns an ISO-8601 time string.
+    /// </summary>
+    public static string Format(this TimeOnly timeOnly, string? format = null, CultureInfo? cultureInfo = null)
+    {
+        format = string.IsNullOrEmpty(format) ? "HH:mm:ss" : format;
+        return timeOnly.ToString(format, cultureInfo ?? CultureInfo.CurrentCulture);
+    }
+#endif
 }

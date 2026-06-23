@@ -234,4 +234,74 @@ public static class WeekAndQuarterExtensions
 
     private static int GetIsoDayOfWeek(DateTime dateTime) =>
         dateTime.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)dateTime.DayOfWeek;
+
+#if NET6_0_OR_GREATER
+    /// <summary>
+    /// Returns the calendar quarter for the <see cref="DateOnly"/> as a value from 1 to 4.
+    /// </summary>
+    public static int Quarter(this DateOnly dateOnly) => GetQuarter(dateOnly.Month);
+
+    /// <summary>
+    /// Returns the culture-specific week of year for the <see cref="DateOnly"/> using the current culture.
+    /// </summary>
+    public static int Week(this DateOnly dateOnly) => dateOnly.Week(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the culture-specific week of year for the <see cref="DateOnly"/>.
+    /// </summary>
+    public static int Week(this DateOnly dateOnly, CultureInfo cultureInfo) =>
+        cultureInfo.Calendar.GetWeekOfYear(dateOnly.ToDateTime(default), cultureInfo.DateTimeFormat.CalendarWeekRule,
+            cultureInfo.DateTimeFormat.FirstDayOfWeek);
+
+    /// <summary>
+    /// Returns the ISO-8601 week number for the <see cref="DateOnly"/>.
+    /// </summary>
+    public static int IsoWeek(this DateOnly dateOnly)
+    {
+        var dateTime = dateOnly.ToDateTime(default);
+        var thursday = dateTime.AddDays(4 - GetIsoDayOfWeek(dateTime));
+        return ((thursday.DayOfYear - 1) / 7) + 1;
+    }
+
+    /// <summary>
+    /// Returns the ISO-8601 week-numbering year for the <see cref="DateOnly"/>.
+    /// </summary>
+    public static int IsoWeekYear(this DateOnly dateOnly)
+    {
+        var dateTime = dateOnly.ToDateTime(default);
+        return dateTime.AddDays(4 - GetIsoDayOfWeek(dateTime)).Year;
+    }
+
+    /// <summary>
+    /// Returns the first date in the week that contains the <see cref="DateOnly"/> using the current culture.
+    /// </summary>
+    public static DateOnly FirstDateInWeek(this DateOnly dateOnly) => dateOnly.FirstDateInWeek(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the first date in the week that contains the <see cref="DateOnly"/> using the supplied culture.
+    /// </summary>
+    public static DateOnly FirstDateInWeek(this DateOnly dateOnly, CultureInfo cultureInfo)
+    {
+        var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+        var dateTime = dateOnly.ToDateTime(default);
+        var daysSinceFirstDayOfWeek = GetDaysSinceFirstDayOfWeek(dateTime.DayOfWeek, firstDayOfWeek);
+        return dateOnly.AddDays(-daysSinceFirstDayOfWeek);
+    }
+
+    /// <summary>
+    /// Returns the last date in the week that contains the <see cref="DateOnly"/> using the current culture.
+    /// </summary>
+    public static DateOnly LastDateInWeek(this DateOnly dateOnly) => dateOnly.LastDateInWeek(CultureInfo.CurrentCulture);
+
+    /// <summary>
+    /// Returns the last date in the week that contains the <see cref="DateOnly"/> using the supplied culture.
+    /// </summary>
+    public static DateOnly LastDateInWeek(this DateOnly dateOnly, CultureInfo cultureInfo)
+    {
+        var firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+        var dateTime = dateOnly.ToDateTime(default);
+        var daysSinceFirstDayOfWeek = GetDaysSinceFirstDayOfWeek(dateTime.DayOfWeek, firstDayOfWeek);
+        return dateOnly.AddDays(6 - daysSinceFirstDayOfWeek);
+    }
+#endif
 }
