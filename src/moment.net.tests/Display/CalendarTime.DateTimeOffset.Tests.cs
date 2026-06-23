@@ -15,7 +15,7 @@ public class CalendarTimeDateTimeOffsetTests
     public void CalendarTime_SameDay_ReturnsTodayFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
-        var end   = new DateTimeOffset(2012, 12, 12, 12, 0, 0, Utc);
+        var end = new DateTimeOffset(2012, 12, 12, 12, 0, 0, Utc);
         start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Today");
     }
 
@@ -23,7 +23,7 @@ public class CalendarTimeDateTimeOffsetTests
     public void CalendarTime_LastDay_ReturnsYesterdayFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
-        var end   = new DateTimeOffset(2012, 12, 13, 12, 0, 0, Utc);
+        var end = new DateTimeOffset(2012, 12, 13, 12, 0, 0, Utc);
         start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Yesterday");
     }
 
@@ -31,7 +31,7 @@ public class CalendarTimeDateTimeOffsetTests
     public void CalendarTime_NextDay_ReturnsTomorrowFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
-        var end   = new DateTimeOffset(2012, 12, 11, 12, 0, 0, Utc);
+        var end = new DateTimeOffset(2012, 12, 11, 12, 0, 0, Utc);
         start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Tomorrow");
     }
 
@@ -39,7 +39,7 @@ public class CalendarTimeDateTimeOffsetTests
     public void CalendarTime_LastWeek_ReturnsLastDayNameFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
-        var end   = new DateTimeOffset(2012, 12, 17, 12, 0, 0, Utc); // Monday (5 days ahead)
+        var end = new DateTimeOffset(2012, 12, 17, 12, 0, 0, Utc); // Monday (5 days ahead)
         start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Wednesday");
     }
 
@@ -47,7 +47,7 @@ public class CalendarTimeDateTimeOffsetTests
     public void CalendarTime_NextWeek_ReturnsDayNameFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc); // Wednesday
-        var end   = new DateTimeOffset(2012, 12, 7, 12, 0, 0, Utc);  // Friday (5 days before)
+        var end = new DateTimeOffset(2012, 12, 7, 12, 0, 0, Utc);  // Friday (5 days before)
         start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldContain("Wednesday");
     }
 
@@ -55,7 +55,7 @@ public class CalendarTimeDateTimeOffsetTests
     public void CalendarTime_EverythingElse_ReturnsDateFormat()
     {
         var start = new DateTimeOffset(2012, 12, 12, 0, 0, 0, Utc);
-        var end   = new DateTimeOffset(2012, 11, 1, 12, 0, 0, Utc);
+        var end = new DateTimeOffset(2012, 11, 1, 12, 0, 0, Utc);
         start.CalendarTime(end, ci: CultureInfo.InvariantCulture).ShouldBe("12/12/2012");
     }
 
