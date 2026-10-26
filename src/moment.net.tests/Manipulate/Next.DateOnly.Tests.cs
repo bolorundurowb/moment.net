@@ -23,7 +23,7 @@ public class NextDateOnlyTests
     [Test]
     public void Next_WithInvalidCount_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { Thursday.Next(DayOfWeek.Thursday, 0); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { Thursday.Next(DayOfWeek.Thursday, 0); });
     }
 }
 
@@ -47,6 +47,6 @@ public class LastDateOnlyTests
     [Test]
     public void Last_WithInvalidCount_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { Thursday.Last(DayOfWeek.Thursday, 0); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { Thursday.Last(DayOfWeek.Thursday, 0); });
     }
 }

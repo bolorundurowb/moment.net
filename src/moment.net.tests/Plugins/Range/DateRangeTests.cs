@@ -65,13 +65,13 @@ public class DateRangeTests
     [Test]
     public void Constructor_WhenStartIsAfterEnd_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { new MomentRange(new DateTime(2024, 2, 1), new DateTime(2024, 1, 1)); });
+        Ensure.Throws<ArgumentException>(() => { new MomentRange(new DateTime(2024, 2, 1), new DateTime(2024, 1, 1)); });
     }
 
     [Test]
     public void Constructor_WhenDateTimeOffsetStartAfterEnd_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { new MomentRangeOffset(
+        Ensure.Throws<ArgumentException>(() => { new MomentRangeOffset(
             new DateTimeOffset(2024, 2, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)); });
     }
@@ -96,7 +96,7 @@ public class DateRangeTests
     public void Contains_OtherRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Contains((MomentRange)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Contains((MomentRange)null!); });
     }
 
     [Test]
@@ -105,14 +105,14 @@ public class DateRangeTests
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Contains((MomentRangeOffset)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Contains((MomentRangeOffset)null!); });
     }
 
     [Test]
     public void Overlaps_OtherRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
     }
 
     [Test]
@@ -121,14 +121,14 @@ public class DateRangeTests
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
     }
 
     [Test]
     public void Intersect_OtherRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentRange(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
     }
 
     [Test]
@@ -137,7 +137,7 @@ public class DateRangeTests
         var range = new MomentRangeOffset(
             new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero),
             new DateTimeOffset(2024, 1, 31, 0, 0, 0, TimeSpan.Zero));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
     }
 
     [Test]
@@ -213,7 +213,7 @@ public class DateRangeTests
     [Test]
     public void Constructor_WhenDateOnlyStartAfterEnd_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { new MomentDateOnlyRange(new DateOnly(2024, 2, 1), new DateOnly(2024, 1, 1)); });
+        Ensure.Throws<ArgumentException>(() => { new MomentDateOnlyRange(new DateOnly(2024, 2, 1), new DateOnly(2024, 1, 1)); });
     }
 
     [Test]
@@ -227,7 +227,7 @@ public class DateRangeTests
     public void Contains_WhenDateOnlyRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Contains((MomentDateOnlyRange)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Contains((MomentDateOnlyRange)null!); });
     }
 
     [Test]
@@ -243,13 +243,13 @@ public class DateRangeTests
     public void Overlaps_WhenDateOnlyRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Overlaps(null!); });
     }
 
     [Test]
     public void Intersect_WhenDateOnlyRangeNull_ThrowsArgumentNullException()
     {
         var range = new MomentDateOnlyRange(new DateOnly(2024, 1, 1), new DateOnly(2024, 1, 31));
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { range.Intersect(null!); });
     }
 }

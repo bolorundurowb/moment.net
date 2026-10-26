@@ -57,6 +57,6 @@ public class NextDateTimeOffsetTests
     [Test]
     public void Next_WithInvalidCount_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { Friday.Next(DayOfWeek.Monday, 0); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { Friday.Next(DayOfWeek.Monday, 0); });
     }
 }

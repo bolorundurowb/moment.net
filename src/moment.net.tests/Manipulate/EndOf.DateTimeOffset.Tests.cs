@@ -123,7 +123,7 @@ public class EndOfDateTimeOffsetTests : IDisposable
     [Test]
     public void EndOf_InvalidAnchor_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { May2008PlusTwoHours.EndOf((DateTimeAnchor)99); });
+        Ensure.Throws<ArgumentException>(() => { May2008PlusTwoHours.EndOf((DateTimeAnchor)99); });
     }
 
     public void Dispose()

@@ -28,25 +28,25 @@ public class MomentUtilityTests
     [Test]
     public void Min_WithNoDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateTime>()); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateTime>()); });
     }
 
     [Test]
     public void Max_WithNoDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateTime>()); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateTime>()); });
     }
 
     [Test]
     public void Min_NullDates_ThrowsArgumentNullException()
     {
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateTime>)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateTime>)null!); });
     }
 
     [Test]
     public void Max_NullDates_ThrowsArgumentNullException()
     {
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateTime>)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateTime>)null!); });
     }
 
     [Test]
@@ -62,25 +62,25 @@ public class MomentUtilityTests
     [Test]
     public void Min_WhenDateTimeOffsetAndNull_ThrowsArgumentNullException()
     {
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateTimeOffset>)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateTimeOffset>)null!); });
     }
 
     [Test]
     public void Max_WhenDateTimeOffsetAndNull_ThrowsArgumentNullException()
     {
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateTimeOffset>)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateTimeOffset>)null!); });
     }
 
     [Test]
     public void Min_WhenDateTimeOffsetAndEmpty_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateTimeOffset>()); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateTimeOffset>()); });
     }
 
     [Test]
     public void Max_WhenDateTimeOffsetAndEmpty_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateTimeOffset>()); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateTimeOffset>()); });
     }
 
     [Test]
@@ -124,25 +124,25 @@ public class MomentUtilityTests
     [Test]
     public void Min_WhenDateOnlyAndEmpty_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateOnly>()); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Min(Array.Empty<DateOnly>()); });
     }
 
     [Test]
     public void Min_WhenDateOnlyAndNull_ThrowsArgumentNullException()
     {
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateOnly>)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { Moment.Min((IEnumerable<DateOnly>)null!); });
     }
 
     [Test]
     public void Max_WhenDateOnlyAndEmpty_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateOnly>()); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Max(Array.Empty<DateOnly>()); });
     }
 
     [Test]
     public void Max_WhenDateOnlyAndNull_ThrowsArgumentNullException()
     {
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateOnly>)null!); });
+        Ensure.Throws<ArgumentNullException>(() => { Moment.Max((IEnumerable<DateOnly>)null!); });
     }
 
     [Test]
@@ -180,13 +180,13 @@ public class MomentUtilityTests
     [Test]
     public void Min_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(ReadOnlySpan<DateTime>.Empty); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Min(ReadOnlySpan<DateTime>.Empty); });
     }
 
     [Test]
     public void Max_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(ReadOnlySpan<DateTime>.Empty); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Max(ReadOnlySpan<DateTime>.Empty); });
     }
 
     [Test]
@@ -204,13 +204,13 @@ public class MomentUtilityTests
     [Test]
     public void DateTimeOffsetMin_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(ReadOnlySpan<DateTimeOffset>.Empty); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Min(ReadOnlySpan<DateTimeOffset>.Empty); });
     }
 
     [Test]
     public void DateTimeOffsetMax_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(ReadOnlySpan<DateTimeOffset>.Empty); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Max(ReadOnlySpan<DateTimeOffset>.Empty); });
     }
 
     [Test]
@@ -229,12 +229,12 @@ public class MomentUtilityTests
     [Test]
     public void DateOnlyMin_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Min(ReadOnlySpan<DateOnly>.Empty); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Min(ReadOnlySpan<DateOnly>.Empty); });
     }
 
     [Test]
     public void DateOnlyMax_ReadOnlySpan_EmptyDates_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Moment.Max(ReadOnlySpan<DateOnly>.Empty); });
+        Ensure.Throws<ArgumentException>(() => { Moment.Max(ReadOnlySpan<DateOnly>.Empty); });
     }
 }

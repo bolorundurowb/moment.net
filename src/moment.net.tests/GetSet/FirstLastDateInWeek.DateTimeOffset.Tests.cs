@@ -91,25 +91,25 @@ public class FirstLastDateInWeekDateTimeOffsetTests : IDisposable
     [Test]
     public void FirstDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MinValue.FirstDateInWeek(); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MinValue.FirstDateInWeek(); });
     }
 
     [Test]
     public void FirstDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MaxValue.FirstDateInWeek(); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MaxValue.FirstDateInWeek(); });
     }
 
     [Test]
     public void LastDateInWeek_MinValue_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MinValue.LastDateInWeek(); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MinValue.LastDateInWeek(); });
     }
 
     [Test]
     public void LastDateInWeek_MaxValue_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MaxValue.LastDateInWeek(); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { DateTimeOffset.MaxValue.LastDateInWeek(); });
     }
 
     [Test]

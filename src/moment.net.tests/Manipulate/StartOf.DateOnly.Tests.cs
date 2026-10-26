@@ -86,13 +86,13 @@ public class StartOfDateOnlyTests : IDisposable
     [Test]
     public void StartOf_InvalidAnchor_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { May2008.StartOf(DateTimeAnchor.Minute); });
+        Ensure.Throws<ArgumentException>(() => { May2008.StartOf(DateTimeAnchor.Minute); });
     }
 
     [Test]
     public void EndOf_InvalidAnchor_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { May2008.EndOf(DateTimeAnchor.Hour); });
+        Ensure.Throws<ArgumentException>(() => { May2008.EndOf(DateTimeAnchor.Hour); });
     }
 
     public void Dispose()
@@ -133,6 +133,6 @@ public class StartOfTimeOnlyTests
     [Test]
     public void StartOf_InvalidAnchor_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { Sample.StartOf(DateTimeAnchor.Day); });
+        Ensure.Throws<ArgumentException>(() => { Sample.StartOf(DateTimeAnchor.Day); });
     }
 }
