@@ -16,7 +16,7 @@ Call the extension methods on the date value you already have. The package id is
 dotnet add package moment.net
 ```
 
-For the full method list, see [references/api.md](references/api.md).
+For the full method list, see [the API reference](../../../docs/api.md). The same rules are written for people in [the guide](../../../docs/guide.md).
 
 ## Import only the namespaces you call
 
@@ -82,6 +82,8 @@ range.Contains(new DateTime(2024, 1, 15));
 `CalendarTimeFormats` takes six .NET format strings: same day, next day, next week, last day, last week, and everything else. The parameterless constructor builds the localised defaults for the supplied culture, or for `CultureInfo.CurrentCulture` when culture is omitted.
 
 ## Rules
+
+These rules are the agent summary. The same behaviour is written for people in [the guide](../../../docs/guide.md).
 
 - `From` describes the receiver against the other value. `past.From(future)` reads as time already elapsed, such as "6 years ago". `To` describes the other value as ahead of the receiver. `start.To(end)` reads as time still to come, such as "in 3 days". `withoutSuffix` is the `bool` before `CultureInfo`. It drops words such as "ago" and "in".
 - For `DateTime`, `FromNow` and `ToNow` use `DateTime.UtcNow` when `Kind` is `Utc`, and `DateTime.Now` otherwise. `DateTimeOffset` relative time uses `DateTimeOffset.UtcNow`. `CalendarTime()` with no reference uses `DateTime.Now` or `DateTimeOffset.Now`.
