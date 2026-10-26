@@ -27,6 +27,8 @@
 
 **moment.net** is a multi-target library (`netstandard2.0`, `net6.0`, `net8.0`) that brings moment.js-style fluent date/time operations to C#. It provides extension methods on `DateTime`, `DateTimeOffset`, and — on .NET 6+ — `DateOnly` and `TimeOnly` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localisation support.
 
+Agents writing code that uses this library should follow [.agents/skills/moment-net/SKILL.md](.agents/skills/moment-net/SKILL.md).
+
 ## Table of Contents
 
 - [Installation](#installation)
