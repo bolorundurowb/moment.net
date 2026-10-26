@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using MomentNet.I18n;
 
@@ -23,13 +24,12 @@ public class CalendarTimeFormats
     public CalendarTimeFormats(CultureInfo? ci = null)
     {
         ci ??= CultureInfo.CurrentCulture;
-        var rm = Strings.ResourceManager;
-        string baseSuffix = $" '{rm.GetString("TIME_AT", ci)}' hh:mm tt";
-        SameDay = $"'{rm.GetString("TIME_TODAY", ci)}'" + baseSuffix;
-        NextDay = $"'{rm.GetString("TIME_TOMORROW", ci)}'" + baseSuffix;
+        string baseSuffix = $" '{LocalizedStrings.Get("TIME_AT", ci)}' hh:mm tt";
+        SameDay = $"'{LocalizedStrings.Get("TIME_TODAY", ci)}'" + baseSuffix;
+        NextDay = $"'{LocalizedStrings.Get("TIME_TOMORROW", ci)}'" + baseSuffix;
         NextWeek = "dddd" + baseSuffix;
-        LastDay = $"'{rm.GetString("TIME_YESTERDAY", ci)}'" + baseSuffix;
-        LastWeek = $"'{rm.GetString("TIME_LAST", ci)}' dddd" + baseSuffix;
+        LastDay = $"'{LocalizedStrings.Get("TIME_YESTERDAY", ci)}'" + baseSuffix;
+        LastWeek = $"'{LocalizedStrings.Get("TIME_LAST", ci)}' dddd" + baseSuffix;
         EverythingElse = "MM/dd/yyyy";
     }
 
@@ -42,6 +42,9 @@ public class CalendarTimeFormats
     /// <param name="lastDay">Format for dates that fall on the day before</param>
     /// <param name="lastWeek">Format for dates that fall in the preceding week</param>
     /// <param name="everythingElse">Format for dates that do not fall into the predefined categories</param>
+#if NET6_0_OR_GREATER
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
+#endif
     public CalendarTimeFormats(string sameDay, string nextDay, string nextWeek, string lastDay, string lastWeek,
         string everythingElse)
     {

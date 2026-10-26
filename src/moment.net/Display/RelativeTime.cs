@@ -11,7 +11,7 @@ public static class RelativeTime
     private const double DaysInAMonth = DaysInAYear / 12;
 
     private static string GetString(string key, CultureInfo ci) =>
-        Strings.ResourceManager.GetString(key, ci) ?? $"[missing:{key}]";
+        LocalizedStrings.Get(key, ci);
 
     /// <summary>
     /// Returns a localised relative time string from the date to now.
