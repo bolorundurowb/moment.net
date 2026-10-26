@@ -1,6 +1,8 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using MomentNet.Display.Models;
+using MomentNet.I18n;
 
 namespace MomentNet.Display;
 
@@ -12,6 +14,9 @@ public static class CalendarTimeExtensions
     /// <param name="dateTime">The date to format.</param>
     /// <param name="formats">Optional calendar format strings.</param>
     /// <returns>A formatted calendar time string.</returns>
+#if NET6_0_OR_GREATER
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
+#endif
     public static string CalendarTime(this DateTime dateTime, CalendarTimeFormats? formats = null) =>
         CalendarTime(dateTime, DateTime.Now, formats);
 
@@ -23,6 +28,9 @@ public static class CalendarTimeExtensions
     /// <param name="formats">Optional calendar format strings.</param>
     /// <param name="ci">The culture used for default calendar format strings.</param>
     /// <returns>A formatted calendar time string.</returns>
+#if NET6_0_OR_GREATER
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
+#endif
     public static string CalendarTime(this DateTime dateTime, DateTime comparisonDateTime,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
@@ -55,6 +63,9 @@ public static class CalendarTimeExtensions
     /// <param name="dateTimeOffset">The date to format.</param>
     /// <param name="formats">Optional calendar format strings.</param>
     /// <returns>A formatted calendar time string.</returns>
+#if NET6_0_OR_GREATER
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
+#endif
     public static string CalendarTime(this DateTimeOffset dateTimeOffset, CalendarTimeFormats? formats = null) =>
         CalendarTime(dateTimeOffset, DateTimeOffset.Now, formats);
 
@@ -66,6 +77,9 @@ public static class CalendarTimeExtensions
     /// <param name="formats">Optional calendar format strings.</param>
     /// <param name="ci">The culture used for default calendar format strings.</param>
     /// <returns>A formatted calendar time string.</returns>
+#if NET6_0_OR_GREATER
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
+#endif
     public static string CalendarTime(this DateTimeOffset dateTimeOffset, DateTimeOffset comparisonDateTimeOffset,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null)
     {
@@ -96,12 +110,14 @@ public static class CalendarTimeExtensions
     /// <summary>
     /// Returns a calendar-style formatted string relative to now for a <see cref="DateOnly"/>.
     /// </summary>
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
     public static string CalendarTime(this DateOnly dateOnly, CalendarTimeFormats? formats = null) =>
         dateOnly.ToDateTime(default).CalendarTime(formats);
 
     /// <summary>
     /// Returns a calendar-style formatted string relative to a reference date for a <see cref="DateOnly"/>.
     /// </summary>
+    [RequiresUnreferencedCode(TrimMessages.FormatRequiresUnreferencedCode)]
     public static string CalendarTime(this DateOnly dateOnly, DateOnly comparisonDate,
         CalendarTimeFormats? formats = null, CultureInfo? ci = null) =>
         dateOnly.ToDateTime(default).CalendarTime(comparisonDate.ToDateTime(default), formats, ci);
