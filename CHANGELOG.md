@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0]
+
+### Added
+- `DateOnly` and `TimeOnly` extensions for relative time, calendar time, formatting, manipulation, and week and quarter helpers
+- `Moment.Min`, `Moment.Max`, and `Moment.Range` for `DateTime`, `DateTimeOffset`, and `DateOnly`
+- `ReadOnlySpan` overloads of `Moment.Min` and `Moment.Max` on .NET 8 and later
+- `IsDaylightSavingTime` extensions
+- Quarter and ISO-week APIs: `StartOf` and `EndOf` for `Quarter` and `IsoWeek`, and `DiffInQuarters`
+
 ## [2.0.0]
 
 ### Added
