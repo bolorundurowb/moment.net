@@ -4,17 +4,30 @@
     width="175"
     src="https://raw.githubusercontent.com/bolorundurowb/moment.net/refs/heads/master/assets/logo.png"
     alt="moment.net logo"  />
+  <h1 align="center">moment.net</h1>
 </div>
 
-# moment.net
-
-[![.NET Build, Test and Coverage](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml)
-[![codecov](https://codecov.io/gh/bolorundurowb/moment.net/graph/badge.svg?token=WIGQVIAR70)](https://codecov.io/gh/bolorundurowb/moment.net)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![NuGet Version](https://img.shields.io/nuget/v/moment.net)](https://www.nuget.org/packages/moment.net)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/moment.net)](https://www.nuget.org/packages/moment.net)
+<p align="center">
+  <a href="https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml">
+    <img src="https://github.com/bolorundurowb/moment.net/actions/workflows/build-and-test.yml/badge.svg" alt=".NET Build, Test and Coverage">
+  </a>  
+  <a href="https://codecov.io/gh/bolorundurowb/moment.net">
+    <img src="https://codecov.io/gh/bolorundurowb/moment.net/graph/badge.svg?token=WIGQVIAR70" alt="codecov">
+  </a>  
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  </a>  
+  <a href="https://www.nuget.org/packages/moment.net">
+    <img src="https://img.shields.io/nuget/v/moment.net" alt="NuGet Version">
+  </a>  
+  <a href="https://www.nuget.org/packages/moment.net">
+    <img src="https://img.shields.io/nuget/dt/moment.net" alt="NuGet Downloads">
+  </a>
+</p>
 
 **moment.net** is a multi-target library (`netstandard2.0`, `net6.0`, `net8.0`) that brings moment.js-style fluent date/time operations to C#. It provides extension methods on `DateTime`, `DateTimeOffset`, and — on .NET 6+ — `DateOnly` and `TimeOnly` for relative time, calendar formatting, date manipulation, business day calculations, and more — all with full localisation support.
+
+Agents writing code that uses this library should follow [.agents/skills/moment-net/SKILL.md](.agents/skills/moment-net/SKILL.md).
 
 ## Table of Contents
 
