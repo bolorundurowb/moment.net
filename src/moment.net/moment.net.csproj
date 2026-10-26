@@ -32,6 +32,11 @@
         <PackageIcon>logo.png</PackageIcon>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+        <IsTrimmable>true</IsTrimmable>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    </PropertyGroup>
+
     <ItemGroup>
       <Compile Update="I18n\Strings.Designer.cs">
         <DesignTime>True</DesignTime>
