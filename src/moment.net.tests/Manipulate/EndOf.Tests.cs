@@ -69,7 +69,7 @@ public class EndOfTests : IDisposable
     public void EndOf_InvalidAnchor_ThrowsArgumentException()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        OmniAssert.Assert.Throws<ArgumentException>(() => { date.EndOf((DateTimeAnchor)999); });
+        Ensure.Throws<ArgumentException>(() => { date.EndOf((DateTimeAnchor)999); });
     }
 
     public void Dispose()

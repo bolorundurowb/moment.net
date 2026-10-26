@@ -69,7 +69,7 @@ public class StartOfTests : IDisposable
     public void StartOf_InvalidAnchor_ThrowsArgumentException()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        OmniAssert.Assert.Throws<ArgumentException>(() => { date.StartOf((DateTimeAnchor)999); });
+        Ensure.Throws<ArgumentException>(() => { date.StartOf((DateTimeAnchor)999); });
     }
 
     public void Dispose()

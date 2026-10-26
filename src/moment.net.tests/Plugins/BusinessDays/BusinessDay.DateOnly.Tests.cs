@@ -64,6 +64,6 @@ public class BusinessDayDateOnlyTests
     public void AddBusinessDays_NullHolidays_ThrowsArgumentNullException()
     {
         var date = new DateOnly(2023, 10, 23);
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.AddBusinessDays(1, null!); });
+        Ensure.Throws<ArgumentNullException>(() => { date.AddBusinessDays(1, null!); });
     }
 }

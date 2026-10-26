@@ -51,14 +51,14 @@ public class DstTests
     public void IsDaylightSavingTime_NullTimeZone_ThrowsArgumentNullException()
     {
         var date = new DateTime(2024, 7, 1, 12, 0, 0);
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
     }
 
     [Test]
     public void IsDaylightSavingTime_WhenDateTimeOffsetAndNullTimeZone_ThrowsArgumentNullException()
     {
         var date = new DateTimeOffset(2024, 7, 1, 12, 0, 0, TimeSpan.Zero);
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
     }
 
     [Test]
@@ -83,7 +83,7 @@ public class DstTests
     public void IsDaylightSavingTime_WhenDateOnlyAndNullTimeZone_ThrowsArgumentNullException()
     {
         var date = new DateOnly(2024, 7, 1);
-        OmniAssert.Assert.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
+        Ensure.Throws<ArgumentNullException>(() => { date.IsDaylightSavingTime(null!); });
     }
 
     [Test]

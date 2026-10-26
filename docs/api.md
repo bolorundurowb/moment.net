@@ -1,6 +1,8 @@
-# moment.net public API
+# API reference
 
 Import the namespace in the first column. Receivers marked **6+** exist only on `net6.0` and `net8.0`. `ReadOnlySpan` overloads exist only on `net8.0`.
+
+Rules for receivers, cultures, format strings, and comparisons are in the [guide](guide.md).
 
 ## MomentNet
 
@@ -10,6 +12,17 @@ Import the namespace in the first column. Receivers marked **6+** exist only on 
 | `Max(params T[])`, `Max(IEnumerable<T>)` | `DateTime`, `DateTimeOffset`, `DateOnly` **6+** | Throws on null or empty input. Returns the latest value. |
 | `Min(params ReadOnlySpan<T>)`, `Max(params ReadOnlySpan<T>)` | `DateTime`, `DateTimeOffset`, `DateOnly` | .NET 8+ only. Throws on an empty span. |
 | `Range(start, end)` | `DateTime` → `MomentRange`, `DateTimeOffset` → `MomentRangeOffset`, `DateOnly` **6+** → `MomentDateOnlyRange` | Throws when `start` is after `end`. |
+
+```csharp
+using MomentNet;
+
+var earliest = Moment.Min(
+    new DateTime(2024, 3, 1),
+    new DateTime(2024, 1, 1),
+    new DateTime(2024, 6, 1)); // 2024-01-01
+
+var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+```
 
 ## MomentNet.Plugins.Range
 
@@ -23,6 +36,16 @@ Import the namespace in the first column. Receivers marked **6+** exist only on 
 | `Contains(other, inclusive = true)` | The other range is fully inside this range. Throws if `other` is null. |
 | `Overlaps(other, inclusive = true)` | Throws if `other` is null. |
 | `Intersect(other)` | Overlapping range, or null when there is no overlap. Throws if `other` is null. |
+
+```csharp
+using MomentNet;
+
+var range = Moment.Range(new DateTime(2024, 1, 1), new DateTime(2024, 1, 31));
+
+range.Contains(new DateTime(2024, 1, 15)); // true
+range.Overlaps(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5))); // true
+range.Intersect(Moment.Range(new DateTime(2024, 1, 20), new DateTime(2024, 2, 5))); // 20–31 January
+```
 
 ## MomentNet.Display
 
@@ -43,6 +66,22 @@ Optional `CultureInfo` parameters default to `CultureInfo.CurrentCulture`. `with
 | `DiffInQuarters` | same | `(T other)` returns `double`, from `DiffInMonths / 3` |
 | `DiffInYears` | same | `(T other)` returns `double`, from `DiffInMonths / 12` |
 
+```csharp
+using System.Globalization;
+using MomentNet.Display;
+
+var past = new DateTime(2020, 1, 1);
+var future = new DateTime(2026, 1, 1);
+var date = new DateTime(2024, 3, 15);
+
+past.From(future);                                        // "6 years ago"
+past.To(future);                                          // "in 6 years"
+date.CalendarTime(new DateTime(2024, 3, 15, 12, 0, 0));
+date.Format("dd MMMM yyyy", new CultureInfo("de"));
+date.DiffInMonths(new DateTime(2024, 1, 1));
+date.UnixTimestampInSeconds();
+```
+
 ## MomentNet.Display.Models
 
 `CalendarTimeFormats` has `SameDay`, `NextDay`, `NextWeek`, `LastDay`, `LastWeek`, and `EverythingElse`.
@@ -51,6 +90,22 @@ Optional `CultureInfo` parameters default to `CultureInfo.CurrentCulture`. `with
 | --- | --- |
 | `CalendarTimeFormats(CultureInfo? ci = null)` | Localised default patterns for that culture. |
 | `CalendarTimeFormats(string sameDay, string nextDay, string nextWeek, string lastDay, string lastWeek, string everythingElse)` | Each argument is a .NET format pattern. |
+
+```csharp
+using MomentNet.Display;
+using MomentNet.Display.Models;
+
+var formats = new CalendarTimeFormats(
+    sameDay: "'Today' 'at' HH:mm",
+    nextDay: "'Tomorrow' 'at' HH:mm",
+    nextWeek: "dddd 'at' HH:mm",
+    lastDay: "'Yesterday' 'at' HH:mm",
+    lastWeek: "'Last' dddd 'at' HH:mm",
+    everythingElse: "yyyy-MM-dd");
+
+var date = new DateTime(2024, 3, 15);
+date.CalendarTime(formats: formats);
+```
 
 ## MomentNet.GetSet
 
@@ -64,6 +119,17 @@ Optional `CultureInfo` parameters default to `CultureInfo.CurrentCulture`. `with
 | `IsoWeekYear` | same | `int`, ISO week-numbering year |
 | `FirstDateInWeek` | same | Same type as the receiver, at the culture's first day of the week. `DateTimeOffset` keeps its offset. |
 | `LastDateInWeek` | same | Six days after `FirstDateInWeek`. `DateTimeOffset` keeps its offset. |
+
+```csharp
+using MomentNet.GetSet;
+
+var date = new DateTime(2008, 5, 1);
+
+date.Quarter();          // 2
+date.IsoWeek();          // ISO-8601 week number
+date.IsoWeekYear();      // ISO week-numbering year
+date.FirstDateInWeek();  // first day of the culture's week
+```
 
 ## MomentNet.Manipulate
 
@@ -80,6 +146,19 @@ Optional `CultureInfo` parameters default to `CultureInfo.CurrentCulture`. `with
 
 `DateOnly` `StartOf` and `EndOf` accept `Day`, `Week`, `IsoWeek`, `Month`, `Quarter`, and `Year`.
 
+```csharp
+using MomentNet.Manipulate;
+
+var date = new DateTime(2024, 3, 15); // Friday
+
+date.StartOf(DateTimeAnchor.Month); // 2024-03-01 00:00:00
+date.EndOf(DateTimeAnchor.Day);     // 2024-03-15 23:59:59.999
+date.Next(DayOfWeek.Monday);        // Monday 18 March 2024
+date.Next(DayOfWeek.Monday, 2);     // Monday 25 March 2024
+date.Last(DayOfWeek.Friday);        // Friday 8 March 2024
+date.Final().Monday().InMonth();    // last Monday of March 2024
+```
+
 ## MomentNet.Query
 
 | Method | Receivers | Signature shape |
@@ -89,9 +168,18 @@ Optional `CultureInfo` parameters default to `CultureInfo.CurrentCulture`. `with
 | `IsBetween` | same | `(T start, T end)`, inclusive |
 | `IsDaylightSavingTime` | `DateTime`, `DateTimeOffset`, `DateOnly` **6+** | `()` uses `TimeZoneInfo.Local`. `(TimeZoneInfo timeZone)` uses that zone and throws if it is null. |
 
+```csharp
+using MomentNet.Query;
+
+var date = new DateTime(2024, 3, 15);
+
+date.IsLeapYear(); // true
+date.IsBetween(new DateTime(2024, 3, 1), new DateTime(2024, 3, 31)); // true
+```
+
 ## MomentNet.Plugins.BusinessDays
 
-Holiday lists use the same type as the receiver. The date portion is what matters.
+Holiday lists use the same type as the receiver. The date portion is what matters. `IsBusinessDay()` with no holiday list means Monday to Friday. `IsWeekend()` is Saturday or Sunday. `IsWeekday()` is Monday to Friday.
 
 | Method | Receivers | Signature shape |
 | --- | --- | --- |
@@ -99,3 +187,14 @@ Holiday lists use the same type as the receiver. The date portion is what matter
 | `IsWeekend` | same | `()` |
 | `IsWeekday` | same | `()` |
 | `AddBusinessDays` | same | `(int days)` and `(int days, IEnumerable<T> holidays)`. Zero returns the same value. A negative count moves backward. |
+
+```csharp
+using MomentNet.Plugins.BusinessDays;
+
+var friday = new DateTime(2023, 10, 20);
+var holidays = new[] { new DateTime(2023, 10, 23) };
+
+friday.IsBusinessDay();             // true
+friday.AddBusinessDays(1);          // Monday 23 October 2023
+friday.AddBusinessDays(1, holidays); // Tuesday 24 October 2023
+```

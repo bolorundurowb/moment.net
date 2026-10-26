@@ -28,6 +28,6 @@ public class LastTests
     public void Last_WithInvalidCount_ThrowsArgumentOutOfRangeException()
     {
         var date = DateTime.Parse(dateString, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { date.Last(DayOfWeek.Thursday, 0); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { date.Last(DayOfWeek.Thursday, 0); });
     }
 }

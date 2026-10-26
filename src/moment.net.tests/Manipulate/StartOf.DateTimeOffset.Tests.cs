@@ -106,7 +106,7 @@ public class StartOfDateTimeOffsetTests : IDisposable
     [Test]
     public void StartOf_InvalidAnchor_ThrowsArgumentException()
     {
-        OmniAssert.Assert.Throws<ArgumentException>(() => { May2008PlusTwoHours.StartOf((DateTimeAnchor)99); });
+        Ensure.Throws<ArgumentException>(() => { May2008PlusTwoHours.StartOf((DateTimeAnchor)99); });
     }
 
     public void Dispose()

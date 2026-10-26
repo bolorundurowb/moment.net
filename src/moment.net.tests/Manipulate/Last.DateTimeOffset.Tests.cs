@@ -57,6 +57,6 @@ public class LastDateTimeOffsetTests
     [Test]
     public void Last_WithInvalidCount_ThrowsArgumentOutOfRangeException()
     {
-        OmniAssert.Assert.Throws<ArgumentOutOfRangeException>(() => { Friday.Last(DayOfWeek.Monday, 0); });
+        Ensure.Throws<ArgumentOutOfRangeException>(() => { Friday.Last(DayOfWeek.Monday, 0); });
     }
 }
